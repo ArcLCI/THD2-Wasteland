@@ -426,6 +426,23 @@ local botTable = {
     [DOTA_TEAM_BADGUYS]     = {}
 }
 
+function _G.THD2_IsBotHero(unit)
+	if unit == nil or unit:IsNull() then return false end
+	if AddBotsToTable ~= nil then
+		AddBotsToTable()
+	end
+
+	for _, teamBots in pairs(botTable) do
+		for _, botHero in pairs(teamBots) do
+			if botHero ~= nil and not botHero:IsNull() and botHero == unit then
+				return true
+			end
+		end
+	end
+
+	return false
+end
+
 if THDOTSGameMode == nil then
 	THDOTSGameMode = {}
 end

@@ -117,6 +117,7 @@ function modifier_ability_nazrin03_combo:OnIntervalThink()
 	self.combo_pending = true
 	self.pending_expire_time = GameRules:GetGameTime() + NAZRIN03_COMBO_PENDING_TIMEOUT
 	caster.nazrin03_comboing = true
+	caster.nazrin03_combo_suppress_until = GameRules:GetGameTime() + 0.1
 	caster:PerformAttack(target, false, true, true, true, true, false, false)
 	self:PlayComboAttackGesture()
 end
@@ -127,6 +128,8 @@ function modifier_ability_nazrin03_combo:OnAttackLanded(keys)
 	if keys.attacker ~= caster then return end
 	if not self.combo_pending then return end
 	if self.target_entindex and keys.target and not keys.target:IsNull() and keys.target:entindex() ~= self.target_entindex then return end
+	-- 连击攻击自身落地时，不允许再次触发 3 技能连击。
+	caster.nazrin03_combo_suppress_until = GameRules:GetGameTime() + 0.1
 	caster.nazrin03_comboing = false
 	caster:RemoveModifierByName("modifier_ability_nazrin03_combo")
 end
@@ -137,6 +140,7 @@ function OnNazrin03Attacklanded(keys)
 	local caster = keys.caster
 	local target = keys.target
 	local ability = keys.ability
+	if caster.nazrin03_combo_suppress_until and GameRules:GetGameTime() <= caster.nazrin03_combo_suppress_until then return end
 	if caster.nazrin03_comboing then return end
 	if caster:HasModifier("modifier_ability_nazrin03_combo") then return end
 	if target == nil or target:IsNull() or not target:IsAlive() then return end

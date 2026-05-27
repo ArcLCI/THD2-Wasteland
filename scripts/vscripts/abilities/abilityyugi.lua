@@ -2,6 +2,41 @@ if AbilityYugi == nil then
 	AbilityYugi = class({})
 end
 
+local function Yugi04_IsBotUnit(unit)
+	if not unit or unit:IsNull() then return false end
+	if THD2_IsBotHero ~= nil and THD2_IsBotHero(unit) then return true end
+
+	local playerID = unit:GetPlayerOwnerID()
+	if (not playerID or playerID < 0) and unit.GetPlayerID then
+		playerID = unit:GetPlayerID()
+	end
+	if playerID and playerID >= 0 then
+		if PlayerResource:IsValidPlayerID(playerID) and PlayerResource:IsFakeClient(playerID) then
+			return true
+		end
+
+		local player = PlayerResource:GetPlayer(playerID)
+		if player and player:GetContext("PlayerIsBot") == 1 then
+			return true
+		end
+	end
+
+	local owner = unit:GetPlayerOwner()
+	return owner and owner:GetContext("PlayerIsBot") == 1
+end
+
+local function Yugi04_ApplyBotCircle(caster, ability, target, duration)
+	if Yugi04_IsBotUnit(target) then
+		local center = target:GetAbsOrigin()
+		target:AddNewModifier(caster, ability, "modifier_thdots_yugi04_bot_circle", {
+			duration = duration,
+			center_x = center.x,
+			center_y = center.y,
+			center_z = center.z,
+		})
+	end
+end
+
 function OnYugi03Damage(keys)
 	local caster = EntIndexToHScript(keys.caster_entindex)
 	local target = keys.target
@@ -258,6 +293,8 @@ function ability_thdots_yugi04:OnSpellStart()
 		ParticleManager:DestroyParticleSystem(effectIndex1,false)
 
 		target:AddNewModifier( caster, self, "modifier_thdots_yugi04_think_interval", {duration = duration} )
+		-- 仅对 bot 目标额外附加不可驱散减速。
+		Yugi04_ApplyBotCircle(caster, self, target, duration)
 
 		if caster:HasModifier("modifier_item_wanbaochui") then
 			local targets = FindUnitsInRadius(
@@ -273,6 +310,7 @@ function ability_thdots_yugi04:OnSpellStart()
 			)
 			for k,v in pairs(targets) do
 				v:AddNewModifier( caster, self, "modifier_thdots_yugi04_think_interval", {duration = duration} )
+				Yugi04_ApplyBotCircle(caster, self, v, duration)
 
 				if v~=target then
 					local effectIndex = ParticleManager:CreateParticle("particles/thd2/heroes/yugi/yugi_slam.vpcf", PATTACH_CUSTOMORIGIN, caster)
@@ -293,6 +331,66 @@ function modifier_thdots_yugi04_think_interval:IsPurgable()			return false end
 function modifier_thdots_yugi04_think_interval:RemoveOnDeath()		return true end
 function modifier_thdots_yugi04_think_interval:IsDebuff()			return true end
 function modifier_thdots_yugi04_think_interval:GetAttributes()		return MODIFIER_ATTRIBUTE_IGNORE_INVULNERABLE end
+
+modifier_thdots_yugi04_bot_circle = {}
+LinkLuaModifier("modifier_thdots_yugi04_bot_circle", "scripts/vscripts/abilities/abilityYugi.lua", LUA_MODIFIER_MOTION_NONE)
+function modifier_thdots_yugi04_bot_circle:IsHidden()		return true end
+function modifier_thdots_yugi04_bot_circle:IsPurgable()		return false end
+function modifier_thdots_yugi04_bot_circle:RemoveOnDeath()	return true end
+function modifier_thdots_yugi04_bot_circle:IsDebuff()		return true end
+
+function modifier_thdots_yugi04_bot_circle:OnCreated(params)
+	if not IsServer() then return end
+	self.parent = self:GetParent()
+	self.radius = 270
+	self.displacement_threshold = 70
+	if params and params.center_x and params.center_y then
+		self.center_position = Vector(params.center_x, params.center_y, params.center_z or self.parent:GetAbsOrigin().z)
+	else
+		self.center_position = self.parent:GetAbsOrigin()
+	end
+	self.last_position = self.parent:GetAbsOrigin()
+	self:StartIntervalThink(0.03)
+end
+
+function modifier_thdots_yugi04_bot_circle:OnIntervalThink()
+	if not IsServer() then return end
+	if not self.parent or self.parent:IsNull() then return end
+
+	local current_position = self.parent:GetAbsOrigin()
+	if self.parent:HasModifier("modifier_thdots_yugi03_mark") then
+		-- Yugi 3 技能击退期间不限制移动，避免圆形边界抵消击退效果。
+		self.last_position = current_position
+		return
+	end
+
+	local step_distance = (current_position - self.last_position):Length2D()
+	if step_distance > self.displacement_threshold then
+		-- 大位移视为位移/瞬移技能，不阻止技能效果，但圆心仍保持 4 技能施放时的位置。
+		self.last_position = current_position
+		return
+	end
+
+	local offset = current_position - self.center_position
+	local distance_from_center = offset:Length2D()
+	if distance_from_center > self.radius then
+		-- 普通移动越界时夹回圆形边缘，圆内移动不受影响。
+		local direction = offset:Normalized()
+		local clamped_position = self.center_position + direction * self.radius
+		clamped_position.z = GetGroundHeight(clamped_position, self.parent)
+		self.parent:SetAbsOrigin(clamped_position)
+		current_position = clamped_position
+	end
+
+	self.last_position = current_position
+end
+
+function modifier_thdots_yugi04_bot_circle:OnDestroy()
+	if not IsServer() then return end
+	if self.parent and not self.parent:IsNull() then
+		self.parent:SetUnitOnClearGround()
+	end
+end
 
 function modifier_thdots_yugi04_think_interval:OnCreated()
 	if not IsServer() then return end
