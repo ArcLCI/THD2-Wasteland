@@ -1,6 +1,5 @@
-# THDAmethyst_Game
+# THD2_Wasteland
 
 Game files of a custom map of Dota2.
-
-Game is published on Steam workshop: [THD · Amethyst](https://steamcommunity.com/sharedfiles/filedetails/?id=3431291576)
+Currently running on version 7.38, heavily modified by Wasteland devs.
 
