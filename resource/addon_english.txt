@@ -5221,6 +5221,85 @@
 		"DOTA_Tooltip_ability_special_bonus_unique_sunny_2"		"+2「Blue Deflection」bounces"
 
 		// --------------------
+		// Yoshika Miyako translated by epic
+		// --------------------
+		// 23-01-2023 - modified by Lasiace
+
+		"npc_dota_hero_undying"													"Yoshika Miyako"
+
+		// MiyakoEX
+		"DOTA_Tooltip_ability_ability_thdots_miyakoEx"							"「Heal by Desire」"
+		"DOTA_Tooltip_ability_ability_thdots_miyakoEx_Description"				"Halves health regeneration during daytime, but doubles during nighttime."
+		"DOTA_Tooltip_ability_ability_thdots_miyakoEx_Lore"						"As a Jiang Shi, Yoshika is afraid of sunshine."
+
+		"DOTA_Tooltip_modifier_ability_thdots_miyakoEx_passive"					"「Heal by Desire」"
+		"DOTA_Tooltip_modifier_ability_thdots_miyakoEx_passive_Description"		"Halves health regeneration during daytime, but doubles during nighttime."
+
+		// Miyako01
+		"DOTA_Tooltip_ability_ability_thdots_miyako01"							"Desire Sign「Score Desire Spirit Invitation」"
+		"DOTA_Tooltip_ability_ability_thdots_miyako01_Description"				"While active, Yoshika consumes mana continuously to absorb enemy girls' mana and convert it into healing.<br><br>Consumes an additional 3% of her maximum mana per second."
+		"DOTA_Tooltip_ability_ability_thdots_miyako01_radius"					"RADIUS: "
+		"DOTA_Tooltip_ability_ability_thdots_miyako01_lost_mana"				"MANA ABSORBED PER SECOND: "
+		"DOTA_Tooltip_ability_ability_thdots_miyako01_spend_mana"				"MANA COST PER SECOND/GIRL: "
+
+		"DOTA_Tooltip_modifier_ability_thdots_miyako01_caster"					"「Score Desire Spirit Invitation」"
+		"DOTA_Tooltip_modifier_ability_thdots_miyako01_caster_Description"		"Absorbing enemy girls' mana to heal Yoshika."
+		"DOTA_Tooltip_modifier_ability_thdots_miyako01_target"					"「Score Desire Spirit Invitation」"
+		"DOTA_Tooltip_modifier_ability_thdots_miyako01_target_Description"		"Mana is being absorbed."
+
+		// Miyako02
+		"DOTA_Tooltip_ability_ability_thdots_miyako02"							"Desire Ghost「Score Desire Eater」"
+		"DOTA_Tooltip_ability_ability_thdots_miyako02_Description"				"Enemy girls near Yoshika gradually stimulate her hunger, causing them to receive a stacking debuff. When the enemy girl's health percentage falls below her stack level, Yoshika will gain increased attack speed and movement speed, with the bonuses increasing as their health falls further.<br><br>Yoshika will gain vision and True Sight of that girl, but that girl will also gain vision of Yoshika.<br><br>Effects stack if multiple girls are affected. Unlocks max movement speed for Yoshika.<br><br>Grants attack speed and movement speed based on stack value."
+		"DOTA_Tooltip_ability_ability_thdots_miyako02_radius"					"RADIUS: "
+		"DOTA_Tooltip_ability_ability_thdots_miyako02_stack_add_speed"			"STACKS PER SECOND: "
+
+		"DOTA_Tooltip_modifier_ability_thdots_miyako02_caster"					"「Score Desire Eater」"
+		"DOTA_Tooltip_modifier_ability_thdots_miyako02_caster_Description"		"Gains bonus movement speed on each wounded enemy girl."
+		"DOTA_Tooltip_modifier_ability_thdots_miyako02_target"					"「Score Desire Eater」"
+		"DOTA_Tooltip_modifier_ability_thdots_miyako02_target_Description"		"Grants attack and move speed bonus to Yoshika when your health is below this stack."
+
+		// Miyako03
+		"DOTA_Tooltip_ability_ability_thdots_miyako03"							"Poison Nail「Poison Murder」"
+		"DOTA_Tooltip_ability_ability_thdots_miyako03_Description"				"Yoshika's attacks inject a venom that causes enemy units to move more slowly. Enemies explode when the status expires, causing damage in an area around it. If the target dies while under this effect, they explode violently, dealing a percentage of their maximum health as additional damage.<br><br>Refreshing the status duration has no effect."
+		"DOTA_Tooltip_ability_ability_thdots_miyako03_radius"					"DAMAGE RADIUS: "
+		"DOTA_Tooltip_ability_ability_thdots_miyako03_damage"					"BASE DAMAGE: "
+		"DOTA_Tooltip_ability_ability_thdots_miyako03_percent_damage"			"%MAX HEALTH AS DAMAGE: "
+		"DOTA_Tooltip_ability_ability_thdots_miyako03_slow"						"%MOVE SPEED SLOW: "
+		"DOTA_Tooltip_ability_ability_thdots_miyako03_duration"					"DURATION: "
+
+
+		"DOTA_Tooltip_modifier_ability_thdots_miyako03_debuff"					"「Poison Murder」"
+		"DOTA_Tooltip_modifier_ability_thdots_miyako03_debuff_Description"		"Slowed and explodes on death."
+		"DOTA_Tooltip_modifier_ability_thdots_miyako03"							"「Poison Murder」"
+		"DOTA_Tooltip_modifier_ability_thdots_miyako03_Description"				"Attacks inject a venom which slows movement and cause a violent explosion when the target dies."
+
+		// Miyako04
+		"DOTA_Tooltip_ability_ability_thdots_miyako04"							"「Undead Murderer」"
+		"DOTA_Tooltip_ability_ability_thdots_miyako04_Description"				"<h1>Passive: </h1>Yoshika is numb to pain. All damage she takes is converted to damage over time.\n<h1>Active: </h1>Temporarily delays all damage she takes for a few seconds, only being dealt to her after the status expires.<br><br>(<font color=\"#d9534f\">You can enter \"-zisha\" if bugs occur.</font>)"
+		"DOTA_Tooltip_ability_ability_thdots_miyako04_pre_damage_percent"		"%STACKS AS DPS: "
+		"DOTA_Tooltip_ability_ability_thdots_miyako04_delay_time"				"DELAY DURATION: "
+		"DOTA_Tooltip_ability_ability_thdots_miyako04_Note0"					"When Yoshika dies, the kill is credited to the girl who damaged Yoshika last.\nIn order to interrupt effects which end when taking damage, she will take 1 damage from any incoming damage instances. The rest of the damage is converted into the damage over time status effect."
+
+		"DOTA_Tooltip_modifier_ability_thdots_miyako04_passive"					"「Undead Murderer」"
+		"DOTA_Tooltip_modifier_ability_thdots_miyako04_passive_Description"		"All damage taken converted to damage over time."
+		"DOTA_Tooltip_modifier_ability_thdots_miyako04_active"					"「Undead Murderer」"
+		"DOTA_Tooltip_modifier_ability_thdots_miyako04_active_Description"		"All damage received is delayed until after the status expires."
+
+		// Miyako05
+		"DOTA_Tooltip_ability_ability_thdots_miyako05"							"Jiang Shi「Flesh Desire」"
+		"DOTA_Tooltip_ability_ability_thdots_miyako05_Description"				"Yoshika longs to consume living flesh.<br><br>Spins towards the closest enemy girl within %radius% range, attacking any enemies on the way.<br><br>If autocast is activated, Yoshika will search for the closest allied girl instead.<br><br>If there is no eligible target in the radius, Yoshika will spin on the spot and attack nearby units instead."
+
+		// Talents
+		"DOTA_Tooltip_ability_special_bonus_unique_miyako_1"					"+{s:value}%「Poison Murder」Slow"
+		"DOTA_Tooltip_ability_special_bonus_unique_miyako_2"					"「Poison Murder」heals Yoshika"
+		"DOTA_Tooltip_ability_special_bonus_unique_miyako_2_Description"		"The healing is equal to the damage."
+		"DOTA_Tooltip_ability_special_bonus_unique_miyako_3"					"+{s:value}「Score Desire Eater」radius"
+		"DOTA_Tooltip_ability_special_bonus_unique_miyako_4"					"-{s:value}%「Undead Murderer」Stacks as DPS"
+		"DOTA_Tooltip_ability_special_bonus_unique_miyako_5"					"「Score Desire...」absorbs {s:value}% of targets' current mana"
+		"DOTA_Tooltip_ability_special_bonus_unique_miyako_6"					"+{s:value}「Score Desire Spirit Invitation」Radius"
+
+
+		// --------------------
 		// Seiga Kaku translated by epic
 		// --------------------
 		// 22-02-2023 - modified by Lasiace
@@ -5458,6 +5537,53 @@
 		"DOTA_Tooltip_ability_special_bonus_unique_kokoro_5"						"「Expression Management」"
 		"DOTA_Tooltip_ability_special_bonus_unique_kokoro_5_Description"			"The states of Anger, Cheerful and Melancholy are always active."
 		"DOTA_Tooltip_ability_special_bonus_unique_kokoro_6"						"Refresh Spells if「Dance of the...」Kills Enemy Girls"
+
+		// --------------------
+		// Seija Kijin translated by epic
+		// --------------------
+		"npc_dota_hero_batrider"	"Seija Kijin"
+		"DOTA_Tooltip_ability_ability_thdots_seija01_Description"	"Fires needle barrages in the arrange of sector to the target point. Costs additional mana while channeling. The barrages will aim at the target girl if she has been affected by「Evil in the Mirror」.\nBonus Damage per Intelligence: %int_bonus%"
+		"DOTA_Tooltip_ability_ability_thdots_seija01"	"Deceit Sign「Reverse Needle Attack」"
+		"DOTA_Tooltip_ability_ability_thdots_seija01_damage"	"Damage: "
+		"DOTA_Tooltip_ability_ability_thdots_seija01_extra_cost"	"Additional mana cost:  "
+		"DOTA_Tooltip_ability_ability_thdots_seija01_cast_range"	"Cast range: "
+		"DOTA_Tooltip_ability_ability_thdots_seija02"	"Reverse Bow「Dream Bow of Heaven & Earth」"
+		"DOTA_Tooltip_ability_ability_thdots_seija02_Description"	"Throws numerous piercing arrows forward, slowing and dealing damage to enemies hit. The arrows disappear when they distance Seija %radius% and appear at the oppisite side with a higher speed.\nFor each enemy that arrows hit, its damage is reduced by %damage_reduce%%%, no less than %damage_limit%%%.\nBonus Damage per Intelligence: %int_bonus%"
+		"DOTA_Tooltip_ability_ability_thdots_seija02_scepter_description"	"Speeds the arrows. The arrows will aim at the target girl if she has been affected by「Evil in the Mirror」."
+		"DOTA_Tooltip_ability_ability_thdots_seija02_damage"	"Damage: "
+		"DOTA_Tooltip_ability_ability_thdots_seija02_reappear"	"Reappear times: "
+		"DOTA_Tooltip_ability_ability_thdots_seija02_movement_slow"	"%Move speed slow: "
+		"DOTA_Tooltip_ability_ability_thdots_seija02_duration_slow"	"Slow duration: "
+		"DOTA_Tooltip_ability_ability_thdots_seija03"	"Reverse Sign「Evil in the Mirror」"
+		"DOTA_Tooltip_ability_ability_thdots_seija03_Description"	"<h1>Passive: </h1>Grants Seija with physical damage based on the difference between the target girl's attack damage and the Seija's if the girl's attack damage is higher. Grants Seija with magical damage based on the difference between the girl's intelligence and the Seija's if the girl's intelligence is higher.\n<font color=\"#d9534f\">Physical damage: </font>Target's attack damage - Seija's\n<font color=\"#337ab7\">Magical damage: </font>Target's intelligence - Seija's\n<h1>Active: </h1>Exchanges target girl's attack damage and intelligence."
+		"DOTA_Tooltip_ability_ability_thdots_seija03_duration"	"Duration: "
+		"DOTA_Tooltip_ability_ability_thdots_seija03_cast_range"	"Cast range: "
+		"DOTA_Tooltip_modifier_ability_thdots_seija03"	"「Evil in the Mirror」"
+		"DOTA_Tooltip_modifier_ability_thdots_seija03_Description"	"Attack damage and intelligence exchanged."
+		"DOTA_Tooltip_modifier_ability_thdots_seija03_passive"	"「Evil in the Mirror」"
+		"DOTA_Tooltip_modifier_ability_thdots_seija03_passive_Description"	"Deals physical damage on difference of attack damage and magical damage on difference of intelligence."
+		"DOTA_Tooltip_ability_ability_thdots_seija04_Description"	"Rotates all units in the area around the target point or girl by 180°.\nWhen casts on <font color=\"#5cb85c\">Point</font> or a girl who has a <font color=\"#5cb85c\">Normal Visual Angle</font>, the rotation will only work on those who have a <font color=\"#5cb85c\">Reverse Visual Angle</font>;\nWhen casts on a girl who has a <font color=\"#f0ad4e\">Reverse Visual Angle</font>, the rotetion will only work on those who have a <font color=\"#f0ad4e\">Normal Visual Angle</font>."
+		"DOTA_Tooltip_ability_ability_thdots_seija04"	"Turnabout「Reverse Hierarchy」"
+		"DOTA_Tooltip_ability_ability_thdots_seija04_radius"	"Radius: "
+		"DOTA_Tooltip_modifier_ability_thdots_seija04"	"「Reverse Hierarchy」"
+		"DOTA_Tooltip_modifier_ability_thdots_seija04_Description"	"Being Rotated!"
+		"DOTA_Tooltip_ability_ability_thdots_seija04_Note0"	"Rotates clockwise when the target's visual is normal; rotates anti-clockwise when the target's visual is reverse."
+		"DOTA_Tooltip_ability_ability_thdots_seija04_range"	"Cast range: "
+		"DOTA_Tooltip_ability_ability_thdots_seijaEx_Description"	"<h1>Passive: </h1>Your visual is rotated by 180°.\n（<font color=\"#d9534f\">To me, you are those who is reverse!!!</font>)\n<h1>Active: </h1>Rotates the target's visual by 180°."
+		"DOTA_Tooltip_ability_ability_thdots_seijaEx"	"Reverse Sign「Overturning All Under Heaven」"
+		"DOTA_Tooltip_ability_ability_thdots_seijaEx_duration"	"Duration: "
+		"DOTA_Tooltip_ability_ability_thdots_seijaEx_AbilityCastRange"	"Cast range: "
+		"DOTA_Tooltip_modifier_ability_thdots_seijaEx"	"「Overturning All Under Heaven」"
+		"DOTA_Tooltip_modifier_ability_thdots_seijaEx_Description"	"180° visual rotated."
+		"DOTA_Tooltip_modifier_ability_thdots_seijaEx_passive"	"「Overturning All Under Heaven」"
+		"DOTA_Tooltip_modifier_ability_thdots_seijaEx_passive_Description"	"They are reverse in Seija's visual."
+		"DOTA_Tooltip_modifier_ability_thdots_seija02_debuff"	"「Dream Bow of Heaven & Earth」"
+		"DOTA_Tooltip_modifier_ability_thdots_seija02_debuff_Description"	"Slowed."
+		"DOTA_Tooltip_ability_special_bonus_unique_seija_1"	"damage of「Dream Bow of Heaven & Earth」doesn't reduce"
+		"DOTA_Tooltip_ability_special_bonus_unique_seija_2"	"+3 reappear times of「Dream Bow of Heaven & Earth」"
+		"DOTA_Tooltip_ability_special_bonus_unique_seija_3"	"「Evil in the Mirror」can be cast on allies"
+		"DOTA_Tooltip_ability_special_bonus_unique_seija_4"	"+800「Reverse Hierarchy」cast range and radius"
+		"DOTA_Tooltip_ability_special_bonus_unique_seija_5"	"+50% spell amplification"
 
 		// --------------------
 		// Eternity Larva translated by epic

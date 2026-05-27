@@ -1,0 +1,242 @@
+// Dota2 Editor
+// Get latest version: https://github.com/zombieJ/nw-dota2editor
+
+"DOTAAbilities"
+{
+	"Version"		"1"
+
+	"ability_thdots_miyakoEx"
+	{
+		"BaseClass"	"ability_lua"
+		"AbilityTextureName"	"\vengefulspirit\huangs_umbra_icons\vengefulspirit_nether_swap"
+		"ScriptFile"	"scripts/vscripts/abilities/abilitymiyako.lua"
+		"AbilityBehavior"	"DOTA_ABILITY_BEHAVIOR_PASSIVE"
+		"MaxLevel"	"1"
+		"IsBreakable"					"1"
+		"precache"
+		{
+			"soundfile"	"soundevents/thdots_hero_sounds/thdots_miyako_sounds.vsndevts"
+		}
+		"Modifiers"
+		{
+			"modifier_ability_thdots_miyakoEx_passive"	{}
+		}
+		"AbilityValues"
+		{
+			"day_regen"	"-50"
+			"unday_regen"	"100"
+		}
+	}
+
+	"ability_thdots_miyako01"
+	{
+		"BaseClass"	"ability_lua"
+		"AbilityTextureName"	"death_prophet_spirit_siphon"
+		"ScriptFile"	"scripts/vscripts/abilities/abilitymiyako.lua"
+		"AbilityBehavior"	"DOTA_ABILITY_BEHAVIOR_TOGGLE | DOTA_ABILITY_BEHAVIOR_IGNORE_PSEUDO_QUEUE | DOTA_ABILITY_BEHAVIOR_UNRESTRICTED | DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
+		"AbilityUnitTargetType"	"DOTA_UNIT_TARGET_HERO"
+		"AbilityUnitTargetTeam"	"DOTA_UNIT_TARGET_TEAM_ENEMY"
+		"AbilityCastPoint"	"0.2"
+		"AbilityCastAnimation"	"ACT_DOTA_CAST_ABILITY_1"
+		"AnimationPlaybackRate"	"1"
+		"AbilityCooldown"	"12 10 8 6"
+		"precache"
+		{
+			"particle"		"particles/econ/items/lion/lion_demon_drain/lion_spell_mana_drain_demon_magic.vpcf"
+			"particle"		"particles/units/heroes/hero_lion/lion_spell_mana_drain.vpcf"
+		}
+		"AbilityValues"
+		{
+			"radius"
+			{
+				"value"			"600"
+				"affected_by_aoe_increase"	"1"
+			}
+			"lost_mana"	"15 30 45 60"
+			"spend_mana"	"4 8 12 16"
+			"power_regen"	"30 60 90 120"
+		}
+		"SpellDispellableType"	"SPELL_DISPELLABLE_NO"
+	}
+
+	"ability_thdots_miyako02"
+	{
+		"BaseClass"	"ability_lua"
+		"AbilityTextureName"	"\bloodseeker\thirst_of_eztshok\bloodseeker_bloodrage"
+		"ScriptFile"	"scripts/vscripts/abilities/abilitymiyako.lua"
+		"AbilityBehavior"	"DOTA_ABILITY_BEHAVIOR_PASSIVE"
+		"AbilityUnitTargetType"	"DOTA_UNIT_TARGET_HERO | DOTA_UNIT_TARGET_BASIC"
+		"AbilityUnitTargetTeam"	"DOTA_UNIT_TARGET_TEAM_ENEMY"
+		"AbilityUnitDamageType"	"DAMAGE_TYPE_MAGICAL"
+		"IsBreakable"					"1"
+		"precache"
+		{
+			"particle"		"particles/econ/items/lion/lion_demon_drain/lion_demon_drain_witness_ambient.vpcf"
+		}
+		"AbilityValues"
+		{
+			"radius"
+			{
+				"value"	"1250 1500 1750 2000"
+				"LinkedSpecialBonus"	"special_bonus_unique_miyako_3"
+				"affected_by_aoe_increase"	"1"
+			}
+			"stack_add_speed"	"10 16 22 28"
+		}
+		"SpellDispellableType"	"SPELL_DISPELLABLE_NO"
+	}
+
+	"ability_thdots_miyako03"
+	{
+		"BaseClass"	"ability_lua"
+		"AbilityTextureName"	"touhoutd/thtd_yoshika_01"
+		"ScriptFile"	"scripts/vscripts/abilities/abilitymiyako.lua"
+		"AbilityBehavior"	"DOTA_ABILITY_BEHAVIOR_PASSIVE"
+		"AbilityUnitTargetType"	"DOTA_UNIT_TARGET_HERO | DOTA_UNIT_TARGET_BASIC"
+		"AbilityUnitTargetTeam"	"DOTA_UNIT_TARGET_TEAM_ENEMY"
+		"AbilityUnitDamageType"	"DAMAGE_TYPE_MAGICAL"
+		"IsBreakable"					"1"
+		"precache"
+		{
+			"particle"		"particles/econ/items/sand_king/sandking_ti7_arms/sandking_ti7_caustic_finale_debuff.vpcf"
+			"particle"		"particles/units/heroes/hero_sandking/sandking_caustic_finale_explode.vpcf"
+		}
+		"AbilityValues"
+		{
+			"radius"
+			{
+				"value"			"250"
+				"affected_by_aoe_increase"	"1"
+			}
+			"damage"	"50 70 90 110"
+			"percent_damage"	"10 15 20 25"
+			"slow"
+			{
+				"value"	"10 15 20 25"
+				"LinkedSpecialBonus"	"special_bonus_unique_miyako_1"
+			}
+			"duration"	"3"
+		}
+		"SpellDispellableType"	"SPELL_DISPELLABLE_YES"
+	}
+
+	"ability_thdots_miyako04"
+	{
+		"BaseClass"	"ability_lua"
+		"AbilityTextureName"	"\necrolyte\apostle_of_decay_icons\necrolyte_death_pulse"
+		"ScriptFile"	"scripts/vscripts/abilities/abilitymiyako.lua"
+		"AbilityBehavior"	"DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE"
+		"AbilityType"	"DOTA_ABILITY_TYPE_ULTIMATE"
+		//"AbilityCastPoint"	"0.4"
+		//"AbilityCastAnimation"	"ACT_DOTA_CAST_ABILITY_1"
+		//"AnimationPlaybackRate"	"2.5"
+		"AbilityCooldown"	"30"
+		"precache"
+		{
+			"particle"		"particles/units/heroes/hero_undying/undying_fg_aura_debuff.vpcf"
+			"particle"		"particles/units/heroes/hero_undying/undying_tower_destruction.vpcf"
+			"particle"		"particles/units/heroes/hero_undying/undying_tower_destruct_flashbang.vpcf"
+			"particle"		"particles/units/heroes/hero_abaddon/abaddon_borrowed_time.vpcf"
+		}
+		"AbilityValues"
+		{
+			"pre_damage_percent"
+			{
+				"value"	"25 20 15"
+				"LinkedSpecialBonus"	"special_bonus_unique_miyako_4"
+			}
+			"delay_time"	"2 3 4"
+		}
+		"SpellDispellableType"	"SPELL_DISPELLABLE_NO"
+	}
+
+	"ability_thdots_miyako05"
+	{
+		"BaseClass"	"ability_lua"
+		"AbilityTextureName"	"undying_soul_rip"
+		"ScriptFile"	"scripts/vscripts/abilities/abilitymiyako.lua"
+		"AbilityBehavior"	"DOTA_ABILITY_BEHAVIOR_IMMEDIATE | DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_AUTOCAST"
+		"AbilityUnitTargetType"	"DOTA_UNIT_TARGET_HERO | DOTA_UNIT_TARGET_BASIC"
+		"AbilityUnitTargetTeam"	"DOTA_UNIT_TARGET_TEAM_ENEMY"
+		"MaxLevel"	"1"
+		"IsGrantedByScepter"	"1"
+		"AbilityCooldown"	"10"
+		"precache"
+		{
+			"particle"		"particles/econ/items/juggernaut/jugg_arcana/juggernaut_arcana_v2_blade_fury_disk.vpcf"
+		}
+		"AbilityValues"
+		{
+			"radius"
+			{
+				"value"			"1500"
+				"affected_by_aoe_increase"	"1"
+			}
+		}
+		"HasScepterUpgrade"	"1"
+	}
+
+	"special_bonus_unique_miyako_1"
+	{
+		"BaseClass"	"special_bonus_undefined"
+		"AbilityBehavior"	"DOTA_ABILITY_BEHAVIOR_PASSIVE"
+		"AbilityType"	"DOTA_ABILITY_TYPE_ATTRIBUTES"
+		"AbilityValues"
+		{
+			"value"	"20"
+		}
+	}
+
+	"special_bonus_unique_miyako_2"
+	{
+		"BaseClass"	"special_bonus_undefined"
+		"AbilityBehavior"	"DOTA_ABILITY_BEHAVIOR_PASSIVE"
+		"AbilityType"	"DOTA_ABILITY_TYPE_ATTRIBUTES"
+		"AbilityValues"
+		{
+			"value"	"1"
+		}
+	}
+
+	"special_bonus_unique_miyako_3"
+	{
+		"BaseClass"	"special_bonus_undefined"
+		"AbilityBehavior"	"DOTA_ABILITY_BEHAVIOR_PASSIVE"
+		"AbilityType"	"DOTA_ABILITY_TYPE_ATTRIBUTES"
+		"AbilityValues"
+		{
+			"value"	"1250"
+		}
+	}
+
+	"special_bonus_unique_miyako_4"
+	{
+		"BaseClass"	"special_bonus_undefined"
+		"AbilityBehavior"	"DOTA_ABILITY_BEHAVIOR_PASSIVE"
+		"AbilityType"	"DOTA_ABILITY_TYPE_ATTRIBUTES"
+		"AbilityValues"
+		{
+			"value"	"-8"
+		}
+	}
+	"special_bonus_unique_miyako_5"
+	{
+		"BaseClass"	"special_bonus_undefined"
+		"AbilityBehavior"	"DOTA_ABILITY_BEHAVIOR_PASSIVE"
+		"AbilityType"	"DOTA_ABILITY_TYPE_ATTRIBUTES"
+		"AbilityValues"
+		{
+			"value"	"5"
+		}
+	}
+	"special_bonus_unique_miyako_6"
+	{
+		"BaseClass"	"special_bonus_undefined"
+		"AbilityBehavior"	"DOTA_ABILITY_BEHAVIOR_PASSIVE"
+		"AbilityType"	"DOTA_ABILITY_TYPE_ATTRIBUTES"
+		"AbilityValues"
+		{
+			"value"	"200"
+		}
+	}
+}

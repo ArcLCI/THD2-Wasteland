@@ -40,6 +40,7 @@
 #base heroes/miko/hero.txt
 #base heroes/minamitsu/hero.txt
 #base heroes/minoriko/hero.txt
+#base heroes/miyako/hero.txt
 #base heroes/mokou/hero.txt
 #base heroes/momiji/hero.txt
 #base heroes/mystia/hero.txt
@@ -60,6 +61,7 @@
 #base heroes/sanae/hero.txt
 #base heroes/satori/hero.txt
 #base heroes/seiga/hero.txt
+#base heroes/seija/hero.txt
 #base heroes/shikieiki/hero.txt
 #base heroes/shinki/hero.txt
 #base heroes/shion/hero.txt

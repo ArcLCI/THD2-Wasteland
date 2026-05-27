@@ -106,7 +106,7 @@ function THD2_GetJFFMode() return cur_jff end
 
 
 --to ban some girls(which is not work done XD)
-cur_bot_heros_size = 43
+cur_bot_heros_size = 44
 tot_bot_heros_size = 67
 G_BOT_USED = 
 {
@@ -173,7 +173,7 @@ G_BOT_USED =
 	true ,			--爱莲
 	false ,			--果/极/羽
 	false ,			--神子
-	true ,			--宫古
+	false ,			--宫古
 	false ,			--青娥
 	
 	false ,			--探女

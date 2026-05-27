@@ -261,6 +261,11 @@ ability_can_be_stolen ={
 	"ability_thdots_lily02",
 	"ability_thdots_lily03",
 	"ability_thdots_lily04",
+--seija
+	"ability_thdots_seija01",
+	"ability_thdots_seija02",
+	"ability_thdots_seija03",
+	"ability_thdots_seija04",
 --Nazrin
 	"ability_thdotsr_Nazrin01",
 	"ability_thdotsr_Nazrin02",
@@ -342,6 +347,9 @@ ability_can_be_stolen ={
 	"ability_thdots_seiga02",
 	"ability_thdots_seiga03",
 	"ability_thdots_seiga04",
+--miyako
+	"ability_thdots_miyako01",
+	"ability_thdots_miyako04",
 --shizuha
 	"ability_thdots_shizuha01",
 	"ability_thdots_shizuha02",
@@ -873,6 +881,8 @@ function ability_thdots_satori01:ForgetSpell(caster)
 	caster:RemoveModifierByName("modifier_mystiaEx")
 	caster:RemoveModifierByName("modifier_ability_thdots_hatate01")
 	caster:RemoveModifierByName("modifier_ability_thdots_nitori03")
+	caster:RemoveModifierByName("modifier_ability_thdots_miyako01_caster")
+	caster:RemoveModifierByName("modifier_ability_thdots_miyako04_passive")
 	if caster:HasModifier("modifier_kagerou_add_damage") then
 		caster:RemoveModifierByName("modifier_kagerou_add_damage")
 		--print("doit")

@@ -57,9 +57,6 @@ DOTA_BAN_LIST={
 	"npc_dota_hero_nevermore",--影魔
 	"npc_dota_hero_bloodseeker",--血魔
 	"npc_dota_hero_ember_spirit",--灰烬之灵
-	"npc_dota_hero_batrider",--蝙蝠骑士
-	"npc_dota_hero_undying",--不朽尸王
-	"npc_dota_hero_largo",--朗戈
 }--dota乱入名单，请在activelist中同步修改
 THD2_BAN_LIST ={
 	
@@ -2533,6 +2530,9 @@ function THDOTSGameMode:PrecacheHeroResource(hero)
 	elseif (heroName == "npc_dota_hero_lycan") then
 		abilityEx = hero:FindAbilityByName("ability_thdots_kagerouEx")
 		abilityEx:SetLevel(1)
+	elseif (heroName == "npc_dota_hero_batrider") then
+		abilityEx = hero:FindAbilityByName("ability_thdots_seijaEx")
+		abilityEx:SetLevel(1)
 	elseif (heroName == "npc_dota_hero_leshrac") then
 		abilityEx = hero:FindAbilityByName("ability_thdots_lily05")
 		abilityEx:SetLevel(1)
@@ -2600,6 +2600,11 @@ function THDOTSGameMode:PrecacheHeroResource(hero)
 		abilityEx = hero:FindAbilityByName("ability_thdots_seigaEx")
 		abilityEx:SetLevel(1)
 		abilityEx = hero:FindAbilityByName("ability_thdots_seiga05")
+		abilityEx:SetLevel(1)
+	elseif (heroName == "npc_dota_hero_undying") then
+		abilityEx = hero:FindAbilityByName("ability_thdots_miyakoEx")
+		abilityEx:SetLevel(1)
+		abilityEx = hero:FindAbilityByName("ability_thdots_miyako05")
 		abilityEx:SetLevel(1)
 	elseif (heroName == "npc_dota_hero_bristleback") then
 		local ability = hero:FindAbilityByName("ability_thdots_kasen04_ex")
