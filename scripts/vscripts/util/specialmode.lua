@@ -106,7 +106,7 @@ function THD2_GetJFFMode() return cur_jff end
 
 
 --to ban some girls(which is not work done XD)
-cur_bot_heros_size = 44
+cur_bot_heros_size = 45
 tot_bot_heros_size = 67
 G_BOT_USED = 
 {

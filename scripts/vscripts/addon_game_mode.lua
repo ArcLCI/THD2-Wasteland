@@ -112,6 +112,7 @@ require ( "util/thd_secondary_ability")
 require ( "util/camerayaw")
 require ( "util/skill_change")
 require ( "util/mushroom")
+require ( "util/bot_wards")
 require ( "util/heroselectoverlay")
 require ( "util/innate_ability")
 require ( "util/occult_ball" )
@@ -441,6 +442,50 @@ function _G.THD2_IsBotHero(unit)
 	end
 
 	return false
+end
+
+function _G.THD2_TeamHasBot(team)
+	if AddBotsToTable ~= nil then
+		AddBotsToTable()
+	end
+
+	local bots = botTable[team]
+	if bots == nil then return false end
+	for _, hero in pairs(bots) do
+		if hero ~= nil and not hero:IsNull() then
+			return true
+		end
+	end
+
+	return false
+end
+
+local function THD2_IsBotPlayerID(playerID)
+	if playerID == nil or playerID < 0 then return false end
+	if PlayerResource.IsFakeClient ~= nil and PlayerResource:IsFakeClient(playerID) then return true end
+	if PlayerIsBot ~= nil and PlayerIsBot(playerID) then return true end
+	return PlayerResource:GetSteamID(playerID) == PlayerResource:GetSteamID(100)
+end
+
+function _G.THD2_TeamIsPureBot(team)
+	local playerCount = PlayerResource:GetPlayerCountForTeam(team)
+	local validHeroCount = 0
+
+	for index = 0, playerCount - 1 do
+		local playerID = PlayerResource:GetNthPlayerIDOnTeam(team, index)
+		local player = PlayerResource:GetPlayer(playerID)
+		if player ~= nil then
+			local hero = player:GetAssignedHero()
+			if hero ~= nil and not hero:IsNull() then
+				validHeroCount = validHeroCount + 1
+				if not THD2_IsBotPlayerID(playerID) then
+					return false
+				end
+			end
+		end
+	end
+
+	return validHeroCount > 0
 end
 
 if THDOTSGameMode == nil then
@@ -2900,6 +2945,7 @@ function THDOTSGameMode:OnGameRulesStateChange(keys)
 		rune_fixer_init()
 		THD2_neutral_spawner_fixer()	-- 刷野修正
 		THD2_BotPushAllWithDelay()
+		THD2_StartBotObserverWardThinker()
 		GameRules:SetTimeOfDay(0.25)
 		MushRoomStart() 		--刷蘑菇系统
 		AddBotsToTable()
