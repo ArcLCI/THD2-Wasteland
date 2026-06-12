@@ -360,20 +360,21 @@ end
 
 function modifier_ability_thdots_chen03:OnAbilityExecuted(keys)
 	if not IsServer() then return end
+	self.caster 						= self:GetParent()
+	-- 过滤物品、隐藏技能和不触发魔棒的中立建筑交互技能。
+	if keys.unit ~= self.caster or keys.ability == nil or keys.ability:IsItem() or IsNotLunchbox_ability(keys.ability) then
+		return
+	end
 	if keys.ability:GetName() == "ability_thdots_chen01" or 
 		keys.ability:GetName() == "ability_thdots_chen02" or
 		keys.ability:GetName() == "ability_thdots_chen04"
 		then return
 	end
-	self.caster 						= self:GetParent()
 	self.damage 						= self:GetAbility():GetSpecialValueFor("damage")
 	self.radius 						= self:GetAbility():GetSpecialValueFor("radius")
 	self.duration 						= self:GetAbility():GetSpecialValueFor("duration")
 	-- self.int_bonus 						= self:GetAbility():GetSpecialValueFor("int_bonus")
 	self.ability 						= self:GetAbility()
-	if keys.unit ~= self.caster or keys.ability:IsItem() then
-		return
-	end
 	--主动触发3技能
 	if keys.ability:GetName() == "ability_thdots_chen03" then
 		self.damage = self.damage * 2

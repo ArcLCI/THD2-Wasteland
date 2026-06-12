@@ -184,7 +184,7 @@ G_BOT_USED =
 	false ,			--铃仙02
 	true ,			--拉尔瓦
 	false ,			--秋穰子
-	true ,			--秋静叶
+	false ,			--秋静叶
 	true ,			--youmuv2
 	
 	true ,			--紫苑

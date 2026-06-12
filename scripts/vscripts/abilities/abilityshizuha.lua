@@ -1,55 +1,4 @@
 -------------------------------------------------------------------------------------------
--- old 天生技能
--------------------------------------------------------------------------------------------
-function OnCreatedShizuhaEX(keys)
-    keys.caster:SetModifierStackCount("modifier_thdots_shizuhaEX_check_levelup", keys.ability, 1)
-end
-
-function OnPlayerLevelupShizuhaEX(keys)
-
-    local baseDamage = keys.base_damage
-    local levelMultiple = keys.level_multiple
-    local caster = keys.caster
-
-    local levelcount = caster:GetModifierStackCount("modifier_thdots_shizuhaEX_check_levelup", caster)
-
-    if caster:IsRealHero() and levelcount ~= keys.caster:GetLevel() then
-
-        -- 伤害值计算
-        local dealdamages = ((keys.caster:GetLevel() * levelMultiple) + baseDamage)
-        -- 获取全图范围的 敌方少女
-        local targets = FindUnitsInRadius(caster:GetTeam(), caster:GetAbsOrigin(), nil, 20000,
-            keys.ability:GetAbilityTargetTeam(), keys.ability:GetAbilityTargetType(), 0, 0, false)
-
-        -- 循环给每个少女造成伤害
-        for _, vic in ipairs(targets) do
-            local damage_table = {
-                ability = keys.ability,
-                victim = vic,
-                attacker = caster,
-                damage = dealdamages,
-                damage_type = keys.ability:GetAbilityDamageType(),
-                damage_flags = 0
-            }
-            UnitDamageTarget(damage_table) -- 公用伤害方法
-        end
-
-        -- 所有人说话广播
-        GameRules:SendCustomMessage("#ShizuhaEXMessage", 0, 0)
-
-        -- 生产特效 在自己脚下
-        local nEffectIndex = ParticleManager:CreateParticle(
-            "particles/econ/items/windrunner/windranger_arcana/windranger_arcana_item_cyclone_v2_leaf.vpcf",
-            PATTACH_CUSTOMORIGIN, caster)
-        ParticleManager:SetParticleControl(nEffectIndex, 0, caster:GetOrigin())
-
-    end
-
-    caster:SetModifierStackCount("modifier_thdots_shizuhaEX_check_levelup_new", ability, caster:GetLevel())
-
-end
-
--------------------------------------------------------------------------------------------
 -- new 天生技能（可以使用魔晶升级）
 -------------------------------------------------------------------------------------------
 ability_thdots_shizuhaEXNew = {}
@@ -139,9 +88,9 @@ function modifier_thdots_shizuhaEX_check_levelup_new:OnCreated()
     end
     self.caster = self:GetCaster()
     self.ability = self:GetAbility()
-    -- mylevel = self.caster:GetLevel()
-    self.caster:SetModifierStackCount("modifier_thdots_shizuhaEX_check_levelup_new", self.ability, 1)
-    -- 优化：升级是离散事件，FrameTime 空轮询完全没必要，改为 0.5 秒。
+    self.lastLevel = self.caster:GetLevel()
+    self:SetStackCount(self.lastLevel)
+    -- 升级是离散事件，低频检查并仅在等级变化时继续处理。
     self:StartIntervalThink(0.5)
 end
 function modifier_thdots_shizuhaEX_check_levelup_new:OnIntervalThink()
@@ -149,31 +98,33 @@ function modifier_thdots_shizuhaEX_check_levelup_new:OnIntervalThink()
         return
     end
     local caster = self:GetCaster()
+    local currentLevel = caster:GetLevel()
+    if currentLevel == self.lastLevel then
+        return
+    end
+
     local ability = self:GetAbility()
     local baseDamage = ability:GetSpecialValueFor("base_damage")
     local levelMultiple = ability:GetSpecialValueFor("level_multiple")
 
-    local levelcount = caster:GetModifierStackCount("modifier_thdots_shizuhaEX_check_levelup_new", caster)
-
-    if caster:IsRealHero() and levelcount ~= caster:GetLevel() then
+    if caster:IsRealHero() then
 
         -- 伤害值计算
-        local dealdamages = ((caster:GetLevel() * levelMultiple) + baseDamage)
-        -- 获取全图范围的 敌方少女
-        local targets = FindUnitsInRadius(caster:GetTeam(), caster:GetAbsOrigin(), nil, 20000,
-            ability:GetAbilityTargetTeam(), ability:GetAbilityTargetType(), 0, 0, false)
-
-        -- 循环给每个少女造成伤害
-        for _, vic in ipairs(targets) do
-            local damage_table = {
-                ability = ability,
-                victim = vic,
-                attacker = caster,
-                damage = dealdamages,
-                damage_type = ability:GetAbilityDamageType(),
-                damage_flags = 0
-            }
-            UnitDamageTarget(damage_table) -- 公用伤害方法
+        local dealdamages = ((currentLevel * levelMultiple) + baseDamage)
+        -- 升级伤害只需要检查英雄列表，避免执行全图空间扫描。
+        for _, vic in ipairs(HeroList:GetAllHeroes()) do
+            if vic:IsAlive() and UnitFilter(vic, ability:GetAbilityTargetTeam(), ability:GetAbilityTargetType(),
+                ability:GetAbilityTargetFlags(), caster:GetTeamNumber()) == UF_SUCCESS then
+                local damage_table = {
+                    ability = ability,
+                    victim = vic,
+                    attacker = caster,
+                    damage = dealdamages,
+                    damage_type = ability:GetAbilityDamageType(),
+                    damage_flags = 0
+                }
+                UnitDamageTarget(damage_table) -- 公用伤害方法
+            end
         end
 
         -- 所有人说话广播
@@ -192,11 +143,12 @@ function modifier_thdots_shizuhaEX_check_levelup_new:OnIntervalThink()
             "particles/econ/items/windrunner/windranger_arcana/windranger_arcana_item_cyclone_v2_leaf.vpcf",
             PATTACH_CUSTOMORIGIN, caster)
         ParticleManager:SetParticleControl(nEffectIndex, 0, caster:GetOrigin())
+        ParticleManager:ReleaseParticleIndex(nEffectIndex)
 
     end
 
-    -- mylevel = caster:GetLevel()
-    caster:SetModifierStackCount("modifier_thdots_shizuhaEX_check_levelup_new", ability, caster:GetLevel())
+    self.lastLevel = currentLevel
+    self:SetStackCount(currentLevel)
 end
 
 modifier_thdots_shizuhaEX_speed_up_buff = {}
@@ -264,6 +216,7 @@ function shizuha01soundeffect(keys)
     local particle2 = ParticleManager:CreateParticle(
         "particles/econ/items/pugna/pugna_ti9_immortal/pugna_ti9_immortal_netherblast.vpcf", PATTACH_CUSTOMORIGIN, nil)
     ParticleManager:SetParticleControl(particle2, 5, target)
+    ParticleManager:DestroyParticleSystem(particle2, false)
 
     -- 台词语音
     caster:EmitSound("Voice_Thdots_Shizuha.AbilityShizuha01")
@@ -311,23 +264,6 @@ function OnCreatedShizuha02Time(keys)
     SendOverheadEventMessage(nil, OVERHEAD_ALERT_HEAL, keys.caster, keys.heal_amount / times1, nil)
     SendOverheadEventMessage(nil, OVERHEAD_ALERT_MANA_ADD, keys.caster, keys.mana_regen_amount / times1, nil)
 
-end
-
--- 受到伤害时眩晕0.01秒
-function OnOnTakeDamageShizuha02(keys)
-
-    local unique_value = 0
-
-    -- 有天赋直接跳过
-    local special_bonus_unique_shizuha_6 = keys.caster:FindAbilityByName("special_bonus_unique_shizuha_6")
-    if special_bonus_unique_shizuha_6 and special_bonus_unique_shizuha_6:GetLevel() ~= 0 then
-        unique_value = special_bonus_unique_shizuha_6:GetSpecialValueFor("value")
-    end
-    if unique_value ~= 0 then
-        return
-    end
-
-    UtilStun:UnitStunTarget(keys.caster, keys.caster, 0.01)
 end
 
 function OnCreatedShizuha02End(keys)
@@ -400,22 +336,16 @@ function ability_thdots_shizuha03:OnOrbImpact(keys)
 
     local splash_damage = self:GetSpecialValueFor("range_damage") +
                               FindTelentValue(caster, "special_bonus_unique_shizuha_5")
-    local splash_radius = self:GetSpecialValueFor("damage_radius")
-
-    local targets = FindUnitsInRadius(caster:GetTeam(), target:GetAbsOrigin(), nil, splash_radius,
-        DOTA_UNIT_TARGET_TEAM_ENEMY, DOTA_UNIT_TARGET_ALL, 0, 0, false)
-    for k, v in pairs(targets) do
-        local damage_table = {
-            ability = self,
-            victim = v,
-            attacker = caster,
-            damage = splash_damage,
-            damage_type = self:GetAbilityDamageType(),
-            damage_flags = 0
-        }
-        UnitDamageTarget(damage_table)
-
-    end
+    -- 当前主动法球仅对主目标造成额外物理伤害，不再扫描或伤害周围单位。
+    local damage_table = {
+        ability = self,
+        victim = target,
+        attacker = caster,
+        damage = splash_damage,
+        damage_type = self:GetAbilityDamageType(),
+        damage_flags = 0
+    }
+    UnitDamageTarget(damage_table)
 end
 
 shizuha03_disable_healing_debuff = {}
@@ -592,7 +522,8 @@ function ability_thdots_shizuha05:OnSpellStart()
     EmitSoundOnLocationWithCaster(pTgt, "Hero_Batrider.Flamebreak", caster)
     local trees = GridNav:GetAllTreesAroundPoint(pTgt, radius, true)
     -- 初始范围内每多1棵树，增加5%的伤害
-    damage = damage * (1 + (#trees - 1) * self:GetSpecialValueFor("damage_pct_per_tree") / 100)
+    damage = damage * (1 + (#trees - 1) * self:GetSpecialValueFor("dmg_bonus_pct_per_tree") / 100)
+    local processedTrees = {}
     -- 特效
     local ptc0 = ParticleManager:CreateParticle("particles/heros/shizuha/sizuha_05_leaf_nosuck.vpcf",
         PATTACH_WORLDORIGIN, nil)
@@ -603,7 +534,7 @@ function ability_thdots_shizuha05:OnSpellStart()
     caster:EmitSound("Hero_Batrider.Firefly.loop")
     Timers:CreateTimer(interval, function()
 
-        if #trees <= 0 or radius > radius_max then
+        if radius > radius_max then
             ParticleManager:SetParticleControl(ptc0, 1, Vector(radius_max, 1, 1))
 
             Timers:CreateTimer(tree_down_delay, function()
@@ -616,19 +547,43 @@ function ability_thdots_shizuha05:OnSpellStart()
         else
             -- 重新找树
             trees = GridNav:GetAllTreesAroundPoint(pTgt, radius, true)
-            for i, tree in pairs(trees) do
-                -- 特效
-                local ptc = ParticleManager:CreateParticle(
-                    "particles/econ/items/windrunner/windranger_arcana/windranger_arcana_ambient_v2.vpcf",
-                    PATTACH_WORLDORIGIN, nil)
-                ParticleManager:SetParticleControl(ptc, 0, tree:GetAbsOrigin())
-                ParticleManager:SetParticleShouldCheckFoW(ptc, false)
-
+            if #trees <= 0 then
+                ParticleManager:SetParticleControl(ptc0, 1, Vector(radius_max, 1, 1))
                 Timers:CreateTimer(tree_down_delay, function()
+                    ParticleManager:DestroyParticle(ptc0, false)
+                    ParticleManager:ReleaseParticleIndex(ptc0)
+                    caster:StopSound("Hero_Batrider.Firefly.loop")
+                    return nil
+                end)
+                return nil
+            end
+
+            local roundParticles = {}
+            for i, tree in pairs(trees) do
+                local treeIndex = tree:entindex()
+                if not processedTrees[treeIndex] then
+                    processedTrees[treeIndex] = true
+                    -- 每棵树只创建一次特效，避免扩圈时重复处理内圈树木。
+                    local ptc = ParticleManager:CreateParticle(
+                        "particles/econ/items/windrunner/windranger_arcana/windranger_arcana_ambient_v2.vpcf",
+                        PATTACH_WORLDORIGIN, nil)
+                    ParticleManager:SetParticleControl(ptc, 0, tree:GetAbsOrigin())
+                    ParticleManager:SetParticleShouldCheckFoW(ptc, false)
+                    table.insert(roundParticles, ptc)
+                end
+            end
+
+            local roundTrees = trees
+            local shouldCutTrees = tree_down_countdown - interval <= 0
+            -- 每轮共用一个 Timer，统一清理粒子和到期树木。
+            Timers:CreateTimer(tree_down_delay, function()
+                for _, ptc in pairs(roundParticles) do
                     ParticleManager:DestroyParticle(ptc, false)
                     ParticleManager:ReleaseParticleIndex(ptc)
-                    if tree_down_countdown <= 0 then
-                        if tree then
+                end
+                if shouldCutTrees then
+                    for _, tree in pairs(roundTrees) do
+                        if tree ~= nil and not tree:IsNull() then
                             if tree:GetClassname() == "dota_temp_tree" then
                                 tree:RemoveSelf()
                             else
@@ -636,9 +591,9 @@ function ability_thdots_shizuha05:OnSpellStart()
                             end
                         end
                     end
-                    return nil
-                end)
-            end
+                end
+                return nil
+            end)
 
             ParticleManager:SetParticleControl(ptc0, 1, Vector(radius, 1, 1))
             -- ParticleManager:SetParticleControl(ptc0, 2, Vector(radius,0,0))
@@ -748,11 +703,14 @@ function ability_thdots_shizuha04:OnProjectileHit_ExtraData(target, location, ex
     false -- bool, can grow cache
     )
 
-    for _, enemy in pairs(enemies) do
-
-        self:GetCaster():AddNewModifier(self:GetCaster(), self, "modifier_shizuha04_damage_control", {})
-        self:GetCaster():PerformAttack(enemy, false, true, true, true, false, false, true)
-        self:GetCaster():RemoveModifierByName("modifier_shizuha04_damage_control")
+    local caster = self:GetCaster()
+    if #enemies > 0 then
+        -- 同一投射物命中范围内共用一次伤害覆盖 modifier，保留每个目标的 PerformAttack。
+        caster:AddNewModifier(caster, self, "modifier_shizuha04_damage_control", {})
+        for _, enemy in pairs(enemies) do
+            caster:PerformAttack(enemy, false, true, true, true, false, false, true)
+        end
+        caster:RemoveModifierByName("modifier_shizuha04_damage_control")
     end
 
     return true

@@ -5,9 +5,8 @@ end
 ability_thdots_marisa01 = {}
 
 function ability_thdots_marisa01:GetCastRange(location, target)
-    if IsServer() then
-        return 0
-    end
+    -- GetCastRange 只返回基础距离，指示器会由引擎自动叠加施法距离加成。
+    return self:GetSpecialValueFor("cast_range")
 end
 
 function ability_thdots_marisa01:OnSpellStart()
@@ -16,21 +15,24 @@ function ability_thdots_marisa01:OnSpellStart()
 
     caster:EmitSound("Hero_FacelessVoid.TimeWalk")
 
-    -- local targetPoint  = CastRang_Calculate(caster,keys.ability:GetCursorPosition(),keys.ability:GetSpecialValueFor("cast_range"))
+    -- 位移距离需要吃施法距离加成，避免自定义截断只按基础距离计算。
     local targetPoint = self:GetCursorPosition()
-    local range = ability:GetSpecialValueFor("cast_range")
-    local distance = (targetPoint - caster:GetOrigin()):Length2D()
-    if distance >= range then
-        targetPoint = caster:GetOrigin() + (targetPoint - caster:GetOrigin()):Normalized() * range
+    local casterOrigin = caster:GetOrigin()
+    local range = ability:GetSpecialValueFor("cast_range") + caster:GetCastRangeBonus()
+    local distance = (targetPoint - casterOrigin):Length2D()
+    if distance >= range and distance > 0 then
+        targetPoint = casterOrigin + (targetPoint - casterOrigin):Normalized() * range
     end
-    local marisa01rad = GetRadBetweenTwoVec2D(caster:GetOrigin(), targetPoint)
-    local marisa01dis = GetDistanceBetweenTwoVec2D(caster:GetOrigin(), targetPoint)
+    local marisa01rad = GetRadBetweenTwoVec2D(casterOrigin, targetPoint)
+    local marisa01dis = GetDistanceBetweenTwoVec2D(casterOrigin, targetPoint)
     ability:SetContextNum("ability_marisa01_Rad", marisa01rad, 0)
     ability:SetContextNum("ability_marisa01_Dis", marisa01dis, 0)
     -- local marisa01time = marisa01dis/1250
     -- UnitPauseTarget(caster,caster,marisa01time)
 
-    local move_duration = self:GetSpecialValueFor("move_duration")
+    -- 加成后的距离可能超过原本耗时，按实际距离补足移动持续时间。
+    local move_speed = self:GetSpecialValueFor("move_speed")
+    local move_duration = math.max(self:GetSpecialValueFor("move_duration"), marisa01dis / move_speed + 0.05)
     caster:AddNewModifier(caster, self, "modifier_thdots_marisa01_effect", {
         duration = move_duration
     })

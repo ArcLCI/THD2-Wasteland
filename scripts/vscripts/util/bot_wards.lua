@@ -1,4 +1,4 @@
-if BotObserverWards == nil then
+﻿if BotObserverWards == nil then
 	BotObserverWards = {}
 end
 
@@ -62,26 +62,26 @@ local BOT_WARD_PREVIOUS_TOWER = {
 
 local BOT_WARD_TOWER_NAMES = {
 	[DOTA_TEAM_GOODGUYS] = {
-		[TOWER_TOP_1] = {"npc_dota_goodguys_tower1_top", "npc_thd_goodguys_tower1_top"},
-		[TOWER_MID_1] = {"npc_dota_goodguys_tower1_mid", "npc_thd_goodguys_tower1_mid"},
-		[TOWER_BOT_1] = {"npc_dota_goodguys_tower1_bot", "npc_thd_goodguys_tower1_bot"},
-		[TOWER_TOP_2] = {"npc_dota_goodguys_tower2_top", "npc_thd_goodguys_tower2_top"},
-		[TOWER_MID_2] = {"npc_dota_goodguys_tower2_mid", "npc_thd_goodguys_tower2_mid"},
-		[TOWER_BOT_2] = {"npc_dota_goodguys_tower2_bot", "npc_thd_goodguys_tower2_bot"},
-		[TOWER_TOP_3] = {"npc_dota_goodguys_tower3_top", "npc_thd_goodguys_tower3_top"},
-		[TOWER_MID_3] = {"npc_dota_goodguys_tower3_mid", "npc_thd_goodguys_tower3_mid"},
-		[TOWER_BOT_3] = {"npc_dota_goodguys_tower3_bot", "npc_thd_goodguys_tower3_bot"},
+		[TOWER_TOP_1] = {"npc_dota_goodguys_tower1_top"},
+		[TOWER_MID_1] = {"npc_dota_goodguys_tower1_mid"},
+		[TOWER_BOT_1] = {"npc_dota_goodguys_tower1_bot"},
+		[TOWER_TOP_2] = {"npc_dota_goodguys_tower2_top"},
+		[TOWER_MID_2] = {"npc_dota_goodguys_tower2_mid"},
+		[TOWER_BOT_2] = {"npc_dota_goodguys_tower2_bot"},
+		[TOWER_TOP_3] = {"npc_dota_goodguys_tower3_top"},
+		[TOWER_MID_3] = {"npc_dota_goodguys_tower3_mid"},
+		[TOWER_BOT_3] = {"npc_dota_goodguys_tower3_bot"},
 	},
 	[DOTA_TEAM_BADGUYS] = {
-		[TOWER_TOP_1] = {"npc_dota_badguys_tower1_top", "npc_thd_badguys_tower1_top"},
-		[TOWER_MID_1] = {"npc_dota_badguys_tower1_mid", "npc_thd_badguys_tower1_mid"},
-		[TOWER_BOT_1] = {"npc_dota_badguys_tower1_bot", "npc_thd_badguys_tower1_bot"},
-		[TOWER_TOP_2] = {"npc_dota_badguys_tower2_top", "npc_thd_badguys_tower2_top"},
-		[TOWER_MID_2] = {"npc_dota_badguys_tower2_mid", "npc_thd_badguys_tower2_mid"},
-		[TOWER_BOT_2] = {"npc_dota_badguys_tower2_bot", "npc_thd_badguys_tower2_bot"},
-		[TOWER_TOP_3] = {"npc_dota_badguys_tower3_top", "npc_thd_badguys_tower3_top"},
-		[TOWER_MID_3] = {"npc_dota_badguys_tower3_mid", "npc_thd_badguys_tower3_mid"},
-		[TOWER_BOT_3] = {"npc_dota_badguys_tower3_bot", "npc_thd_badguys_tower3_bot"},
+		[TOWER_TOP_1] = {"npc_dota_badguys_tower1_top"},
+		[TOWER_MID_1] = {"npc_dota_badguys_tower1_mid"},
+		[TOWER_BOT_1] = {"npc_dota_badguys_tower1_bot"},
+		[TOWER_TOP_2] = {"npc_dota_badguys_tower2_top"},
+		[TOWER_MID_2] = {"npc_dota_badguys_tower2_mid"},
+		[TOWER_BOT_2] = {"npc_dota_badguys_tower2_bot"},
+		[TOWER_TOP_3] = {"npc_dota_badguys_tower3_top"},
+		[TOWER_MID_3] = {"npc_dota_badguys_tower3_mid"},
+		[TOWER_BOT_3] = {"npc_dota_badguys_tower3_bot"},
 	},
 }
 

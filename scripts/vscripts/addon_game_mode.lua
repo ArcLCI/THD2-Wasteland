@@ -88,6 +88,7 @@ require ( "util/collision" )
 require ( "util/nodamage" )
 require ( "util/CheckItemModifies")
 require ( "util/performattack")
+require ( "util/bot_courier")
 require ( "util/create_illusion")
 require ( "lib/selection")
 require ( "components/modifiers/init" )
@@ -2230,6 +2231,9 @@ function THDOTSGameMode:OnHeroSpawned( keys )
 	if(hero==nil)then
 	  return
 	end
+	-- 信使生成或重生时，为 Bot 控制的信使补充永久护盾。
+	THD2_ScheduleBotCourierShield(hero)
+
 	--[[if hero:GetUnitName() =="npc_dota_roshan" then
 		print("roshan")
 		hero:AddItemByName("item_aegis")

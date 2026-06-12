@@ -155,6 +155,10 @@
 		"DOTA_Tooltip_modifier_thdots_unit_anti_bd"									"Unable to pass bd inspect"
 		"DOTA_Tooltip_modifier_bot_buff"											"Bot"
 		"DOTA_Tooltip_modifier_bot_buff_Description"								"Increases all attribute, %dMODIFIER_PROPERTY_HEALTH_REGEN_CONSTANT% health regen and %dMODIFIER_PROPERTY_MANA_REGEN_CONSTANT% mana regen."
+		"DOTA_Tooltip_modifier_bot_buff_radiant"									"Bot"
+		"DOTA_Tooltip_modifier_bot_buff_radiant_Description"						"Increases all attribute, %dMODIFIER_PROPERTY_HEALTH_REGEN_CONSTANT% health regen and %dMODIFIER_PROPERTY_MANA_REGEN_CONSTANT% mana regen."
+		"DOTA_Tooltip_modifier_bot_buff_dire"										"Bot"
+		"DOTA_Tooltip_modifier_bot_buff_dire_Description"							"Increases all attribute, %dMODIFIER_PROPERTY_HEALTH_REGEN_CONSTANT% health regen and %dMODIFIER_PROPERTY_MANA_REGEN_CONSTANT% mana regen."
 		"DOTA_Tooltip_modifier_bot_corrector"										"Bot Difficulty"
 		"DOTA_Tooltip_modifier_bot_corrector_Description"							"The level of buff is the diffculty of bot."
 		"DOTA_Tooltip_modifier_ex_bot"												"Extra"
@@ -259,10 +263,9 @@
 		// Marisa01
 		"DOTA_Tooltip_ability_ability_thdots_marisa01"							"Comet「Blazing Star」"
 		"DOTA_Tooltip_ability_ability_thdots_marisa01_Description"				"Marisa turns into a comet and flies towards the target location, dealing damage to enemies along the way."
+		"DOTA_Tooltip_ability_ability_thdots_marisa01_AbilityCastRange"			"CAST RANGE: "
 		"DOTA_Tooltip_ability_ability_thdots_marisa01_move_speed"				"SPEED: "
 		"DOTA_Tooltip_ability_ability_thdots_marisa01_damage_radius"			"DAMAGE RADIUS: "
-		"DOTA_Tooltip_ability_ability_thdots_marisa01_move_duration"			"CASTING TIME: "
-		"DOTA_Tooltip_ability_ability_thdots_marisa01_cast_range"				"CAST RANGE: "
 		"DOTA_Tooltip_ability_ability_thdots_marisa01_Lore"						"Marisa transforms into an enormous yet beautiful comet to mow down enemies at high speed."
 
 		"DOTA_Tooltip_modifier_thdots_marisa01_think_interval"					"Comet「Blazing Star」"
@@ -2453,10 +2456,11 @@
 
 		// Lunasa01
 		"DOTA_Tooltip_ability_ability_thdots_lunasa01"								"Fake Strings「Pseudo Stradivarius」"
-		"DOTA_Tooltip_ability_ability_thdots_lunasa01_Description"					"Lunasa shoots a string of notes forward, dealing magical damage to enemies in a straight line. Due to the notes' melancholic effects, the enemy will be silenced for a short time."
+		"DOTA_Tooltip_ability_ability_thdots_lunasa01_Description"					"Lunasa shoots a string of notes forward, dealing magical damage to enemies in a straight line. Due to the notes' melancholic effects, the enemy will be silenced for a short time. The skill length is affected by cast range bonuses.<br><br>Deals 120%% damage within 300 range and 100%% damage from 300 to 800 range. Beyond 800 range, damage decreases by 10%% for every 50 range, down to a minimum of 20%%."
+		"DOTA_Tooltip_ability_ability_thdots_lunasa01_AbilityCastRange"				"SKILL LENGTH: "
 		"DOTA_Tooltip_ability_ability_thdots_lunasa01_lunasa01_duration"			"DURATION: "
 		"DOTA_Tooltip_ability_ability_thdots_lunasa01_damage"						"DAMAGE: "
-		"DOTA_Tooltip_ability_ability_thdots_lunasa01_range"						"RANGE: "
+		"DOTA_Tooltip_ability_ability_thdots_lunasa01_range"						"BASE LENGTH: "
 		"DOTA_Tooltip_ability_ability_thdots_lunasa01_int_bonus"					"BONUS DAMAGE PER INT: "
 
 		"DOTA_Tooltip_modifier_lunasa01"											"Fake Strings Silence"

@@ -148,60 +148,8 @@
 				"LinkedSpecialBonus"		"special_bonus_unique_shizuha_5"
 				"affected_by_aoe_increase"	"1"
 			}
-			"damage_radius"				"0"
 			"disable_healing_times"		"1.25 2.5 3.75 5"
 			"regen_amplify"				"-60"
-		}
-	}
-
-	"ability_thdots_shizuhaEX"
-	{
-		"BaseClass"			"ability_datadriven"
-		"AbilityTextureName"		"touhoutd/thtd_sizuha_ex"
-		"AbilityUnitDamageType"		"DAMAGE_TYPE_PURE"
-		"SpellImmunityType"		"SPELL_IMMUNITY_ENEMIES_YES"
-		"AbilityBehavior"		"DOTA_ABILITY_BEHAVIOR_PASSIVE"
-		"AbilityUnitTargetType"		"DOTA_UNIT_TARGET_HERO"
-		"AbilityUnitTargetTeam"		"DOTA_UNIT_TARGET_TEAM_ENEMY"
-		"MaxLevel"			"1"
-		"precache"
-		{
-			"particle"		"particles/econ/items/windrunner/windranger_arcana/windranger_arcana_item_cyclone_v2_leaf.vpcf"
-		}
-
-		"Modifiers"
-		{
-			"modifier_thdots_shizuhaEX_check_levelup"
-			{
-				"Passive"	"1"
-				"RemoveOnDeath"	"0"
-				"ThinkInterval"	"1"
-
-				"OnCreated"
-				{
-					"RunScript"
-					{
-						"ScriptFile"	"scripts/vscripts/abilities/abilityshizuha.lua"
-						"Function"	"OnCreatedShizuhaEX"
-					}
-				}
-				"OnIntervalThink"
-				{
-					"RunScript"
-					{
-						"ScriptFile"		"scripts/vscripts/abilities/abilityshizuha.lua"
-						"Function"			"OnPlayerLevelupShizuhaEX"
-						"base_damage"		"%base_damage"
-						"level_multiple"	"%level_multiple"
-					}
-				}
-			}
-		}
-		"AbilityValues"
-		{
-			"aura_radius"		"0"
-			"base_damage"		"75"
-			"level_multiple"	"9"
 		}
 	}
 

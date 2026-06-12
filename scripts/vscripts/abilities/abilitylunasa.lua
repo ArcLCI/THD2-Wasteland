@@ -2,12 +2,27 @@ abilitylunasa = {}
 
 LUNASAEX_BONUS_COUNT = nil --提琴EX层数记录
 
+local function Lunasa01GetDamageMultiplier(distance)
+	if distance <= 300 then
+		return 1.2
+	end
+	if distance <= 800 then
+		return 1.0
+	end
+
+	-- 超过800码后按距离连续衰减，每50码降低10%伤害，最低保留20%。
+	local decay = (distance - 800) / 50 * 0.1
+	return math.max(1.0 - decay, 0.2)
+end
+
 function lunasa01OnSpellStart(keys)
 	-- body
 	local caster = EntIndexToHScript(keys.caster_entindex)
-	local targetPoint = caster:GetOrigin()
+	local castOrigin = caster:GetOrigin()
+	local targetPoint = castOrigin
 	local vec = caster:GetForwardVector()
-	local distance = keys.range
+	-- 技能长度使用基础长度，并额外受到施法距离加成影响。
+	local distance = keys.range + caster:GetCastRangeBonus()
 
 	--制作一条爆炸特效, 并附带伤害
 	for i =1, distance/100 do
@@ -16,22 +31,23 @@ function lunasa01OnSpellStart(keys)
 		ParticleManager:SetParticleControl(effectIndex, 1, targetPoint)
 		ParticleManager:DestroyParticleSystem(effectIndex,false)
 	end
-	local targetPoint = caster:GetOrigin()
  	local targets = FindUnitsInLine(
 	      	caster:GetTeam(),
-	      	targetPoint,
-	      	targetPoint + vec*distance,
+			castOrigin,
+			castOrigin + vec*distance,
 	      	nil,
 	      	100,
 	      	DOTA_UNIT_TARGET_TEAM_ENEMY,
 	      	keys.ability:GetAbilityTargetType(),
 	      	0)
  	for _,v in pairs(targets) do
+		local targetDistance = GetDistanceBetweenTwoVec2D(castOrigin, v:GetOrigin())
+		local damageMultiplier = Lunasa01GetDamageMultiplier(targetDistance)
  		local DamageTable = {
 				   			ability = keys.ability,
 			                victim = v, 
 			                attacker = caster, 
-			                damage = keys.damage + caster:GetIntellect(false)*keys.ability:GetSpecialValueFor("int_bonus"), 
+			                damage = (keys.damage + caster:GetIntellect(false)*keys.ability:GetSpecialValueFor("int_bonus")) * damageMultiplier,
 			                damage_type = keys.ability:GetAbilityDamageType()
 		           }
 		local effectIndex = ParticleManager:CreateParticle("particles/units/heroes/hero_death_prophet/death_prophet_base_attack_explosion.vpcf", PATTACH_POINT, v)

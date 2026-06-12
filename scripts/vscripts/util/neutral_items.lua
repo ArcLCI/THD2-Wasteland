@@ -55,10 +55,12 @@ local Tier5NeutralItems = {
     "item_desolator_2",
     "item_fallen_sky",
     "item_minotaur_horn",
+    "item_pirate_hat",
     "item_panic_button",
     "item_spider_legs",
     "item_unrelenting_eye",
     "item_panic_button",
+    "item_fallen_sky",
     "item_pirate_hat",
 }
 
@@ -200,7 +202,7 @@ function NeutralItems.GiveNeutralItems(TeamRadiant, TeamDire)
     end
 
     -- Tier 5 Neutral Items
-    if DotaTime() >= 25 * 60
+    if DotaTime() >= 30 * 60
     and not isTierFiveDone
     then
 

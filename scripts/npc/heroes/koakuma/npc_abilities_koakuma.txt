@@ -12,7 +12,7 @@
 			"modifier_thdots_koakumaex_passive"
 			{		
 				"Passive"	"1"
-				"ThinkInterval"		"0.1"
+				"ThinkInterval"		"0.5"
 				"IsHidden"	"0"
 				"OnIntervalThink"
 				{
@@ -278,34 +278,13 @@
 
 	"ability_thdots_koakuma03"
 	{
-		"BaseClass"				"ability_datadriven"
+		"BaseClass"				"ability_lua"
+		"ScriptFile"			"scripts/vscripts/abilities/abilitykoakuma.lua"
 		"AbilityTextureName"	"custom/ability_thdots_koakuma03"
 		"AbilityBehavior"		"DOTA_ABILITY_BEHAVIOR_PASSIVE"		
 		"AbilityCooldown"				"10 9 8 7"
 		"MaxLevel"	"4"
 		"IsBreakable"					"1"
-		"Modifiers"
-		{
-			"modifier_thdots_koakuma03_passive"
-			{		
-				"Passive"	"1"
-				"ThinkInterval"		"0.1"
-				"IsHidden"	"1"
-				"OnIntervalThink"
-				{
-					"RunScript"
-					{
-						"ScriptFile"	"scripts/vscripts/abilities/abilitykoakuma.lua"
-						"Function"		"OnKoakuma03Think"						
-					}
-				}
-			}
-			"modifier_thdots_koakuma03"
-			{
-				"IsHidden"	"0"
-				"IsBuff"	"1"
-			}
-		}
 		"AbilityValues"
 		{
 			"bounces"	"2 3 4 5"
@@ -388,39 +367,18 @@
 					}
 				}			
 			}	
-			"modifier_koakuma04_royal_flame"
-			{	
-				"RemoveOnDeath"				"1"
-				"IsBuff"		"1"
-				"IsHidden"			"1"
-				"OnCreated"
-				{
-					"FireEffect"
-					{
-						"EffectName"	"particles/heroes/yumemi/ability_yumemi_04_exolosion.vpcf"
-						"EffectAttachType"	"follow_origin"
-						"Target"	"CASTER"
-					}	
-					"FireSound"
-					{
-						"EffectName"	"Hero_Huskar.Inner_Fire.Cast"
-						"Target"	"TARGET"
-					}					
-				}
-			}
 			"modifier_koakuma04_dead"
 			{
 				"IsBuff"		"1"
 				"IsHidden"			"1"
 				"RemoveOnDeath"				"1"
 				"Passive"	 "1"
-				"OnTakeDamage"
+				"OnDeath"
 				{
 					"RunScript"
 					{
 						"ScriptFile"	"scripts/vscripts/abilities/abilitykoakuma.lua"
-						"Function"		"OnKoakuma04Think"							
-						"DamageTaken"	"%attack_damage"
+						"Function"		"OnKoakuma04Death"
 					}
 				}
 			}
