@@ -25,7 +25,7 @@
 			"RunScript"
 			{
 				"Function"	"AyaFantasy"
-				"ScriptFile"	"scripts/vscripts/abilities/abilityAya.lua"
+				"ScriptFile"	"scripts/vscripts/abilities/abilityaya.lua"
 			}
 			"FireSound"
 			{
@@ -63,7 +63,7 @@
 				{
 					"RunScript"
 					{
-						"ScriptFile"	"scripts/vscripts/abilities/abilityAya.lua"
+						"ScriptFile"	"scripts/vscripts/abilities/abilityaya.lua"
 						"Function"	"AyaFantasyHit"
 					}
 				}
@@ -187,7 +187,7 @@
 			"RunScript"
 			{
 				"Target"	"TARGET"
-				"ScriptFile"	"scripts/vscripts/abilities/abilityAya.lua"
+				"ScriptFile"	"scripts/vscripts/abilities/abilityaya.lua"
 				"Function"	"OnAya02SpellStart"
 				"BuffName"	"modifier_thdots_aya02_buff"
 				"EffectName"	"modifier_thdots_aya02_effect"
@@ -216,7 +216,7 @@
 					"RunScript"
 					{
 						"Target"	"TARGET"
-						"ScriptFile"	"scripts/vscripts/abilities/abilityAya.lua"
+						"ScriptFile"	"scripts/vscripts/abilities/abilityaya.lua"
 						"Function"	"OnAya02Attack"
 						"BounsDamage"	"%bouns_damage"
 						"damage_maxhealth"	"%damage_maxhealth"
@@ -240,7 +240,7 @@
 					"RunScript"
 					{
 						"Target"	"TARGET"
-						"ScriptFile"	"scripts/vscripts/abilities/abilityAya.lua"
+						"ScriptFile"	"scripts/vscripts/abilities/abilityaya.lua"
 						"Function"	"OnAya02Attack"
 						"BounsDamage"	"%bouns_damage"
 					}
@@ -313,7 +313,7 @@
 								}
 								// 加成
 								"AbilityMulti"	"%ability_multi"
-								"ScriptFile"	"scripts/vscripts/abilities/abilityAya.lua"
+								"ScriptFile"	"scripts/vscripts/abilities/abilityaya.lua"
 								"Function"	"OnAya03SpellStart"
 							}
 							"ApplyModifier"
@@ -403,7 +403,7 @@
 			}
 			"RunScript"
 			{
-				"ScriptFile"	"scripts/vscripts/abilities/abilityAya.lua"
+				"ScriptFile"	"scripts/vscripts/abilities/abilityaya.lua"
 				"Function"		"OnAya04SpellStart"
 				//"Count"			"%refresh_count"
 			}
@@ -438,7 +438,7 @@
 				{
 					"RunScript"
 					{
-						"ScriptFile"	"scripts/vscripts/abilities/abilityAya.lua"
+						"ScriptFile"	"scripts/vscripts/abilities/abilityaya.lua"
 						"Function"		"OnAya04Created"
 					}
 				}
@@ -463,7 +463,7 @@
 					"RunScript"
 					{
 						"Target"	"TARGET"
-						"ScriptFile"	"scripts/vscripts/abilities/abilityAya.lua"
+						"ScriptFile"	"scripts/vscripts/abilities/abilityaya.lua"
 						"Function"	"OnAya04SpellOrderAttack"
 					}
 				}
@@ -471,7 +471,7 @@
 				{
 					"RunScript"
 					{						
-						"ScriptFile"	"scripts/vscripts/abilities/abilityAya.lua"
+						"ScriptFile"	"scripts/vscripts/abilities/abilityaya.lua"
 						"Function"	"OnAya04SpellOrderMoved"
 						"Target"  "POINT"
 						"BlinkRange"	"%blink_range"

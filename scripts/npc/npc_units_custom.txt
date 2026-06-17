@@ -600,7 +600,7 @@
 		// Armor
 		// ----------------------------------------------------------------
 		// Physical protection.
-		"ArmorPhysical"	"16"
+		"ArmorPhysical"	"19"
 		// Magical protection.
 		"MagicalResistance"	"0"
 		// Attack
@@ -662,7 +662,7 @@
 		// Status
 		// ----------------------------------------------------------------
 		// Base health.
-		"StatusHealth"	"3000"
+		"StatusHealth"	"3500"
 		// Health regeneration rate.
 		"StatusHealthRegen"	"0"
 		// Base mana.
@@ -729,7 +729,7 @@
 		// Armor
 		// ----------------------------------------------------------------
 		// Physical protection.
-		"ArmorPhysical"	"16"
+		"ArmorPhysical"	"19"
 		// Magical protection.
 		"MagicalResistance"	"0"
 		// Attack
@@ -791,7 +791,7 @@
 		// Status
 		// ----------------------------------------------------------------
 		// Base health.
-		"StatusHealth"	"3000"
+		"StatusHealth"	"3500"
 		// Health regeneration rate.
 		"StatusHealthRegen"	"0"
 		// Base mana.
@@ -858,7 +858,7 @@
 		// Armor
 		// ----------------------------------------------------------------
 		// Physical protection.
-		"ArmorPhysical"	"16"
+		"ArmorPhysical"	"19"
 		// Magical protection.
 		"MagicalResistance"	"0"
 		// Attack
@@ -920,7 +920,7 @@
 		// Status
 		// ----------------------------------------------------------------
 		// Base health.
-		"StatusHealth"	"3000"
+		"StatusHealth"	"3500"
 		// Health regeneration rate.
 		"StatusHealthRegen"	"0"
 		// Base mana.
@@ -987,7 +987,7 @@
 		// Armor
 		// ----------------------------------------------------------------
 		// Physical protection.
-		"ArmorPhysical"	"27"
+		"ArmorPhysical"	"30"
 		// Magical protection.
 		"MagicalResistance"	"0"
 		// Attack
@@ -1004,9 +1004,9 @@
 		// Normalized time in animation cycle to attack.
 		"AttackAnimationPoint"	"0.6"
 		// Range within a target can be acquired.
-		"AttackAcquisitionRange"	"800"
+		"AttackAcquisitionRange"	"750"
 		// Range within a target can be attacked.
-		"AttackRange"	"800"
+		"AttackRange"	"750"
 		// Particle system model for projectile.
 		"ProjectileModel"	"particles/base_attacks/ranged_tower_good.vpcf"
 		// Speed of projectile.
@@ -1050,7 +1050,7 @@
 		// Status
 		// ----------------------------------------------------------------
 		// Base health.
-		"StatusHealth"	"4000"
+		"StatusHealth"	"5000"
 		// Health regeneration rate.
 		"StatusHealthRegen"	"5"
 		// Base mana.
@@ -1117,7 +1117,7 @@
 		// Armor
 		// ----------------------------------------------------------------
 		// Physical protection.
-		"ArmorPhysical"	"27"
+		"ArmorPhysical"	"30"
 		// Magical protection.
 		"MagicalResistance"	"0"
 		// Attack
@@ -1134,9 +1134,9 @@
 		// Normalized time in animation cycle to attack.
 		"AttackAnimationPoint"	"0.6"
 		// Range within a target can be acquired.
-		"AttackAcquisitionRange"	"800"
+		"AttackAcquisitionRange"	"750"
 		// Range within a target can be attacked.
-		"AttackRange"	"800"
+		"AttackRange"	"750"
 		// Particle system model for projectile.
 		"ProjectileModel"	"particles/base_attacks/ranged_tower_good.vpcf"
 		// Speed of projectile.
@@ -1180,7 +1180,7 @@
 		// Status
 		// ----------------------------------------------------------------
 		// Base health.
-		"StatusHealth"	"4000"
+		"StatusHealth"	"5000"
 		// Health regeneration rate.
 		"StatusHealthRegen"	"5"
 		// Base mana.
@@ -1247,7 +1247,7 @@
 		// Armor
 		// ----------------------------------------------------------------
 		// Physical protection.
-		"ArmorPhysical"	"27"
+		"ArmorPhysical"	"30"
 		// Magical protection.
 		"MagicalResistance"	"0"
 		// Attack
@@ -1264,9 +1264,9 @@
 		// Normalized time in animation cycle to attack.
 		"AttackAnimationPoint"	"0.6"
 		// Range within a target can be acquired.
-		"AttackAcquisitionRange"	"800"
+		"AttackAcquisitionRange"	"750"
 		// Range within a target can be attacked.
-		"AttackRange"	"800"
+		"AttackRange"	"750"
 		// Particle system model for projectile.
 		"ProjectileModel"	"particles/base_attacks/ranged_tower_good.vpcf"
 		// Speed of projectile.
@@ -1310,7 +1310,7 @@
 		// Status
 		// ----------------------------------------------------------------
 		// Base health.
-		"StatusHealth"	"4000"
+		"StatusHealth"	"5000"
 		// Health regeneration rate.
 		"StatusHealthRegen"	"5"
 		// Base mana.
@@ -1377,7 +1377,7 @@
 		// Armor
 		// ----------------------------------------------------------------
 		// Physical protection.
-		"ArmorPhysical"	"36"
+		"ArmorPhysical"	"40"
 		// Magical protection.
 		"MagicalResistance"	"0"
 		// Attack
@@ -1440,7 +1440,7 @@
 		// Status
 		// ----------------------------------------------------------------
 		// Base health.
-		"StatusHealth"	"4000"
+		"StatusHealth"	"6500"
 		// Health regeneration rate.
 		"StatusHealthRegen"	"12"
 		// Base mana.
@@ -1894,7 +1894,7 @@
 		// Armor
 		// ----------------------------------------------------------------
 		// Physical protection.
-		"ArmorPhysical"	"16"
+		"ArmorPhysical"	"19"
 		// Magical protection.
 		"MagicalResistance"	"0"
 		// Attack
@@ -1956,7 +1956,7 @@
 		// Status
 		// ----------------------------------------------------------------
 		// Base health.
-		"StatusHealth"	"3000"
+		"StatusHealth"	"3500"
 		// Health regeneration rate.
 		"StatusHealthRegen"	"0"
 		// Base mana.
@@ -2023,7 +2023,7 @@
 		// Armor
 		// ----------------------------------------------------------------
 		// Physical protection.
-		"ArmorPhysical"	"16"
+		"ArmorPhysical"	"19"
 		// Magical protection.
 		"MagicalResistance"	"0"
 		// Attack
@@ -2085,7 +2085,7 @@
 		// Status
 		// ----------------------------------------------------------------
 		// Base health.
-		"StatusHealth"	"3000"
+		"StatusHealth"	"3500"
 		// Health regeneration rate.
 		"StatusHealthRegen"	"0"
 		// Base mana.
@@ -2152,7 +2152,7 @@
 		// Armor
 		// ----------------------------------------------------------------
 		// Physical protection.
-		"ArmorPhysical"	"16"
+		"ArmorPhysical"	"19"
 		// Magical protection.
 		"MagicalResistance"	"0"
 		// Attack
@@ -2214,7 +2214,7 @@
 		// Status
 		// ----------------------------------------------------------------
 		// Base health.
-		"StatusHealth"	"3000"
+		"StatusHealth"	"3500"
 		// Health regeneration rate.
 		"StatusHealthRegen"	"0"
 		// Base mana.
@@ -2281,7 +2281,7 @@
 		// Armor
 		// ----------------------------------------------------------------
 		// Physical protection.
-		"ArmorPhysical"	"27"
+		"ArmorPhysical"	"30"
 		// Magical protection.
 		"MagicalResistance"	"0"
 		// Attack
@@ -2298,9 +2298,9 @@
 		// Normalized time in animation cycle to attack.
 		"AttackAnimationPoint"	"0.6"
 		// Range within a target can be acquired.
-		"AttackAcquisitionRange"	"800"
+		"AttackAcquisitionRange"	"750"
 		// Range within a target can be attacked.
-		"AttackRange"	"800"
+		"AttackRange"	"750"
 		// Particle system model for projectile.
 		"ProjectileModel"	"particles/base_attacks/ranged_tower_bad.vpcf"
 		// Speed of projectile.
@@ -2344,7 +2344,7 @@
 		// Status
 		// ----------------------------------------------------------------
 		// Base health.
-		"StatusHealth"	"4000"
+		"StatusHealth"	"5000"
 		// Health regeneration rate.
 		"StatusHealthRegen"	"5"
 		// Base mana.
@@ -2411,7 +2411,7 @@
 		// Armor
 		// ----------------------------------------------------------------
 		// Physical protection.
-		"ArmorPhysical"	"27"
+		"ArmorPhysical"	"30"
 		// Magical protection.
 		"MagicalResistance"	"0"
 		// Attack
@@ -2428,9 +2428,9 @@
 		// Normalized time in animation cycle to attack.
 		"AttackAnimationPoint"	"0.6"
 		// Range within a target can be acquired.
-		"AttackAcquisitionRange"	"800"
+		"AttackAcquisitionRange"	"750"
 		// Range within a target can be attacked.
-		"AttackRange"	"800"
+		"AttackRange"	"750"
 		// Particle system model for projectile.
 		"ProjectileModel"	"particles/base_attacks/ranged_tower_bad.vpcf"
 		// Speed of projectile.
@@ -2474,7 +2474,7 @@
 		// Status
 		// ----------------------------------------------------------------
 		// Base health.
-		"StatusHealth"	"4000"
+		"StatusHealth"	"5000"
 		// Health regeneration rate.
 		"StatusHealthRegen"	"5"
 		// Base mana.
@@ -2541,7 +2541,7 @@
 		// Armor
 		// ----------------------------------------------------------------
 		// Physical protection.
-		"ArmorPhysical"	"27"
+		"ArmorPhysical"	"30"
 		// Magical protection.
 		"MagicalResistance"	"0"
 		// Attack
@@ -2558,9 +2558,9 @@
 		// Normalized time in animation cycle to attack.
 		"AttackAnimationPoint"	"0.6"
 		// Range within a target can be acquired.
-		"AttackAcquisitionRange"	"800"
+		"AttackAcquisitionRange"	"750"
 		// Range within a target can be attacked.
-		"AttackRange"	"800"
+		"AttackRange"	"750"
 		// Particle system model for projectile.
 		"ProjectileModel"	"particles/base_attacks/ranged_tower_bad.vpcf"
 		// Speed of projectile.
@@ -2604,7 +2604,7 @@
 		// Status
 		// ----------------------------------------------------------------
 		// Base health.
-		"StatusHealth"	"4000"
+		"StatusHealth"	"5000"
 		// Health regeneration rate.
 		"StatusHealthRegen"	"5"
 		// Base mana.
@@ -2649,7 +2649,7 @@
 		"SoundSet"	"Tower.Fire"
 		"MinimapIcon"	"minimap_tower45"
 		"MinimapIconSize"	"320"
-		"Level"	"3"
+		"Level"	"4"
 		// Abilities
 		// ----------------------------------------------------------------
 		// Ability 1.
@@ -2671,7 +2671,7 @@
 		// Armor
 		// ----------------------------------------------------------------
 		// Physical protection.
-		"ArmorPhysical"	"36"
+		"ArmorPhysical"	"40"
 		// Magical protection.
 		"MagicalResistance"	"0"
 		// Attack
@@ -2734,7 +2734,7 @@
 		// Status
 		// ----------------------------------------------------------------
 		// Base health.
-		"StatusHealth"	"4000"
+		"StatusHealth"	"6500"
 		// Health regeneration rate.
 		"StatusHealthRegen"	"12"
 		// Base mana.

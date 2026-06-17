@@ -1,33 +1,60 @@
+LinkLuaModifier("modifier_koakuma02_debuff", "scripts/vscripts/abilities/abilitykoakuma.lua", LUA_MODIFIER_MOTION_NONE)
+LinkLuaModifier("modifier_koakuma02_aoe_debuff", "scripts/vscripts/abilities/abilitykoakuma.lua", LUA_MODIFIER_MOTION_NONE)
 LinkLuaModifier("modifier_thdots_koakuma03_passive", "scripts/vscripts/abilities/abilitykoakuma.lua", LUA_MODIFIER_MOTION_NONE)
 LinkLuaModifier("modifier_thdots_koakuma03", "scripts/vscripts/abilities/abilitykoakuma.lua", LUA_MODIFIER_MOTION_NONE)
 
-local function CreateKoakumaBounceDummy(caster, dummyAbilityName, dummyModifierName)
-	local dummy = CreateUnitByName("npc_dummy_unit", caster:GetAbsOrigin(), false, caster, caster, caster:GetTeamNumber())
-	dummy:FindAbilityByName("ability_dummy_unit"):SetLevel(1)
-	dummy:AddAbility(dummyAbilityName)
-	local dummyAbility = dummy:FindAbilityByName(dummyAbilityName)
-	dummyAbility:ApplyDataDrivenModifier(caster, dummy, dummyModifierName, {})
+KOAKUMA_BOUNCE_STATES = KOAKUMA_BOUNCE_STATES or {}
+KOAKUMA_BOUNCE_NEXT_ID = KOAKUMA_BOUNCE_NEXT_ID or 0
+KOAKUMA_BOUNCE_CLEANUP_RUNNING = KOAKUMA_BOUNCE_CLEANUP_RUNNING or false
 
-	-- 弹道回调异常时强制清理 dummy，避免实体永久残留。
-	dummy:SetContextThink("koakuma_bounce_dummy_cleanup", function()
-		if dummy ~= nil and not dummy:IsNull() then
-			dummy:RemoveSelf()
+local function StartKoakumaBounceCleanup()
+	if KOAKUMA_BOUNCE_CLEANUP_RUNNING then return end
+	KOAKUMA_BOUNCE_CLEANUP_RUNNING = true
+
+	-- 所有 Koakuma 弹射共用一个低频 thinker 清理异常残留状态。
+	GameRules:GetGameModeEntity():SetContextThink("koakuma_bounce_state_cleanup", function()
+		local now = GameRules:GetGameTime()
+		local hasState = false
+		for castId, state in pairs(KOAKUMA_BOUNCE_STATES) do
+			local caster = state.caster
+			local ability = state.ability
+			if state.expireTime <= now or caster == nil or caster:IsNull() or ability == nil or ability:IsNull() then
+				KOAKUMA_BOUNCE_STATES[castId] = nil
+			else
+				hasState = true
+			end
 		end
-		return nil
-	end, 15)
 
-	return dummyAbility
+		if not hasState then
+			KOAKUMA_BOUNCE_CLEANUP_RUNNING = false
+			return nil
+		end
+		return 2
+	end, 2)
 end
 
-local function GetKoakumaNearbyEnemies(caster, center, ability)
-	local scanRadius = ability.bounceRange
-	if caster:GetOwner():HasModifier("modifier_koakuma04") then
-		scanRadius = math.max(scanRadius, ability.koakuma04_radius)
+local function RegisterKoakumaBounceState(state)
+	KOAKUMA_BOUNCE_NEXT_ID = KOAKUMA_BOUNCE_NEXT_ID + 1
+	state.castId = KOAKUMA_BOUNCE_NEXT_ID
+	state.expireTime = GameRules:GetGameTime() + 15
+	KOAKUMA_BOUNCE_STATES[state.castId] = state
+	StartKoakumaBounceCleanup()
+	return state.castId
+end
+
+local function RemoveKoakumaBounceState(castId)
+	KOAKUMA_BOUNCE_STATES[castId] = nil
+end
+
+local function GetKoakumaNearbyEnemies(state, center, hasKoakuma04)
+	local scanRadius = state.bounceRange
+	if hasKoakuma04 then
+		scanRadius = math.max(scanRadius, state.koakuma04Radius)
 	end
 
 	-- 弹射选敌与 4 技能范围伤害共用一次扫描。
 	return FindUnitsInRadius(
-		caster:GetTeamNumber(),
+		state.caster:GetTeamNumber(),
 		center,
 		nil,
 		scanRadius,
@@ -39,23 +66,38 @@ local function GetKoakumaNearbyEnemies(caster, center, ability)
 	)
 end
 
-local function GetKoakumaNextTarget(caster, currentTarget, center, ability, nearbyEnemies)
+local function GetKoakumaNextTarget(state, currentTarget, center, nearbyEnemies)
 	for _, unit in pairs(nearbyEnemies) do
-		if unit ~= currentTarget and (unit:GetAbsOrigin() - center):Length2D() <= ability.bounceRange then
+		if unit ~= currentTarget and (unit:GetAbsOrigin() - center):Length2D() <= state.bounceRange then
 			return unit
 		end
 	end
 
 	-- 没有其他敌人时直接判断是否能回弹至施法者，无需额外扫描友方单位。
-	local owner = caster:GetOwner()
-	if owner ~= nil and not owner:IsNull() and owner:IsAlive() and not owner:IsInvulnerable() and owner ~= currentTarget
-		and (owner:GetAbsOrigin() - center):Length2D() <= ability.bounceRange then
-		return owner
+	local caster = state.caster
+	if caster:IsAlive() and not caster:IsInvulnerable() and caster ~= currentTarget
+		and (caster:GetAbsOrigin() - center):Length2D() <= state.bounceRange then
+		return caster
 	end
 end
 
+local function LaunchKoakumaBounceProjectile(state, source, target)
+	state.expireTime = GameRules:GetGameTime() + 15
+	ProjectileManager:CreateTrackingProjectile({
+		Target = target,
+		Source = source,
+		EffectName = state.particleName,
+		Ability = state.ability,
+		bDodgeable = false,
+		bProvidesVision = false,
+		iMoveSpeed = state.projectileSpeed,
+		iSourceAttachment = DOTA_PROJECTILE_ATTACHMENT_HITLOCATION,
+		ExtraData = { cast_id = state.castId }
+	})
+end
+
 local function ConsumeKoakuma03Ready(caster, castAbility, koakuma03)
-	if not caster:HasModifier("modifier_thdots_koakuma03") then return 0 end
+	if koakuma03 == nil or not caster:HasModifier("modifier_thdots_koakuma03") then return 0 end
 
 	local level = koakuma03:GetLevel() - 1
 	local bonusProjectileSpeed = koakuma03:GetLevelSpecialValueFor("bonus_projectile_speed", level)
@@ -76,331 +118,218 @@ local function ConsumeKoakuma03Ready(caster, castAbility, koakuma03)
 	return bonusProjectileSpeed
 end
 
-function OnKoakuma01SpellStart( keys )
-	local caster = keys.caster
-	local target = keys.target
-	local ability = keys.ability
-	if is_spell_blocked(keys.target) then return end
-	local ability_level = ability:GetLevel() - 1
-	local koakuma03
-	local koakuma03_level
-	local koakuma04
-	local koakuma04_level
-	local dummy_ability = CreateKoakumaBounceDummy(caster, "ability_thdots_koakuma01_dummy", "modifier_koakuma01_dummy_unit")
-	local Int = caster:GetIntellect(false)
-	if caster:GetClassname()=="npc_dota_hero_lich" then		
-		koakuma03 = caster:FindAbilityByName("ability_thdots_koakuma03")
-		koakuma03_level = koakuma03:GetLevel() - 1
-		koakuma04 = caster:FindAbilityByName("ability_thdots_koakuma04")
-		koakuma04_level = koakuma04:GetLevel() - 1
-	end
-	local bonus_projectile_speed = 0
-	if caster:HasModifier("modifier_thdots_koakuma03") then
-		bonus_projectile_speed = ConsumeKoakuma03Ready(caster, ability, koakuma03)
-	end	
-
-	local koakuma04_bonus_damage = 0
-	if caster:HasModifier("modifier_koakuma04") then 
-		koakuma04_bonus_damage = koakuma04:GetLevelSpecialValueFor("bonus_damage", koakuma04_level)/100	
-	end
-	-- Ability variables
-
-	dummy_ability.bounceCount = 0
-	dummy_ability.damage = (1 + koakuma04_bonus_damage) * (ability:GetLevelSpecialValueFor("damage", ability_level) + Int * ability:GetLevelSpecialValueFor("damage_bonus_percent", ability_level)) + FindTelentValue(caster,"special_bonus_unique_koakuma_4")
-	dummy_ability.bounceRange = ability:GetLevelSpecialValueFor("range", ability_level) 	
-	dummy_ability.original_ability = ability
-	dummy_ability.particle_name = "particles/heroes/koakuma/koakuma01.vpcf"
-	dummy_ability.projectile_speed = ability:GetLevelSpecialValueFor("projectile_speed", ability_level) + bonus_projectile_speed + FindTelentValue(caster,"special_bonus_unique_koakuma_1")
-	dummy_ability.projectileFrom = caster
-	dummy_ability.projectileTo = nil
-	if caster:GetClassname()=="npc_dota_hero_lich" then	
-		dummy_ability.maxBounces = koakuma03:GetLevelSpecialValueFor("bounces", koakuma03_level)  + FindTelentValue(caster,"special_bonus_unique_koakuma_3")
-		dummy_ability.damage_reduction_percent = (koakuma03:GetLevelSpecialValueFor("damage_reduction_percent", koakuma03_level) + FindTelentValue(caster,"special_bonus_unique_koakuma_2"))/100	
-		dummy_ability.koakuma04_damage_percentage = koakuma04:GetLevelSpecialValueFor("damage_percentage", koakuma04_level)
-		dummy_ability.koakuma04_radius = koakuma04:GetLevelSpecialValueFor("radius", koakuma04_level)
-	else
-		dummy_ability.maxBounces = 0
-		dummy_ability.damage_reduction_percent = 0
-		dummy_ability.koakuma04_damage_percentage = 0
-		dummy_ability.koakuma04_radius = 0
+local function CreateKoakumaBounceState(ability, target, kind)
+	local caster = ability:GetCaster()
+	local level = ability:GetLevel() - 1
+	local koakuma03 = caster:FindAbilityByName("ability_thdots_koakuma03")
+	local koakuma04 = caster:FindAbilityByName("ability_thdots_koakuma04")
+	local isKoakuma = caster:GetClassname() == "npc_dota_hero_lich"
+	local bonusProjectileSpeed = ConsumeKoakuma03Ready(caster, ability, koakuma03)
+	local hasKoakuma04 = caster:HasModifier("modifier_koakuma04")
+	local koakuma04Level = koakuma04 ~= nil and koakuma04:GetLevel() - 1 or -1
+	local koakuma04BonusDamage = 0
+	if hasKoakuma04 and koakuma04Level >= 0 then
+		koakuma04BonusDamage = koakuma04:GetLevelSpecialValueFor("bonus_damage", koakuma04Level) / 100
 	end
 
-	dummy_ability.projectileTo = target
-			
+	local damageBonusPercent = ability:GetLevelSpecialValueFor("damage_bonus_percent", level)
+	if kind == 2 then
+		damageBonusPercent = damageBonusPercent + FindTelentValue(caster, "special_bonus_unique_koakuma_5") * 0.25
+	end
 
-	local info = {
-    Target = dummy_ability.projectileTo,
-    Source = dummy_ability.projectileFrom,
-    EffectName = dummy_ability.particle_name,
-    Ability = dummy_ability,
-    bDodgeable = false,
-    bProvidesVision = false,
-    iMoveSpeed = dummy_ability.projectile_speed,
-    iSourceAttachment = DOTA_PROJECTILE_ATTACHMENT_HITLOCATION
+	local state = {
+		ability = ability,
+		caster = caster,
+		kind = kind,
+		bounceCount = 0,
+		damage = (1 + koakuma04BonusDamage) * (ability:GetLevelSpecialValueFor("damage", level) + caster:GetIntellect(false) * damageBonusPercent),
+		bounceRange = ability:GetLevelSpecialValueFor("range", level),
+		projectileSpeed = ability:GetLevelSpecialValueFor("projectile_speed", level) + bonusProjectileSpeed + FindTelentValue(caster, "special_bonus_unique_koakuma_1"),
+		particleName = kind == 1 and "particles/heroes/koakuma/koakuma01.vpcf" or "particles/heroes/koakuma/koakuma02.vpcf",
+		maxBounces = 0,
+		damageReductionPercent = 0,
+		koakuma04DamagePercentage = 0,
+		koakuma04Radius = 0,
+		duration = kind == 2 and ability:GetSpecialValueFor("duration") or 0
 	}
-	ProjectileManager:CreateTrackingProjectile( info )   
+
+	if kind == 1 then
+		state.damage = state.damage + FindTelentValue(caster, "special_bonus_unique_koakuma_4")
+	end
+	if isKoakuma and koakuma03 ~= nil and koakuma04 ~= nil then
+		local koakuma03Level = koakuma03:GetLevel() - 1
+		state.maxBounces = koakuma03:GetLevelSpecialValueFor("bounces", koakuma03Level) + FindTelentValue(caster, "special_bonus_unique_koakuma_3")
+		state.damageReductionPercent = (koakuma03:GetLevelSpecialValueFor("damage_reduction_percent", koakuma03Level) + FindTelentValue(caster, "special_bonus_unique_koakuma_2")) / 100
+		state.koakuma04DamagePercentage = koakuma04:GetLevelSpecialValueFor("damage_percentage", koakuma04Level)
+		state.koakuma04Radius = koakuma04:GetLevelSpecialValueFor("radius", koakuma04Level)
+	end
+
+	RegisterKoakumaBounceState(state)
+	LaunchKoakumaBounceProjectile(state, caster, target)
 end
 
---[[Author: Pizzalol
-	Date: 29.09.2015.
-	Creates bounce projectiles to the nearest target if there is any]]
-function OnKoakuma01SpellJump( keys )
-	local caster = keys.caster
-	local ability = keys.ability
-	local target = keys.target
-
-	-- Initialize the damage table
-	local damage_table = {}
-	damage_table.attacker = caster:GetOwner()
-	damage_table.victim = target
-	damage_table.ability = ability.original_ability
-	damage_table.damage_type = DAMAGE_TYPE_MAGICAL
-	if ability.bounceCount ~= 0 then
-		damage_table.damage = ability.damage * (1-ability.damage_reduction_percent)
-	else
-		damage_table.damage = ability.damage
+local function RefreshKoakuma02Modifier(target, modifierName, duration)
+	local modifier = target:FindModifierByName(modifierName)
+	if modifier ~= nil then
+		modifier:SetDuration(duration, true)
 	end
+end
+
+local function AddKoakuma02ModifierStack(caster, target, ability, modifierName, duration)
+	local modifier = target:FindModifierByName(modifierName)
+	if modifier == nil then
+		modifier = target:AddNewModifier(caster, ability, modifierName, { duration = duration })
+		modifier:SetStackCount(1)
+	else
+		modifier:SetDuration(duration, true)
+		modifier:IncrementStackCount()
+	end
+end
+
+local function ApplyKoakuma02DirectDebuff(state, target)
+	RefreshKoakuma02Modifier(target, "modifier_koakuma02_aoe_debuff", state.duration)
+	AddKoakuma02ModifierStack(state.caster, target, state.ability, "modifier_koakuma02_debuff", state.duration)
+end
+
+local function ApplyKoakuma02AreaDebuff(state, target)
+	RefreshKoakuma02Modifier(target, "modifier_koakuma02_debuff", state.duration)
+	AddKoakuma02ModifierStack(state.caster, target, state.ability, "modifier_koakuma02_aoe_debuff", state.duration)
+end
+
+local function DealKoakuma04AreaDamage(state, target, center, nearbyEnemies)
+	for _, unit in pairs(nearbyEnemies) do
+		if unit ~= target and (unit:GetAbsOrigin() - center):Length2D() <= state.koakuma04Radius then
+			if state.kind == 2 then
+				ApplyKoakuma02AreaDebuff(state, unit)
+			end
+			UnitDamageTarget({
+				ability = state.ability,
+				victim = unit,
+				attacker = state.caster,
+				damage = state.damage * state.koakuma04DamagePercentage / 100,
+				damage_type = DAMAGE_TYPE_MAGICAL,
+				damage_flags = 0
+			})
+		end
+	end
+end
+
+local function HandleKoakumaBounceHit(castId, target)
+	local state = KOAKUMA_BOUNCE_STATES[castId]
+	if state == nil then return true end
+	if target == nil or target:IsNull() or state.caster == nil or state.caster:IsNull() then
+		RemoveKoakumaBounceState(castId)
+		return true
+	end
+
+	target:EmitSound("Hero_OgreMagi.Fireblast.Target")
+	if state.bounceCount ~= 0 then
+		state.damage = state.damage * (1 - state.damageReductionPercent)
+	end
+
 	local center = target:GetAbsOrigin()
-	if target:GetTeam() ~= caster:GetTeam() then
-		UnitDamageTarget(damage_table)
+	if target:GetTeam() ~= state.caster:GetTeam() then
+		if state.kind == 2 then
+			ApplyKoakuma02DirectDebuff(state, target)
+		end
+		UnitDamageTarget({
+			ability = state.ability,
+			victim = target,
+			attacker = state.caster,
+			damage = state.damage,
+			damage_type = DAMAGE_TYPE_MAGICAL
+		})
 	end
-	-- Save the new damage for future bounces
-	ability.damage = damage_table.damage
-	local hasKoakuma04 = caster:GetOwner():HasModifier("modifier_koakuma04")
+
+	local hasKoakuma04 = state.caster:HasModifier("modifier_koakuma04")
 	local nearbyEnemies = nil
-	if hasKoakuma04 or ability.bounceCount < ability.maxBounces then
-		nearbyEnemies = GetKoakumaNearbyEnemies(caster, center, ability)
+	if hasKoakuma04 or state.bounceCount < state.maxBounces then
+		nearbyEnemies = GetKoakumaNearbyEnemies(state, center, hasKoakuma04)
 	end
 	if hasKoakuma04 then
-		for _,v in pairs(nearbyEnemies) do
-			if v ~= target and (v:GetAbsOrigin() - center):Length2D() <= ability.koakuma04_radius then
-				local deal_damage = ability.damage * ability.koakuma04_damage_percentage / 100
-				local damage_table = {
-						ability = ability.original_ability,
-					    victim = v,
-					    attacker = caster:GetOwner(),
-					    damage = deal_damage,
-					    damage_type = DAMAGE_TYPE_MAGICAL, 
-			    	    damage_flags = 0
-				}
-				UnitDamageTarget(damage_table)
-			end
-		end
+		DealKoakuma04AreaDamage(state, target, center, nearbyEnemies)
 	end
 
-	-- If we exceeded the bounce limit then remove the dummy and stop the function
-	if ability.bounceCount >= ability.maxBounces then
-		killDummy(caster,caster)
-		return
+	if state.bounceCount >= state.maxBounces then
+		RemoveKoakumaBounceState(castId)
+		return true
 	end
 
-	-- Reset target data and find new targets
-	ability.projectileFrom = ability.projectileTo
-	ability.projectileTo = nil
+	local nextTarget = GetKoakumaNextTarget(state, target, center, nearbyEnemies)
+	if nextTarget == nil then
+		RemoveKoakumaBounceState(castId)
+		return true
+	end
 
-	ability.projectileTo = GetKoakumaNextTarget(caster, target, center, ability, nearbyEnemies)
-
-	-- If we didnt find a new target then kill the dummy
-	if ability.projectileTo == nil then
-		killDummy(caster, caster)
-	else
-	-- Otherwise increase the bounce count and create a new bounce projectile
-		ability.bounceCount = ability.bounceCount + 1
-		local info = {
-        Target = ability.projectileTo,
-        Source = ability.projectileFrom,
-        EffectName = ability.particle_name,
-        Ability = ability,
-        bDodgeable = false,
-        bProvidesVision = false,
-        iMoveSpeed = ability.projectile_speed,
-        iSourceAttachment = DOTA_PROJECTILE_ATTACHMENT_HITLOCATION
-    	}
-    	ProjectileManager:CreateTrackingProjectile( info )
-    end
+	state.bounceCount = state.bounceCount + 1
+	LaunchKoakumaBounceProjectile(state, target, nextTarget)
+	return true
 end
 
-function killDummy(caster, target)
-	if caster:GetUnitName() == "npc_dummy_unit" then
-		caster:RemoveSelf()
-	elseif target:GetUnitName() == "npc_dummy_unit" then
-		target:RemoveSelf()
-	end
+ability_thdots_koakuma01 = class({})
+
+function ability_thdots_koakuma01:OnSpellStart()
+	local target = self:GetCursorTarget()
+	self:GetCaster():EmitSound("Hero_OgreMagi.Fireblast.Cast")
+	if is_spell_blocked(target) then return end
+	CreateKoakumaBounceState(self, target, 1)
 end
 
-function OnKoakuma02SpellStart( keys )
-	local caster = keys.caster
-	local target = keys.target
-	local ability = keys.ability
-	if is_spell_blocked(keys.target) then return end
-	local ability_level = ability:GetLevel() - 1
-	local koakuma03
-	local koakuma03_level
-	local koakuma04
-	local koakuma04_level
-	local dummy_ability = CreateKoakumaBounceDummy(caster, "ability_thdots_koakuma02_dummy", "modifier_koakuma02_dummy_unit")
-	local Int = caster:GetIntellect(false)
+function ability_thdots_koakuma01:OnProjectileHit_ExtraData(target, location, extraData)
+	return HandleKoakumaBounceHit(tonumber(extraData.cast_id), target)
+end
 
-	if caster:GetClassname()=="npc_dota_hero_lich" then	
-		koakuma03 = caster:FindAbilityByName("ability_thdots_koakuma03")
-		koakuma03_level = koakuma03:GetLevel() - 1
-		koakuma04 = caster:FindAbilityByName("ability_thdots_koakuma04")
-		koakuma04_level = koakuma04:GetLevel() - 1
-	end
-	local bonus_projectile_speed = 0
-	if caster:HasModifier("modifier_thdots_koakuma03") then
-		bonus_projectile_speed = ConsumeKoakuma03Ready(caster, ability, koakuma03)
-	end
-	
-	local koakuma04_bonus_damage = 0
-	if caster:HasModifier("modifier_koakuma04") then 
-		koakuma04_bonus_damage = koakuma04:GetLevelSpecialValueFor("bonus_damage", koakuma04_level)/100	
-	end
-	-- Ability variables
-	
-	dummy_ability.damage = (1 + koakuma04_bonus_damage) * (ability:GetLevelSpecialValueFor("damage", ability_level) + Int * (FindTelentValue(caster,"special_bonus_unique_koakuma_5") * 0.25 + ability:GetLevelSpecialValueFor("damage_bonus_percent", ability_level))) 
+ability_thdots_koakuma02 = class({})
 
-	dummy_ability.bounceCount = 0
-	dummy_ability.bounceRange = ability:GetLevelSpecialValueFor("range", ability_level) 	
-	dummy_ability.original_ability = ability
-	dummy_ability.particle_name = "particles/heroes/koakuma/koakuma02.vpcf"
-	dummy_ability.projectile_speed = ability:GetLevelSpecialValueFor("projectile_speed", ability_level) + bonus_projectile_speed + FindTelentValue(caster,"special_bonus_unique_koakuma_1")
-	dummy_ability.projectileFrom = caster
-	dummy_ability.projectileTo = nil
-	dummy_ability.duration = keys.Duration
-	if caster:GetClassname()=="npc_dota_hero_lich" then	
-		dummy_ability.maxBounces = koakuma03:GetLevelSpecialValueFor("bounces", koakuma03_level) + FindTelentValue(caster,"special_bonus_unique_koakuma_3")
-		dummy_ability.damage_reduction_percent = (koakuma03:GetLevelSpecialValueFor("damage_reduction_percent", koakuma03_level) + FindTelentValue(caster,"special_bonus_unique_koakuma_2"))/100	
-		dummy_ability.koakuma04_damage_percentage = koakuma04:GetLevelSpecialValueFor("damage_percentage", koakuma04_level)
-		dummy_ability.koakuma04_radius = koakuma04:GetLevelSpecialValueFor("radius", koakuma04_level)
-	else
-		dummy_ability.maxBounces = 0
-		dummy_ability.damage_reduction_percent = 0
-		dummy_ability.koakuma04_damage_percentage = 0
-		dummy_ability.koakuma04_radius = 0
-	end
+function ability_thdots_koakuma02:OnSpellStart()
+	local target = self:GetCursorTarget()
+	self:GetCaster():EmitSound("Hero_OgreMagi.Fireblast.Cast")
+	if is_spell_blocked(target) then return end
+	CreateKoakumaBounceState(self, target, 2)
+end
 
-	dummy_ability.projectileTo = target
-	
-	local info = {
-    Target = dummy_ability.projectileTo,
-    Source = dummy_ability.projectileFrom,
-    EffectName = dummy_ability.particle_name,
-    Ability = dummy_ability,
-    bDodgeable = false,
-    bProvidesVision = false,
-    iMoveSpeed = dummy_ability.projectile_speed,
-    iSourceAttachment = DOTA_PROJECTILE_ATTACHMENT_HITLOCATION
+function ability_thdots_koakuma02:OnProjectileHit_ExtraData(target, location, extraData)
+	return HandleKoakumaBounceHit(tonumber(extraData.cast_id), target)
+end
+
+modifier_koakuma02_debuff = class({})
+
+function modifier_koakuma02_debuff:IsDebuff() return true end
+function modifier_koakuma02_debuff:IsPurgable() return true end
+
+function modifier_koakuma02_debuff:DeclareFunctions()
+	return {
+		MODIFIER_PROPERTY_ATTACKSPEED_BONUS_CONSTANT,
+		MODIFIER_PROPERTY_MOVESPEED_BONUS_PERCENTAGE
 	}
-	ProjectileManager:CreateTrackingProjectile( info )   
 end
 
---[[Author: Pizzalol
-	Date: 29.09.2015.
-	Creates bounce projectiles to the nearest target if there is any]]
-function OnKoakuma02SpellJump( keys )
-	local caster = keys.caster
-	local ability = keys.ability
-	local target = keys.target
+function modifier_koakuma02_debuff:GetModifierAttackSpeedBonus_Constant()
+	return self:GetAbility():GetSpecialValueFor("attack_speed_reduction") * self:GetStackCount()
+end
 
-	local targetLoc = target:GetAbsOrigin()
+function modifier_koakuma02_debuff:GetModifierMoveSpeedBonus_Percentage()
+	return self:GetAbility():GetSpecialValueFor("movement_speed_reduction") * self:GetStackCount()
+end
 
-	-- Initialize the damage table
-	local damage_table = {}
-	damage_table.attacker = caster:GetOwner()
-	damage_table.victim = target
-	damage_table.ability = ability.original_ability
-	damage_table.damage_type = DAMAGE_TYPE_MAGICAL
-	if ability.bounceCount ~= 0 then
-		damage_table.damage = ability.damage * (1-ability.damage_reduction_percent)
-	else
-		damage_table.damage = ability.damage
-	end
-	if target:GetTeam() ~= caster:GetTeam() then
-		if target:HasModifier("modifier_koakuma02_debuff") == false and target:HasModifier("modifier_koakuma02_aoe_debuff") == false then			
-			target.koakuma02count = 0			
-			target.koakuma02countaoe = 0			
-		end
-		if target:HasModifier("modifier_koakuma02_debuff") == false then			
-			target.koakuma02count = 0			
-		end
-		ability.original_ability:ApplyDataDrivenModifier(caster:GetOwner(), target, "modifier_koakuma02_debuff", {duration = ability.duration})
-		if target:HasModifier("modifier_koakuma02_aoe_debuff") then
-			ability.original_ability:ApplyDataDrivenModifier(caster:GetOwner(), target, "modifier_koakuma02_aoe_debuff", {duration = ability.duration})
-			target:SetModifierStackCount("modifier_koakuma02_aoe_debuff", ability.original_ability, target.koakuma02countaoe)
-		end
-		target.koakuma02count = target.koakuma02count + 1
-		target:SetModifierStackCount("modifier_koakuma02_debuff", ability.original_ability, target.koakuma02count)
-		UnitDamageTarget(damage_table)	
-	end
-	-- Save the new damage for future bounces
-	ability.damage = damage_table.damage
-	local hasKoakuma04 = caster:GetOwner():HasModifier("modifier_koakuma04")
-	local nearbyEnemies = nil
-	if hasKoakuma04 or ability.bounceCount < ability.maxBounces then
-		nearbyEnemies = GetKoakumaNearbyEnemies(caster, targetLoc, ability)
-	end
-	if hasKoakuma04 then
-		for _,v in pairs(nearbyEnemies) do
-			if v ~= target and (v:GetAbsOrigin() - targetLoc):Length2D() <= ability.koakuma04_radius then
-				if v:HasModifier("modifier_koakuma02_debuff") == false and v:HasModifier("modifier_koakuma02_aoe_debuff") == false then			
-					v.koakuma02count = 0			
-					v.koakuma02countaoe = 0			
-				end
-				if v:HasModifier("modifier_koakuma02_aoe_debuff") == false then			
-					v.koakuma02countaoe = 0			
-				end
-				ability.original_ability:ApplyDataDrivenModifier(caster:GetOwner(), v, "modifier_koakuma02_aoe_debuff", {duration = ability.duration})
-				if v:HasModifier("modifier_koakuma02_debuff") then
-					ability.original_ability:ApplyDataDrivenModifier(caster:GetOwner(), v, "modifier_koakuma02_debuff", {duration = ability.duration})
-					v:SetModifierStackCount("modifier_koakuma02_debuff", ability.original_ability, v.koakuma02count)
-				end
-				v.koakuma02countaoe = v.koakuma02countaoe + 1
-				v:SetModifierStackCount("modifier_koakuma02_aoe_debuff", ability.original_ability, v.koakuma02countaoe)
-				local deal_damage = ability.damage * ability.koakuma04_damage_percentage / 100
-				local damage_table = {
-						ability = ability.original_ability,
-					    victim = v,
-					    attacker = caster:GetOwner(),
-					    damage = deal_damage,
-					    damage_type = DAMAGE_TYPE_MAGICAL, 
-			    	    damage_flags = 0
-				}
-				UnitDamageTarget(damage_table)				
-			end
-		end
-	end
+modifier_koakuma02_aoe_debuff = class({})
 
-	-- If we exceeded the bounce limit then remove the dummy and stop the function
-	if ability.bounceCount >= ability.maxBounces then
-		killDummy(caster,caster)
-		return
-	end
+function modifier_koakuma02_aoe_debuff:IsDebuff() return true end
+function modifier_koakuma02_aoe_debuff:IsPurgable() return true end
 
-	-- Reset target data and find new targets
-	ability.projectileFrom = ability.projectileTo
-	ability.projectileTo = nil
+function modifier_koakuma02_aoe_debuff:DeclareFunctions()
+	return {
+		MODIFIER_PROPERTY_ATTACKSPEED_BONUS_CONSTANT,
+		MODIFIER_PROPERTY_MOVESPEED_BONUS_PERCENTAGE
+	}
+end
 
-	ability.projectileTo = GetKoakumaNextTarget(caster, target, targetLoc, ability, nearbyEnemies)
+function modifier_koakuma02_aoe_debuff:GetModifierAttackSpeedBonus_Constant()
+	return self:GetAbility():GetSpecialValueFor("aoe_attack_speed_reduction") * self:GetStackCount()
+end
 
-	-- If we didnt find a new target then kill the dummy
-	if ability.projectileTo == nil then
-		killDummy(caster, caster)
-	else
-	-- Otherwise increase the bounce count and create a new bounce projectile
-		ability.bounceCount = ability.bounceCount + 1
-		local info = {
-        Target = ability.projectileTo,
-        Source = ability.projectileFrom,
-        EffectName = ability.particle_name,
-        Ability = ability,
-        bDodgeable = false,
-        bProvidesVision = false,
-        iMoveSpeed = ability.projectile_speed,
-        iSourceAttachment = DOTA_PROJECTILE_ATTACHMENT_HITLOCATION
-    	}
-    	ProjectileManager:CreateTrackingProjectile( info )
-    end
+function modifier_koakuma02_aoe_debuff:GetModifierMoveSpeedBonus_Percentage()
+	return self:GetAbility():GetSpecialValueFor("aoe_movement_speed_reduction") * self:GetStackCount()
 end
 
 ability_thdots_koakuma03 = class({})

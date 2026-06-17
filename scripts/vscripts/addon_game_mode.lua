@@ -89,6 +89,7 @@ require ( "util/nodamage" )
 require ( "util/CheckItemModifies")
 require ( "util/performattack")
 require ( "util/bot_courier")
+require ( "util/lane_creep_protection")
 require ( "util/create_illusion")
 require ( "lib/selection")
 require ( "components/modifiers/init" )
@@ -2231,6 +2232,8 @@ function THDOTSGameMode:OnHeroSpawned( keys )
 	if(hero==nil)then
 	  return
 	end
+	-- 30 分钟前为新生成的线上小兵注册防断线护送状态。
+	THD2_RegisterLaneCreepMarchProtection(hero)
 	-- 信使生成或重生时，为 Bot 控制的信使补充永久护盾。
 	THD2_ScheduleBotCourierShield(hero)
 
@@ -2735,6 +2738,31 @@ end
 
 G_Player_randomed = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}
 
+local HIGH_GROUND_TOWER_ABILITIES = {
+	"tower_ursa_fury_swipes",
+	"tower_troll_warlord_fervor",
+	"tower_shredder_reactive_armor",
+}
+
+-- 地图实体加载完成后，为双方 T3/T4 动态添加高地塔被动。
+function THDOTSGameMode:AddHighGroundTowerAbilities()
+	local towers = Entities:FindAllByClassname("npc_dota_tower") or {}
+	for _, tower in pairs(towers) do
+		local unitName = tower:GetUnitName()
+		if string.find(unitName, "tower3", 1, true) or string.find(unitName, "tower4", 1, true) then
+			for _, abilityName in ipairs(HIGH_GROUND_TOWER_ABILITIES) do
+				local ability = tower:FindAbilityByName(abilityName)
+				if ability == nil then
+					ability = tower:AddAbility(abilityName)
+				end
+				if ability ~= nil and ability:GetLevel() < 5 then
+					ability:SetLevel(5)
+				end
+			end
+		end
+	end
+end
+
 function THDOTSGameMode:OnGameRulesStateChange(keys)
 	local newState = GameRules:State_Get()
 	if newState == 2 then -- CUSTOM_GAME_SETUP / shuffle
@@ -2908,6 +2936,7 @@ function THDOTSGameMode:OnGameRulesStateChange(keys)
 		--random hero for anyone which not choosed
 		THDOTSGameMode:CheckChoose()
     elseif newState == DOTA_GAMERULES_STATE_PRE_GAME then -- 地图加载好了, 所有人准备出门
+		self:AddHighGroundTowerAbilities()
 		if GetMapName() ~= "dota" then
 			-- thdots地图
 			GameRules:GetGameModeEntity():SetContextThink("roshanRemove_delay",
@@ -2953,6 +2982,8 @@ function THDOTSGameMode:OnGameRulesStateChange(keys)
 		GameRules:SetTimeOfDay(0.25)
 		MushRoomStart() 		--刷蘑菇系统
 		AddBotsToTable()
+		-- Bot 身份与信使 owner 均已稳定后，补扫并添加永久无敌。
+		THD2_RefreshBotCourierShields()
 		local TeamRadiant = botTable[DOTA_TEAM_GOODGUYS]
     	local TeamDire = botTable[DOTA_TEAM_BADGUYS]
 		Timers:CreateTimer(function()

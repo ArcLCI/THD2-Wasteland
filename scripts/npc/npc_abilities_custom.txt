@@ -1283,6 +1283,50 @@
 		}
 	}
 
+	// 高地塔动态能力：连续攻击同一目标时叠加伤害
+	"tower_ursa_fury_swipes"
+	{
+		"BaseClass"	"ursa_fury_swipes"
+		"MaxLevel"	"10"
+		"AbilityBehavior"	"DOTA_ABILITY_BEHAVIOR_PASSIVE"
+		"AbilityValues"
+		{
+			"bonus_reset_time"	"15"
+			"bonus_reset_time_roshan"	"15"
+			"damage_per_stack"	"5 10 15 20 25 30 35 40 45 50"
+		}
+	}
+
+	// 高地塔动态能力：连续攻击同一目标时叠加攻速
+	"tower_troll_warlord_fervor"
+	{
+		"BaseClass"	"troll_warlord_fervor"
+		"MaxLevel"	"10"
+		"AbilityBehavior"	"DOTA_ABILITY_BEHAVIOR_PASSIVE"
+		"AbilityValues"
+		{
+			"attack_speed"	"5 10 15 20 25 30 35 40 45 50"
+			"max_stacks"	"5"
+		}
+	}
+
+	// 高地塔动态能力：受到攻击时叠加护甲与生命恢复
+	"tower_shredder_reactive_armor"
+	{
+		"BaseClass"	"shredder_reactive_armor"
+		"MaxLevel"	"10"
+		"AbilityBehavior"	"DOTA_ABILITY_BEHAVIOR_PASSIVE"
+		"SpellDispellableType"	"SPELL_DISPELLABLE_NO"
+		"AbilityValues"
+		{
+			"bonus_armor"	"1 2 3 4 5 7 9 13 17 20"
+			"bonus_hp_regen"	"1 2 3 4 5 7 9 13 17 20"
+			"stack_limit"	"5"
+			"stack_duration"	"10"
+			"stacks_per_hero_attack"	"2"
+		}
+	}
+
 	"roshan_death"
 	{
 		"BaseClass"	"ability_lua"

@@ -2,6 +2,33 @@ if AbilityAya == nil then
     AbilityAya = class({})
 end
 
+local function AyaDistancePointToSegment2D(point, startPos, endPos)
+    local sx = startPos.x
+    local sy = startPos.y
+    local ex = endPos.x
+    local ey = endPos.y
+    local px = point.x
+    local py = point.y
+    local dx = ex - sx
+    local dy = ey - sy
+    local lenSq = dx * dx + dy * dy
+
+    if lenSq <= 0 then
+        local ox = px - sx
+        local oy = py - sy
+        return math.sqrt(ox * ox + oy * oy)
+    end
+
+    local t = ((px - sx) * dx + (py - sy) * dy) / lenSq
+    t = math.max(0, math.min(1, t))
+
+    local cx = sx + dx * t
+    local cy = sy + dy * t
+    local ox = px - cx
+    local oy = py - cy
+    return math.sqrt(ox * ox + oy * oy)
+end
+
 ability_thdots_aya01 = {}
 
 function ability_thdots_aya01:GetCastRange(location, target)
@@ -85,61 +112,85 @@ function modifier_thdots_aya01_think_interval:OnCreated()
     if not IsServer() then
         return
     end
-    self:StartIntervalThink(0.02)
+    self.move_interval = 0.02
+    self.search_interval = 0.04
+    self.search_elapsed = self.search_interval
+    self.aya01_next_damage_time = {}
+    self.aya01_last_search_origin = self:GetCaster():GetAbsOrigin()
+    self:StartIntervalThink(self.move_interval)
+end
+
+function modifier_thdots_aya01_think_interval:OnDestroy()
+    if not IsServer() then
+        return
+    end
+    self.aya01_next_damage_time = nil
+    self.aya01_last_search_origin = nil
 end
 
 function modifier_thdots_aya01_think_interval:OnIntervalThink()
     local caster = self:GetCaster()
     local vecCaster = caster:GetOrigin()
     local ability = self:GetAbility()
-    local MoveSpeed = self:GetAbility():GetSpecialValueFor("move_speed")
-    local damage_radius = self:GetAbility():GetSpecialValueFor("damage_radius")
-    if caster:HasModifier("modifier_item_wanbaochui") and caster:HasModifier("modifier_thdots_aya04_blink") then
-        local abilitycd = caster:FindAbilityByName("ability_thdots_aya01")
-        abilitycd:EndCooldown()
-    end
-
-    local targets = FindUnitsInRadius(caster:GetTeam(), caster:GetAbsOrigin(), nil, damage_radius,
-        ability:GetAbilityTargetTeam(), ability:GetAbilityTargetType(), ability:GetAbilityTargetFlags(), 0, false)
-
-    for _, v in pairs(targets) do
-        if (v:GetContext("ability_Aya01_damage") == nil) then
-            v:SetContextNum("ability_Aya01_damage", TRUE, 0)
-        end
-        if (v:GetContext("ability_Aya01_damage") == TRUE) then
-            local damage_table = {
-                ability = ability,
-                victim = v,
-                attacker = caster,
-                damage = ability:GetAbilityDamage() + FindTelentValue(caster, "special_bonus_unique_aya_5"),
-                damage_type = ability:GetAbilityDamageType(),
-                damage_flags = 0
-            }
-            UnitDamageTarget(damage_table)
-
-            if v and not v:IsNull() then
-                if caster:HasModifier("modifier_item_wanbaochui") then
-                    v:AddNewModifier(caster, ability, "modifier_aya01_slow", {
-                        Duration = 3
-                    })
-                end
-
-                if v:IsHero() and caster:HasModifier("modifier_thdots_aya04_blink") and caster:GetClassname() ==
-                    "npc_dota_hero_slark" then
-                    local abilitycd = caster:FindAbilityByName("ability_thdots_aya01")
-                    abilitycd:EndCooldown()
-                end
-
-                v:SetContextNum("ability_Aya01_damage", FALSE, 0)
-                Timer.Wait 'ability_Aya01_damage_timer'(0.4, function()
-                    v:SetContextNum("ability_Aya01_damage", TRUE, 0)
-                end)
-            end
-        end
-    end
+    local MoveSpeed = ability:GetSpecialValueFor("move_speed")
+    local damage_radius = ability:GetSpecialValueFor("damage_radius")
     local flyspeed = MoveSpeed
     if caster:HasModifier("modifier_item_wanbaochui") then
         flyspeed = MoveSpeed * 2
+    end
+    if caster:HasModifier("modifier_item_wanbaochui") and caster:HasModifier("modifier_thdots_aya04_blink") then
+        local abilitycd = caster:FindAbilityByName("ability_thdots_aya01")
+        if abilitycd then
+            abilitycd:EndCooldown()
+        end
+    end
+
+    -- 降低搜敌频率，用上一段位移路径补偿命中范围，避免高速穿越漏判。
+    self.search_elapsed = (self.search_elapsed or 0) + (self.move_interval or 0.02)
+    if self.search_elapsed >= (self.search_interval or 0.04) then
+        local search_start = self.aya01_last_search_origin or vecCaster
+        local search_end = caster:GetAbsOrigin()
+        local search_distance = GetDistanceBetweenTwoVec2D(search_start, search_end)
+        local targets = FindUnitsInRadius(caster:GetTeam(), search_end, nil, damage_radius + search_distance,
+            ability:GetAbilityTargetTeam(), ability:GetAbilityTargetType(), ability:GetAbilityTargetFlags(), 0, false)
+        local now = GameRules:GetGameTime()
+
+        for _, v in pairs(targets) do
+            if v and not v:IsNull() and AyaDistancePointToSegment2D(v:GetAbsOrigin(), search_start, search_end) <=
+                damage_radius then
+                local index = v:GetEntityIndex()
+                local next_damage_time = self.aya01_next_damage_time[index] or 0
+                if now >= next_damage_time then
+                    local damage_table = {
+                        ability = ability,
+                        victim = v,
+                        attacker = caster,
+                        damage = ability:GetAbilityDamage() + FindTelentValue(caster, "special_bonus_unique_aya_5"),
+                        damage_type = ability:GetAbilityDamageType(),
+                        damage_flags = 0
+                    }
+                    UnitDamageTarget(damage_table)
+
+                    if caster:HasModifier("modifier_item_wanbaochui") then
+                        v:AddNewModifier(caster, ability, "modifier_aya01_slow", {
+                            Duration = 3
+                        })
+                    end
+
+                    if v:IsHero() and caster:HasModifier("modifier_thdots_aya04_blink") and caster:GetClassname() ==
+                        "npc_dota_hero_slark" then
+                        local abilitycd = caster:FindAbilityByName("ability_thdots_aya01")
+                        if abilitycd then
+                            abilitycd:EndCooldown()
+                        end
+                    end
+
+                    self.aya01_next_damage_time[index] = now + 0.4
+                end
+            end
+        end
+        self.aya01_last_search_origin = search_end
+        self.search_elapsed = 0
     end
 
     local Aya01rad = ability:GetContext("ability_Aya01_Rad")
@@ -365,7 +416,7 @@ function AyaFantasy(keys)
     Timers:CreateTimer(function()
         if not caster:IsAlive() then
             caster:RemoveModifierByName("modifier_aya_fantasy_find")
-            ParticleManager:DestroyParticle(pct, false)
+            ParticleManager:DestroyParticleSystem(pct, true)
             return nil
         elseif dist > distance then
             if count > 1 then
@@ -380,7 +431,7 @@ function AyaFantasy(keys)
             else
                 caster:RemoveModifierByName("modifier_aya_fantasy_find")
                 FindClearSpaceForUnit(caster, caster:GetAbsOrigin(), true)
-                ParticleManager:DestroyParticle(pct, false)
+                ParticleManager:DestroyParticleSystem(pct, true)
                 caster:SetForwardVector(f)
                 caster:RemoveGesture(ACT_DOTA_CAST_ABILITY_1)
 

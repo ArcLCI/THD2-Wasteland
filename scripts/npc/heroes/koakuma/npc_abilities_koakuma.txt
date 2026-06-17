@@ -43,7 +43,8 @@
 	{
 		// General
 		//-------------------------------------------------------------------------------------------------------------
-		"BaseClass"				"ability_datadriven"
+		"BaseClass"				"ability_lua"
+		"ScriptFile"			"scripts/vscripts/abilities/abilitykoakuma.lua"
 		"AbilityTextureName"		"custom/ability_thdots_koakuma01"
 		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_UNIT_TARGET"
 		"AbilityUnitTargetTeam"			"DOTA_UNIT_TARGET_TEAM_ENEMY"
@@ -78,76 +79,14 @@
 			"damage"					"100 160 220 280"
 			"projectile_speed"			"750"
 		}
-		"OnSpellStart"
-		{
-			"FireSound"
-			{
-				"EffectName"	"Hero_OgreMagi.Fireblast.Cast"
-				"Target" 		"CASTER"
-			}
-			"RunScript"
-			{
-				"ScriptFile"	"scripts/vscripts/abilities/abilitykoakuma.lua"
-				"Function"		"OnKoakuma01SpellStart"		
-			}
-		}
-	}
-
-	"ability_thdots_koakuma01_dummy"
-	{
-		// General
-		//-------------------------------------------------------------------------------------------------------------
-		"BaseClass"				"ability_datadriven"
-		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_PASSIVE"
-		"SpellImmunityType"				"SPELL_IMMUNITY_ENEMIES_YES"
-		"precache"
-		{
-			"soundfile"			"soundevents/game_sounds_heroes/game_sounds_ogre_magi.vsndevts"
-			"particle"			"particles/heroes/koakuma/koakuma01.vpcf"
-		}
-		"OnProjectileHitUnit"
-		{
-			"DeleteOnHit"	"1"
-			"FireSound"
-			{
-				"EffectName"	"Hero_OgreMagi.Fireblast.Target"
-				"Target" 		"TARGET"
-			}	
-			"DelayedAction"
-			{
-				"Delay"	"0.05"
-				"Action"
-				{		
-					"RunScript"
-					{
-						"ScriptFile"	"scripts/vscripts/abilities/abilitykoakuma.lua"
-						"Function"		"OnKoakuma01SpellJump"
-					}
-				}
-			}
-		}
-		"Modifiers"
-		{
-			"modifier_koakuma01_dummy_unit"
-			{
-				"States"
-				{
-					"MODIFIER_STATE_INVULNERABLE"					"MODIFIER_STATE_VALUE_ENABLED"
-					"MODIFIER_STATE_NO_HEALTH_BAR"					"MODIFIER_STATE_VALUE_ENABLED"
-					"MODIFIER_STATE_NO_UNIT_COLLISION"				"MODIFIER_STATE_VALUE_ENABLED"
-					"MODIFIER_STATE_NOT_ON_MINIMAP"					"MODIFIER_STATE_VALUE_ENABLED"
-					"MODIFIER_STATE_UNSELECTABLE"					"MODIFIER_STATE_VALUE_ENABLED"
-					"MODIFIER_STATE_FLYING"							"MODIFIER_STATE_VALUE_ENABLED"
-				}
-			}
-		}
 	}
 
 	"ability_thdots_koakuma02"
 	{
 		// General
 		//-------------------------------------------------------------------------------------------------------------
-		"BaseClass"				"ability_datadriven"
+		"BaseClass"				"ability_lua"
+		"ScriptFile"			"scripts/vscripts/abilities/abilitykoakuma.lua"
 		"AbilityTextureName"		"custom/ability_thdots_koakuma02"
 		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_UNIT_TARGET"
 		"AbilityUnitTargetTeam"			"DOTA_UNIT_TARGET_TEAM_ENEMY"
@@ -186,93 +125,6 @@
 			"duration"					"3.0"
 			"aoe_attack_speed_reduction"	"-4 -8 -12 -16"
 			"aoe_movement_speed_reduction"	"-4 -8 -12 -16"
-		}
-		"OnSpellStart"
-		{
-			"FireSound"
-			{
-				"EffectName"	"Hero_OgreMagi.Fireblast.Cast"
-				"Target" 		"CASTER"
-			}
-			"RunScript"
-			{
-				"ScriptFile"	"scripts/vscripts/abilities/abilitykoakuma.lua"
-				"Function"		"OnKoakuma02SpellStart"	
-				"Duration"		"%duration"		
-			}
-		}
-		"Modifiers"
-		{
-			"modifier_koakuma02_debuff"
-			{
-				"IsDebuff"	"1"
-				"IsPurgable"	"1"
-				"Properties"
-				{					
-					"MODIFIER_PROPERTY_ATTACKSPEED_BONUS_CONSTANT"	"%attack_speed_reduction"
-					"MODIFIER_PROPERTY_MOVESPEED_BONUS_PERCENTAGE"	"%movement_speed_reduction"
-				}
-			}
-			"modifier_koakuma02_aoe_debuff"
-			{
-				"IsDebuff"	"1"
-				"IsPurgable"	"1"
-				"Properties"
-				{					
-					"MODIFIER_PROPERTY_ATTACKSPEED_BONUS_CONSTANT"	"%aoe_attack_speed_reduction"
-					"MODIFIER_PROPERTY_MOVESPEED_BONUS_PERCENTAGE"	"%aoe_movement_speed_reduction"
-				}
-			}
-		}
-	}
-
-	"ability_thdots_koakuma02_dummy"
-	{
-		// General
-		//-------------------------------------------------------------------------------------------------------------
-		"BaseClass"				"ability_datadriven"
-		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_PASSIVE"
-		"SpellImmunityType"				"SPELL_IMMUNITY_ENEMIES_YES"
-		"precache"
-		{
-			"soundfile"			"soundevents/game_sounds_heroes/game_sounds_batrider.vsndevts"
-			"particle"			"particles/heroes/koakuma/koakuma02.vpcf"
-		}
-		"OnProjectileHitUnit"
-		{
-			"DeleteOnHit"	"1"			
-			"FireSound"
-			{
-				"EffectName"	"Hero_OgreMagi.Fireblast.Target"
-				"Target" 		"TARGET"
-			}	
-			"DelayedAction"
-			{
-				"Delay"	"0.05"
-				"Action"
-				{				
-					"RunScript"
-					{
-						"ScriptFile"	"scripts/vscripts/abilities/abilitykoakuma.lua"
-						"Function"		"OnKoakuma02SpellJump"
-					}
-				}
-			}
-		}
-		"Modifiers"
-		{
-			"modifier_koakuma02_dummy_unit"
-			{
-				"States"
-				{
-					"MODIFIER_STATE_INVULNERABLE"					"MODIFIER_STATE_VALUE_ENABLED"
-					"MODIFIER_STATE_NO_HEALTH_BAR"					"MODIFIER_STATE_VALUE_ENABLED"
-					"MODIFIER_STATE_NO_UNIT_COLLISION"				"MODIFIER_STATE_VALUE_ENABLED"
-					"MODIFIER_STATE_NOT_ON_MINIMAP"					"MODIFIER_STATE_VALUE_ENABLED"
-					"MODIFIER_STATE_UNSELECTABLE"					"MODIFIER_STATE_VALUE_ENABLED"
-					"MODIFIER_STATE_FLYING"							"MODIFIER_STATE_VALUE_ENABLED"
-				}
-			}			
 		}
 	}
 

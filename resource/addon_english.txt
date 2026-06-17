@@ -2460,7 +2460,6 @@
 		"DOTA_Tooltip_ability_ability_thdots_lunasa01_AbilityCastRange"				"SKILL LENGTH: "
 		"DOTA_Tooltip_ability_ability_thdots_lunasa01_lunasa01_duration"			"DURATION: "
 		"DOTA_Tooltip_ability_ability_thdots_lunasa01_damage"						"DAMAGE: "
-		"DOTA_Tooltip_ability_ability_thdots_lunasa01_range"						"BASE LENGTH: "
 		"DOTA_Tooltip_ability_ability_thdots_lunasa01_int_bonus"					"BONUS DAMAGE PER INT: "
 
 		"DOTA_Tooltip_modifier_lunasa01"											"Fake Strings Silence"
