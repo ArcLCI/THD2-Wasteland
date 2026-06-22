@@ -1,4 +1,4 @@
-LinkLuaModifier("modifier_thdots_lane_creep_march_protection", "scripts/vscripts/util/lane_creep_protection.lua", LUA_MODIFIER_MOTION_NONE)
+LinkLuaModifier("modifier_thdots_lane_creep_march_protection", "util/lane_creep_protection.lua", LUA_MODIFIER_MOTION_NONE)
 
 local LANE_CREEP_PROTECTION_END_TIME = 30 * 60
 local LANE_CREEP_PROTECTION_THINK_INTERVAL = 0.2

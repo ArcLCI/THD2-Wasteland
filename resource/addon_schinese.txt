@@ -688,7 +688,7 @@
 		"npc_dota_hero_slark"	"射命丸文"
 
 		"DOTA_Tooltip_ability_aya_fantasy"	"「幻想风靡」"
-		"DOTA_Tooltip_ability_aya_fantasy_Description"	"逐渐提高速度，来回多次冲击的大技。碰撞到地形障碍或者达到最大单程距离将改变方向。击中敌人将造成伤害。\n累计击中同一目标3次后将击晕目标1秒。"
+		"DOTA_Tooltip_ability_aya_fantasy_Description"	"逐渐提高速度，来回多次冲击的大技。碰撞到地形障碍或者达到最大单程距离将改变方向。冲刺期间获得100%%闪避、80%%伤害减免和80%%魔法抗性。击中敌人将造成基础伤害加当前冲刺速度的伤害。\n累计击中同一目标3次后将击晕目标1秒。"
 		"DOTA_Tooltip_ability_aya_fantasy_Lore"	"敬请欣赏，由幻想乡第一的速度交织编成的优雅弹幕。"
 		"DOTA_Tooltip_ability_aya_fantasy_count"	"冲击次数："
 		"DOTA_Tooltip_ability_aya_fantasy_range"	"最大距离："

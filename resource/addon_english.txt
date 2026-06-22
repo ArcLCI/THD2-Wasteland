@@ -488,7 +488,7 @@
 		"npc_dota_hero_slark"														"Shameimaru Aya"
 
 		"DOTA_Tooltip_ability_aya_fantasy"											"「Illusionary Dominance」"
-		"DOTA_Tooltip_ability_aya_fantasy_Description"								"A great skill of gradually increasing speed and repeatedly impacting back and forth. Collision with terrain obstacles or reaching the maximum one-way distance will change direction. Hitting enemies and dealing damage.\nAfter hitting the same target 3 times in total, the target will be stunned for 1 second."
+		"DOTA_Tooltip_ability_aya_fantasy_Description"								"A great skill of gradually increasing speed and repeatedly impacting back and forth. Collision with terrain obstacles or reaching the maximum one-way distance will change direction. During the dash, Aya gains 100%% evasion, 80%% damage reduction, and 80%% magic resistance. Hitting enemies deals base damage plus current dash speed.\nAfter hitting the same target 3 times in total, the target will be stunned for 1 second."
 		"DOTA_Tooltip_ability_aya_fantasy_Lore"										"Now witness the elegant danmaku spread by Gensokyo's fastest."
 		"DOTA_Tooltip_ability_aya_fantasy_count"									"IMPACT TIMES: "
 		"DOTA_Tooltip_ability_aya_fantasy_range"									"MAXIMUM DISTANCE: "

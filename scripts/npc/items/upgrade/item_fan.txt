@@ -52,6 +52,7 @@
 		"precache"
 		{
 			"particle"	"particles/units/heroes/hero_death_prophet/death_prophet_carrion_swarm.vpcf"
+			"particle"	"particles/units/heroes/hero_death_prophet/death_prophet_carrion_swarm_core01.vpcf"
 			"soundfile"	"soundevents/game_sounds_heroes/game_sounds_death_prophet.vsndevts"
 		}
 		"AbilityValues"

@@ -409,6 +409,7 @@ function AyaFantasy(keys)
     local v = 75
     local length = distance / v * 0.05
     caster.hitTable = {}
+    ability:SetContextNum("ability_aya_fantasy_speed", v, 0)
     ParticleManager:SetParticleControlEnt(pct, 0, caster, PATTACH_POINT_FOLLOW, "attach_hitloc", caster:GetAbsOrigin(),
         true)
     ability:ApplyDataDrivenModifier(caster, caster, "modifier_aya_fantasy_find", nil)
@@ -423,6 +424,7 @@ function AyaFantasy(keys)
                 count = count - 1
                 dist = 0
                 v = math.min(v + 25, 200)
+                ability:SetContextNum("ability_aya_fantasy_speed", v, 0)
                 length = distance / v * 0.05
                 caster:StartGesture(ACT_DOTA_CAST_ABILITY_1)
                 f = AyaFantasyGetAngle(keys, (-1) * f)
@@ -491,7 +493,10 @@ function AyaFantasyHit(keys)
     local target = keys.target
     local ability = keys.ability
     local level = ability:GetLevel() - 1
-    local dam = ability:GetLevelSpecialValueFor("damage", level) -- + ability:GetLevelSpecialValueFor("factor",level) * caster:GetAverageTrueAttackDamage(nil)
+    -- 幻想风靡命中伤害读取当前冲刺速度档位，不使用末帧被距离截断的位移值。
+    local speed = ability:GetContext("ability_aya_fantasy_speed") or 0
+    local dam = ability:GetLevelSpecialValueFor("damage", level) +
+        speed * ability:GetLevelSpecialValueFor("speed_damage_factor", level)
     if IsValidUnit(target) then
         if target:IsAlive() then
             local damage_table = {

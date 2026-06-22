@@ -54,6 +54,12 @@
 					"MODIFIER_STATE_MUTED"	"MODIFIER_STATE_VALUE_ENABLED"
 					"MODIFIER_STATE_SILENCED"	"MODIFIER_STATE_VALUE_ENABLED"
 				}
+				"Properties"
+				{
+					"MODIFIER_PROPERTY_EVASION_CONSTANT"	"%evasion"
+					"MODIFIER_PROPERTY_INCOMING_DAMAGE_PERCENTAGE"	"%damage_reduction"
+					"MODIFIER_PROPERTY_MAGICAL_RESISTANCE_BONUS"	"%magical_resistance"
+				}
 				"Aura_Flags"	"DOTA_UNIT_TARGET_FLAG_NOT_ANCIENTS"
 			}
 			"modifier_aya_fantasy_dam"
@@ -99,6 +105,11 @@
 			"count"	"12"
 			"range"	"1200"
 			"damage"	"100"
+			"speed_damage_factor"	"1"
+			"evasion"	"100"
+			"damage_reduction"	"-80"
+			"damage_reduction_tooltip"	"80"
+			"magical_resistance"	"80"
 			"dur"	"1.2"
 			"slow"	"-30"
 		}

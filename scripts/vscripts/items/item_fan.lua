@@ -48,7 +48,7 @@ function item_fan:OnSpellStart()
 				bDeleteOnHit = true,
 			    iUnitTargetTeam	 	= ability:GetAbilityTargetTeam(),
 	   			iUnitTargetType 	= ability:GetAbilityTargetType(),
-				EffectName = "ability_effect_path",
+				EffectName = "particles/units/heroes/hero_death_prophet/death_prophet_carrion_swarm_core01.vpcf",
 				fDistance = 975,
 				fStartRadius = 200,
 				fEndRadius = 200,

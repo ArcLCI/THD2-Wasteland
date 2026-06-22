@@ -1,4 +1,4 @@
-LinkLuaModifier("modifier_bot_courier_shield", "scripts/vscripts/util/bot_courier.lua", LUA_MODIFIER_MOTION_NONE)
+LinkLuaModifier("modifier_bot_courier_shield", "util/bot_courier.lua", LUA_MODIFIER_MOTION_NONE)
 
 local BOT_COURIER_OWNER_RETRY_INTERVAL = 0.1
 local BOT_COURIER_OWNER_RETRY_COUNT = 100

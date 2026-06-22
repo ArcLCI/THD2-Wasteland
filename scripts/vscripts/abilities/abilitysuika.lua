@@ -104,6 +104,62 @@ function OnSuika03End(keys)
 	print(caster.suika03_time)
 end
 
+local SUIKA03_AUTO_ATTACK_RADIUS = 500
+local SUIKA03_AUTO_ATTACK_INTERVAL = 0.3
+local SUIKA03_AUTO_ATTACK_FLAGS = DOTA_UNIT_TARGET_FLAG_FOW_VISIBLE +
+	DOTA_UNIT_TARGET_FLAG_NO_INVIS +
+	DOTA_UNIT_TARGET_FLAG_NOT_ATTACK_IMMUNE +
+	DOTA_UNIT_TARGET_FLAG_MAGIC_IMMUNE_ENEMIES
+
+local function Suika03IsValidAttackTarget(unit, target)
+	return target ~= nil and not target:IsNull() and target:IsAlive() and
+		(target:GetAbsOrigin() - unit:GetAbsOrigin()):Length2D() <= SUIKA03_AUTO_ATTACK_RADIUS
+end
+
+local function Suika03FindNearestTarget(unit, targetType)
+	local targets = FindUnitsInRadius(
+		unit:GetTeamNumber(),
+		unit:GetAbsOrigin(),
+		nil,
+		SUIKA03_AUTO_ATTACK_RADIUS,
+		DOTA_UNIT_TARGET_TEAM_ENEMY,
+		targetType,
+		SUIKA03_AUTO_ATTACK_FLAGS,
+		FIND_CLOSEST,
+		false
+	)
+	return targets[1]
+end
+
+local function Suika03StartAutoAttack(unit)
+	unit:SetIdleAcquire(true)
+	unit:SetContextThink(DoUniqueString("ability_thdots_suika03_summon_auto_attack"), function()
+		if unit == nil or unit:IsNull() or not unit:IsAlive() then
+			return nil
+		end
+		if GameRules:IsGamePaused() then
+			return 0.03
+		end
+
+		local currentTarget = unit:GetAttackTarget()
+		-- 三技能召唤物优先保持或寻找英雄目标，附近没有英雄时才攻击普通单位。
+		if Suika03IsValidAttackTarget(unit, currentTarget) and currentTarget:IsHero() then
+			return SUIKA03_AUTO_ATTACK_INTERVAL
+		end
+
+		local target = Suika03FindNearestTarget(unit, DOTA_UNIT_TARGET_HERO)
+		if target == nil and not Suika03IsValidAttackTarget(unit, currentTarget) then
+			target = Suika03FindNearestTarget(unit, DOTA_UNIT_TARGET_BASIC)
+		end
+		if target ~= nil and target ~= currentTarget then
+			unit:MoveToTargetToAttack(target)
+		elseif target == nil and not Suika03IsValidAttackTarget(unit, currentTarget) then
+			unit:Stop()
+		end
+		return SUIKA03_AUTO_ATTACK_INTERVAL
+	end, 0)
+end
+
 function OnSuika03Spawn(keys)
 	local caster = EntIndexToHScript(keys.caster_entindex)
 	local Caster = keys.caster
@@ -134,6 +190,7 @@ function OnSuika03Spawn(keys)
 		unit:SetBaseMaxHealth(health)
 		unit:SetBaseDamageMax(Damage)
 		unit:SetBaseDamageMin(Damage)
+		Suika03StartAutoAttack(unit)
 		unit:SetContextThink("npc_dota_suika_03_smallsuika_timer",
 		function ()
 			if GameRules:IsGamePaused() then return 0.03 end
@@ -154,7 +211,8 @@ function OnSuika03Spawn(keys)
 		keys.ability:ApplyDataDrivenModifier(Caster, unit, "modifier_thdots_suika03_unit", {})
 		unit:SetBaseMaxHealth(health)
 		unit:SetBaseDamageMax(Damage)
-		unit:SetBaseDamageMin(Damage)		
+		unit:SetBaseDamageMin(Damage)
+		Suika03StartAutoAttack(unit)
 		unit:SetContextThink("npc_dota_suika_03_smallsuika_timer",
 		function ()
 			if GameRules:IsGamePaused() then return 0.03 end
