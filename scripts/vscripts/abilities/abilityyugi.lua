@@ -28,6 +28,8 @@ end
 local function Yugi04_ApplyBotCircle(caster, ability, target, duration)
 	if Yugi04_IsBotUnit(target) then
 		local center = target:GetAbsOrigin()
+		-- 仅给 bot 脚本提供可读标记，实际技能效果仍由原本的勇仪4 modifier处理。
+		ability:ApplyDataDrivenModifier(caster, target, "modifier_thdots_yugi04_bot_no_displacement", {duration = duration})
 		target:AddNewModifier(caster, ability, "modifier_thdots_yugi04_bot_circle", {
 			duration = duration,
 			center_x = center.x,

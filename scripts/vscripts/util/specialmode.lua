@@ -276,6 +276,234 @@ G_Bot_Random_Hero =
 	"npc_dota_hero_leshrac",				--莉莉白
 }
 
+G_Bot_Hero_Folder = {
+	"reimu",
+	"youmu",
+	"aya",
+	"tensi",
+	"rumia",
+
+	"marisa",
+	"koishi",
+	"reisen",
+	"mokou",
+	"yugi",
+
+	"suika",
+	"wriggle",
+	"cirno",
+	"flandre",
+	"shikieiki",
+
+	"iku",
+	"byakuren",
+	"kaguya",
+	"minamitsu",
+	"sanae",
+
+	"yuyuko",
+	"ran",
+	"utsuho",
+	"yumemi",
+	"yuuka",
+
+	"yasaka",
+	"remilia",
+	"momiji",
+	"eirin",
+	"yukari",
+
+	"sakuya",
+	"margatroid",
+	"medicine",
+	"seija",
+	"hina",
+
+	"shou",
+	"clown",
+	"sunny",
+	"child",
+	"star",
+
+	"mystia",
+	"daiyousei",
+	"lunasa",
+	"merlin",
+	"lyrica",
+
+	"kokoro",
+	"tojiko",
+	"komachi",
+	"meirin",
+	"koakuma",
+
+	"ellen",
+	"hatate",
+	"miko",
+	"miyako",
+	"seiga",
+
+	"sagume",
+	"kisume",
+	"nazrin",
+	"suwako",
+	"reisen02",
+
+	"larva",
+	"minoriko",
+	"shizuha",
+	"youmu2",
+	"shion",
+
+	"jyoon",
+	"lilywhite",
+}
+
+local THD2_BOT_ROLE_ORDER = {"damage", "frontline", "support"}
+local THD2_BOT_ROLE_GROUPS = {
+	Carry = "damage",
+	Nuker = "damage",
+	Jungler = "damage",
+	Pusher = "damage",
+	Durable = "frontline",
+	Initiator = "frontline",
+	Support = "support",
+	LaneSupport = "support",
+	Disabler = "support",
+}
+local THD2_BOT_ROLE_POOLS = nil
+
+local function THD2_TrimString(value)
+	return string.match(value or "", "^%s*(.-)%s*$")
+end
+
+local function THD2_SplitCommaList(value)
+	local result = {}
+	if value == nil then return result end
+	for item in string.gmatch(value, "[^,]+") do
+		table.insert(result, THD2_TrimString(item))
+	end
+	return result
+end
+
+local function THD2_FindHeroKVByOverride(heroKV, overrideHeroName)
+	if type(heroKV) ~= "table" then return nil end
+	for _, data in pairs(heroKV) do
+		if type(data) == "table" and data["override_hero"] == overrideHeroName then
+			return data
+		end
+	end
+	return nil
+end
+
+local function THD2_AddRolePoolHero(pools, roleName, heroID)
+	if pools[roleName] == nil then return end
+	for _, oldHeroID in pairs(pools[roleName]) do
+		if oldHeroID == heroID then return end
+	end
+	table.insert(pools[roleName], heroID)
+end
+
+local function THD2_AddHeroToRolePools(pools, heroID, heroName, heroData, folder)
+	local roleList = THD2_SplitCommaList(heroData["Role"])
+	local levelList = THD2_SplitCommaList(heroData["Rolelevels"])
+	if #roleList == 0 or #roleList ~= #levelList then
+		print("[BOT][HeroRole] invalid Role/Rolelevels: " .. tostring(heroName) .. " folder=" .. tostring(folder))
+		return
+	end
+
+	local levels = {}
+	for i, levelText in ipairs(levelList) do
+		local level = tonumber(levelText)
+		if level == nil then
+			print("[BOT][HeroRole] invalid Rolelevel: " .. tostring(heroName) .. " role=" .. tostring(roleList[i]) .. " level=" .. tostring(levelText))
+			return
+		end
+		levels[i] = level
+	end
+
+	local maxLevel = nil
+	for i, roleName in ipairs(roleList) do
+		if THD2_BOT_ROLE_GROUPS[roleName] ~= nil then
+			local level = levels[i]
+			if maxLevel == nil or level > maxLevel then
+				maxLevel = level
+			end
+		end
+	end
+
+	local added = false
+	if maxLevel ~= nil then
+		for i, roleName in ipairs(roleList) do
+			local poolName = THD2_BOT_ROLE_GROUPS[roleName]
+			if poolName ~= nil and levels[i] == maxLevel then
+				THD2_AddRolePoolHero(pools, poolName, heroID)
+				added = true
+			end
+		end
+	end
+
+	if not added then
+		print("[BOT][HeroRole] no usable top role: " .. tostring(heroName) .. " folder=" .. tostring(folder))
+	end
+end
+
+local function THD2_BuildBotRolePools()
+	local pools = {
+		frontline = {},
+		damage = {},
+		support = {},
+	}
+
+	for heroID, heroName in ipairs(G_Bot_Random_Hero) do
+		local folder = G_Bot_Hero_Folder[heroID]
+		if folder == nil then
+			print("[BOT][HeroRole] missing hero folder: " .. tostring(heroName) .. " id=" .. tostring(heroID))
+		else
+			local heroKV = LoadKeyValues("scripts/npc/heroes/" .. folder .. "/hero.txt")
+			local heroData = THD2_FindHeroKVByOverride(heroKV, heroName)
+			if heroData == nil then
+				print("[BOT][HeroRole] missing override hero data: " .. tostring(heroName) .. " folder=" .. tostring(folder))
+			else
+				THD2_AddHeroToRolePools(pools, heroID, heroName, heroData, folder)
+			end
+		end
+	end
+
+	return pools
+end
+
+local function THD2_GetBotRolePools()
+	if THD2_BOT_ROLE_POOLS == nil then
+		THD2_BOT_ROLE_POOLS = THD2_BuildBotRolePools()
+	end
+	return THD2_BOT_ROLE_POOLS
+end
+
+local function THD2_GetBalancedBotRole(botIndex)
+	return THD2_BOT_ROLE_ORDER[((botIndex - 1) % #THD2_BOT_ROLE_ORDER) + 1]
+end
+
+local function THD2_GetRandomAvailableHeroID(heroIDs)
+	local available = {}
+	for _, heroID in ipairs(heroIDs or {}) do
+		if G_BOT_USED[heroID] == false then
+			table.insert(available, heroID)
+		end
+	end
+	if #available == 0 then return nil end
+	return available[RandomInt(1, #available)]
+end
+
+local function THD2_GetUsableBotHeroByRole(roleName)
+	local pools = THD2_GetBotRolePools()
+	local heroID = THD2_GetRandomAvailableHeroID(pools[roleName])
+	if heroID ~= nil then return heroID end
+
+	print("[BOT][HeroRole] role pool empty, fallback to any hero: " .. tostring(roleName))
+	return get_usable_bot_hero()
+end
+
 G_Bots_Ability_Add = {
 	--0X
 	{1,2,1,2,1,  6,1,2,2,11,  3,6,3,3,13, 3,0,6,0,14,  0,0,0,0,16,  0,10,12,15,17  },
@@ -402,14 +630,18 @@ function THD2_BotUpGradeAbility(hero)
 		--print(lvl)
 		for i=G_Bot_Level[v]+1,lvl do
 			if i > 25 then break end 
-			local j = G_Bots_Ability_Add[hIndex][i] - 1 --abilitys is 0~n-1, but vals set as 1~n
-			local ability = hero:GetAbilityByIndex(j)
-			if ability~=nil then
-				local oldLevel = ability:GetLevel()
-				local level = math.min((ability:GetLevel() + 1),ability:GetMaxLevel())
-				ability:SetLevel(level)
-				if level > oldLevel then
-					THD2_OnAbilityLearned(hero, ability)
+			local abilitySlot = G_Bots_Ability_Add[hIndex][i]
+			-- 0 表示该等级不点技能，不能传给 GetAbilityByIndex。
+			if abilitySlot ~= nil and abilitySlot > 0 and abilitySlot <= hero:GetAbilityCount() then
+				local j = abilitySlot - 1 --abilitys is 0~n-1, but vals set as 1~n
+				local ability = hero:GetAbilityByIndex(j)
+				if ability~=nil then
+					local oldLevel = ability:GetLevel()
+					local level = math.min((ability:GetLevel() + 1),ability:GetMaxLevel())
+					ability:SetLevel(level)
+					if level > oldLevel then
+						THD2_OnAbilityLearned(hero, ability)
+					end
 				end
 			end
 		end
@@ -564,13 +796,17 @@ function THD2_BPBanHero(hero_name, hero_id)
 	FireGameEvent("dota_ad_ban", {heroid = hero_id})
 end
 function get_usable_bot_hero()
-	
-	local int = RandomInt(1, tot_bot_heros_size)
-	while(G_BOT_USED[int])
-	do
-		int = RandomInt(1, tot_bot_heros_size)
+	local available = {}
+	for i = 1, tot_bot_heros_size do
+		if G_BOT_USED[i] == false then
+			table.insert(available, i)
+		end
 	end
-	return int
+	if #available == 0 then
+		print("[BOT][HeroRole] no available bot hero")
+		return nil
+	end
+	return available[RandomInt(1, #available)]
 end
 			
 function THD2_AddBot()
@@ -619,6 +855,8 @@ function THD2_AddBot()
 			local ply = nil
 			local goodcnt = PlayerResource:GetPlayerCountForTeam(DOTA_TEAM_GOODGUYS)
 			local badcnt = PlayerResource:GetPlayerCountForTeam(DOTA_TEAM_BADGUYS)
+			local goodBotPickCount = 0
+			local badBotPickCount = 0
 			
 			-- will check inside
 			THD2_ForceClone()
@@ -705,13 +943,25 @@ function THD2_AddBot()
 					-- elseif cur_jff == 1 then
 					if cur_jff == 1 then
 						--ordinary
-						H_id = get_usable_bot_hero()
-						H_name = G_Bot_Random_Hero[H_id]	
+						local targetRole = nil
+						if bot_team then
+							goodBotPickCount = goodBotPickCount + 1
+							targetRole = THD2_GetBalancedBotRole(goodBotPickCount)
+						else
+							badBotPickCount = badBotPickCount + 1
+							targetRole = THD2_GetBalancedBotRole(badBotPickCount)
+						end
+						H_id = THD2_GetUsableBotHeroByRole(targetRole)
+						if H_id ~= nil then
+							H_name = G_Bot_Random_Hero[H_id]
+						end
 					elseif cur_jff == 2 then
 						--allsame
 						if (not check_H_name(H_name)) then
 							H_id = get_usable_bot_hero()
-							H_name = G_Bot_Random_Hero[H_id]
+							if H_id ~= nil then
+								H_name = G_Bot_Random_Hero[H_id]
+							end
 						end
 						if bot_team then
 							team_hero[2] = H_name
@@ -724,7 +974,14 @@ function THD2_AddBot()
 					elseif cur_jff == 4 then
 						--gaishi(该模式在循环前修改了Used表)
 						H_id = get_usable_bot_hero()
-						H_name = G_Bot_Random_Hero[H_id]							
+						if H_id ~= nil then
+							H_name = G_Bot_Random_Hero[H_id]
+						end
+					end
+
+					if H_name == nil then
+						print("[BOT][HeroRole] failed to pick bot hero")
+						break
 					end
 
 					if bot_team == true then
@@ -745,7 +1002,7 @@ function THD2_AddBot()
 							THD2_ForcePlayerRepick(i,'npc_dota_hero_monkey_king')
 						end
 					end
-					if not G_IsCloneMode then G_BOT_USED[H_id]=true end
+					if not G_IsCloneMode and H_id ~= nil then G_BOT_USED[H_id]=true end
 					
 				end
 			end

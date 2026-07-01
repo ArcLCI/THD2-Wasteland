@@ -1,20 +1,23 @@
-LinkLuaModifier("modifier_thdots_lane_creep_march_protection", "util/lane_creep_protection.lua", LUA_MODIFIER_MOTION_NONE)
-
 local LANE_CREEP_PROTECTION_END_TIME = 30 * 60
 local LANE_CREEP_PROTECTION_THINK_INTERVAL = 0.2
 local LANE_CREEP_PROTECTION_ACQUISITION_RANGE = 300
 local LANE_CREEP_PROTECTION_CREEP_RELEASE_RADIUS = 700
 local LANE_CREEP_PROTECTION_BUILDING_RELEASE_RADIUS = 900
 local LANE_CREEP_PROTECTION_PLAYER_DAMAGE_REDUCTION = -90
-local LANE_CREEP_PROTECTION_STATUS_RESISTANCE = 70
 local LANE_CREEP_PROTECTION_SPEED_DELAY = 30
 local LANE_CREEP_PROTECTION_SPEED_BONUS = 25
+
+THD_LANE_CREEP_PROTECTION_ENABLED = false
 
 THD_LANE_CREEP_PROTECTION = THD_LANE_CREEP_PROTECTION or {
 	creeps = {},
 	buildings = nil,
 	thinkerRunning = false,
 }
+
+function THD_GetLaneCreepProtectionEnabled()
+	return THD_LANE_CREEP_PROTECTION_ENABLED == true
+end
 
 local function LaneCreepProtection_IsValid(unit)
 	return unit ~= nil and unit.IsNull ~= nil and not unit:IsNull() and unit:IsAlive()
@@ -133,6 +136,9 @@ local function LaneCreepProtection_RestoreCreep(creep, state)
 	if state ~= nil and state.acquisitionRange ~= nil and creep.SetAcquisitionRange ~= nil then
 		creep:SetAcquisitionRange(state.acquisitionRange)
 	end
+	if state ~= nil and state.baseMoveSpeed ~= nil and creep.SetBaseMoveSpeed ~= nil then
+		creep:SetBaseMoveSpeed(state.baseMoveSpeed)
+	end
 	if creep.SetIdleAcquire ~= nil then
 		creep:SetIdleAcquire(true)
 	end
@@ -140,9 +146,16 @@ end
 
 local function LaneCreepProtection_Release(creep, state)
 	LaneCreepProtection_RestoreCreep(creep, state)
-	if creep ~= nil and creep.IsNull ~= nil and not creep:IsNull() then
-		creep:RemoveModifierByName("modifier_thdots_lane_creep_march_protection")
-	end
+end
+
+local function LaneCreepProtection_ApplySpeedBonus(creep, state)
+	if state == nil or state.speedBoosted or state.createdAt == nil then return end
+	if state.baseMoveSpeed == nil or creep.SetBaseMoveSpeed == nil then return end
+	if GameRules:GetGameTime() - state.createdAt < LANE_CREEP_PROTECTION_SPEED_DELAY then return end
+
+	-- 不再依赖 Lua modifier，直接提高基础移速以规避运行时 modifier 注册警告。
+	creep:SetBaseMoveSpeed(state.baseMoveSpeed * (100 + LANE_CREEP_PROTECTION_SPEED_BONUS) / 100)
+	state.speedBoosted = true
 end
 
 local function LaneCreepProtection_Think()
@@ -175,6 +188,7 @@ local function LaneCreepProtection_Think()
 			if creep.SetIdleAcquire ~= nil then
 				creep:SetIdleAcquire(false)
 			end
+			LaneCreepProtection_ApplySpeedBonus(creep, state)
 			local attackTarget = creep.GetAttackTarget ~= nil and creep:GetAttackTarget() or nil
 			if LaneCreepProtection_IsPlayerControlledUnit(attackTarget) then
 				if creep.SetForceAttackTarget ~= nil then creep:SetForceAttackTarget(nil) end
@@ -201,7 +215,22 @@ local function LaneCreepProtection_StartThinker()
 	GameRules:GetGameModeEntity():SetContextThink("thd_lane_creep_protection", LaneCreepProtection_Think, 0)
 end
 
+function THD2_ApplyLaneCreepMarchProtectionDamage(keys)
+	if keys == nil or keys.entindex_attacker_const == nil or keys.entindex_victim_const == nil then return end
+	if not THD_GetLaneCreepProtectionEnabled() then return end
+	if not LaneCreepProtection_IsBeforeEndTime() then return end
+
+	local state = THD_LANE_CREEP_PROTECTION.creeps[keys.entindex_victim_const]
+	if state == nil or not LaneCreepProtection_IsValid(state.creep) then return end
+
+	local attacker = EntIndexToHScript(keys.entindex_attacker_const)
+	if LaneCreepProtection_IsPlayerControlledUnit(attacker) then
+		keys.damage = keys.damage * math.max(0, 1 + LANE_CREEP_PROTECTION_PLAYER_DAMAGE_REDUCTION / 100)
+	end
+end
+
 function THD2_RegisterLaneCreepMarchProtection(unit)
+	if not THD_GetLaneCreepProtectionEnabled() then return end
 	if not LaneCreepProtection_IsBeforeEndTime() or not LaneCreepProtection_IsLaneCreep(unit) then return end
 	if not LaneCreepProtection_IsValid(unit) then return end
 
@@ -213,6 +242,9 @@ function THD2_RegisterLaneCreepMarchProtection(unit)
 		creep = unit,
 		attackCapability = unit.GetAttackCapability ~= nil and unit:GetAttackCapability() or nil,
 		acquisitionRange = unit.GetAcquisitionRange ~= nil and unit:GetAcquisitionRange() or nil,
+		baseMoveSpeed = unit.GetBaseMoveSpeed ~= nil and unit:GetBaseMoveSpeed() or nil,
+		createdAt = GameRules:GetGameTime(),
+		speedBoosted = false,
 	}
 	if unit.SetAttackCapability ~= nil then
 		unit:SetAttackCapability(DOTA_UNIT_CAP_NO_ATTACK)
@@ -223,45 +255,65 @@ function THD2_RegisterLaneCreepMarchProtection(unit)
 	if unit.SetIdleAcquire ~= nil then
 		unit:SetIdleAcquire(false)
 	end
-	unit:AddNewModifier(unit, nil, "modifier_thdots_lane_creep_march_protection", {})
 	LaneCreepProtection_StartThinker()
 end
 
-modifier_thdots_lane_creep_march_protection = class({})
-
-function modifier_thdots_lane_creep_march_protection:IsHidden() return true end
-function modifier_thdots_lane_creep_march_protection:IsDebuff() return false end
-function modifier_thdots_lane_creep_march_protection:IsPurgable() return false end
-
-function modifier_thdots_lane_creep_march_protection:OnCreated()
-	if not IsServer() then return end
-	self.createdAt = GameRules:GetGameTime()
-end
-
-function modifier_thdots_lane_creep_march_protection:DeclareFunctions()
-	return {
-		MODIFIER_PROPERTY_INCOMING_DAMAGE_PERCENTAGE,
-		MODIFIER_PROPERTY_STATUS_RESISTANCE_STACKING,
-		MODIFIER_PROPERTY_MOVESPEED_BONUS_PERCENTAGE,
-	}
-end
-
-function modifier_thdots_lane_creep_march_protection:GetModifierIncomingDamage_Percentage(params)
-	local attacker = params ~= nil and params.attacker or nil
-	if LaneCreepProtection_IsBeforeEndTime() and LaneCreepProtection_IsPlayerControlledUnit(attacker) then
-		return LANE_CREEP_PROTECTION_PLAYER_DAMAGE_REDUCTION
+local function LaneCreepProtection_ClearAll()
+	local manager = THD_LANE_CREEP_PROTECTION
+	for _, state in pairs(manager.creeps) do
+		LaneCreepProtection_Release(state.creep, state)
 	end
-	return 0
+	manager.creeps = {}
+	manager.thinkerRunning = false
 end
 
-function modifier_thdots_lane_creep_march_protection:GetModifierStatusResistanceStacking()
-	return LaneCreepProtection_IsBeforeEndTime() and LANE_CREEP_PROTECTION_STATUS_RESISTANCE or 0
-end
-
-function modifier_thdots_lane_creep_march_protection:GetModifierMoveSpeedBonus_Percentage()
-	if not IsServer() or self.createdAt == nil then return 0 end
-	if GameRules:GetGameTime() - self.createdAt >= LANE_CREEP_PROTECTION_SPEED_DELAY then
-		return LANE_CREEP_PROTECTION_SPEED_BONUS
+function THD2_RefreshLaneCreepMarchProtection()
+	if not THD_GetLaneCreepProtectionEnabled() then return end
+	for _, classname in ipairs({"npc_dota_creep_lane", "npc_dota_creep_siege"}) do
+		for _, unit in pairs(LaneCreepProtection_FindAllByClassname(classname)) do
+			THD2_RegisterLaneCreepMarchProtection(unit)
+		end
 	end
-	return 0
 end
+
+function THD_SetLaneCreepProtectionEnabled(enabled, source)
+	THD_LANE_CREEP_PROTECTION_ENABLED = enabled == true
+	local message = string.format(
+		"[THD][LaneCreepProtection] enabled=%s source=%s",
+		tostring(THD_LANE_CREEP_PROTECTION_ENABLED),
+		tostring(source or "unknown")
+	)
+	print(message)
+	if not THD_LANE_CREEP_PROTECTION_ENABLED then
+		LaneCreepProtection_ClearAll()
+	else
+		THD2_RefreshLaneCreepMarchProtection()
+	end
+	return THD_LANE_CREEP_PROTECTION_ENABLED
+end
+
+local function LaneCreepProtection_ParseEnabled(value)
+	local arg = string.lower(tostring(value or ""))
+	local enable = arg == "1" or arg == "true" or arg == "on"
+	if not enable and not (arg == "0" or arg == "false" or arg == "off") then
+		print("[THD][LaneCreepProtection] usage: thd_lane_creep_protection on|off")
+		return nil
+	end
+	return enable
+end
+
+Convars:RegisterCommand("thd_lane_creep_protection", function(_, value)
+	local enable = LaneCreepProtection_ParseEnabled(value)
+	if enable == nil then return end
+	THD_SetLaneCreepProtectionEnabled(enable, "console")
+end, "Enable or disable lane creep march protection", 0)
+
+Convars:RegisterCommand("thd_lane_creep_protection_on", function()
+	THD_SetLaneCreepProtectionEnabled(true, "console")
+end, "Enable lane creep march protection", 0)
+
+Convars:RegisterCommand("thd_lane_creep_protection_off", function()
+	THD_SetLaneCreepProtectionEnabled(false, "console")
+end, "Disable lane creep march protection", 0)
+
+LaneCreepProtection_ClearAll()

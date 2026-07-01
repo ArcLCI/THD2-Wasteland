@@ -10,7 +10,8 @@ end
 
 -- 初始化
 function InitInnateAbilityForHero(hero)
-    for i = 0, 30 do
+    -- 按实际技能槽数量扫描，避免越界触发控制台警告。
+    for i = 0, hero:GetAbilityCount() - 1 do
         local ability = hero:GetAbilityByIndex(i)
         if ability ~= nil and ability:InnateAbilityType() > 0 then
             local target_ability = ability

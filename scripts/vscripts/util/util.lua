@@ -1284,9 +1284,11 @@ end
 
 function GetAllAbilityName(caster)
     print("--------------",caster:GetName(),"ability list :--------------")
-     for i=0,17 do 
-         if caster:GetAbilityByIndex(i) and caster:GetAbilityByIndex(i) ~= "" then
-             print(caster:GetAbilityByIndex(i):GetName())
+     -- 按实际技能槽数量扫描，避免越界触发控制台警告。
+     for i=0,caster:GetAbilityCount() - 1 do
+         local ability = caster:GetAbilityByIndex(i)
+         if ability and ability ~= "" then
+             print(ability:GetName())
          end
      end
     print("---------------end------------")

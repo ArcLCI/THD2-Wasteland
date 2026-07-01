@@ -598,10 +598,12 @@ function ability_thdots_keine04:OnSpellStart()
 	local duration  			= self:GetSpecialValueFor("duration")
 	caster:AddNewModifier(caster, self, "modifier_ability_thdots_keine04", {duration = duration})
 
-	for i=0,15 do 
-		if caster:GetAbilityByIndex(i) ~= nil then
-			if caster:GetAbilityByIndex(i) ~= self then
-				caster:GetAbilityByIndex(i):EndCooldown()
+	-- 按实际技能槽数量扫描，避免越界触发控制台警告。
+	for i=0,caster:GetAbilityCount() - 1 do
+		local ability = caster:GetAbilityByIndex(i)
+		if ability ~= nil then
+			if ability ~= self then
+				ability:EndCooldown()
 			end
 		end
 	end

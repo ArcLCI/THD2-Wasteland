@@ -13,10 +13,12 @@ function THD_Change_skill(hero,plyhd)
 		return
 	end
 	--删除技能天赋
-	for i=0,17 do 
-		if hero:GetAbilityByIndex(i) and hero:GetAbilityByIndex(i) ~= "" then
-			print(hero:GetAbilityByIndex(i):GetName())
-			hero:RemoveAbilityByHandle(hero:GetAbilityByIndex(i))
+	-- 按实际技能槽数量扫描，避免越界触发控制台警告。
+	for i=0,hero:GetAbilityCount() - 1 do
+		local ability = hero:GetAbilityByIndex(i)
+		if ability and ability ~= "" then
+			print(ability:GetName())
+			hero:RemoveAbilityByHandle(ability)
 		end
 	end
 	if hero:GetName() == "npc_dota_hero_juggernaut" then

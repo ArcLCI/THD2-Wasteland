@@ -137,7 +137,8 @@ function getPlayerSnapshot(playerID)
             -- Build ability data
             abilityData = {}
             local abilityCount = 0
-            while abilityCount < 16 do
+            local maxAbilityCount = math.min(hero:GetAbilityCount(), 16)
+            while abilityCount < maxAbilityCount do
                 -- Grab an ability
                 local ab = hero:GetAbilityByIndex(abilityCount)
 

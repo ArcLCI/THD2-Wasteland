@@ -317,13 +317,19 @@ function ability_thdots_kasen2_3:OnSpellStart()
 		monster:Kill(self, caster)
 		return
 	end
+	-- 按实际技能槽数量扫描，避免越界触发控制台警告。
+	local monsterAbilityCount = monster:GetAbilityCount()
 	for i=0,1 do
-		if monster:GetAbilityByIndex(i) and monster:GetAbilityByIndex(i) ~= nil then
+		local monsterAbility = nil
+		if i < monsterAbilityCount then
+			monsterAbility = monster:GetAbilityByIndex(i)
+		end
+		if monsterAbility and monsterAbility ~= nil then
 			print(i)
-			print(monster:GetAbilityByIndex(i):GetName())
+			print(monsterAbility:GetName())
 			if i == 0 then 
 				caster:RemoveAbilityByHandle(caster:GetAbilityByIndex(3))
-				local ability = monster:GetAbilityByIndex(i)
+				local ability = monsterAbility
 				if ability:GetName() == "ghost_frost_attack" then
 					ability = caster:AddAbility("kasen_weird_attack")
 				elseif ability:GetName() == "alpha_wolf_critical_strike" then
@@ -347,11 +353,11 @@ function ability_thdots_kasen2_3:OnSpellStart()
 				else
 					ability = caster:AddAbility(ability:GetName())
 				end
-				ability:SetLevel(monster:GetAbilityByIndex(i):GetLevel())
+				ability:SetLevel(monsterAbility:GetLevel())
 				ability:SetHidden(false)
 			else
 				caster:RemoveAbilityByHandle(caster:GetAbilityByIndex(4))
-				local ability = monster:GetAbilityByIndex(i)
+				local ability = monsterAbility
 				if ability:GetName() == "black_dragon_splash_attack" then
 					ability = caster:AddAbility("kasen_dragon_splash_attack")
 				elseif ability:GetName() == "forest_troll_high_priest_mana_aura" then
@@ -375,7 +381,7 @@ function ability_thdots_kasen2_3:OnSpellStart()
 				else
 					ability = caster:AddAbility(ability:GetName())
 				end
-				ability:SetLevel(monster:GetAbilityByIndex(i):GetLevel())
+				ability:SetLevel(monsterAbility:GetLevel())
 				ability:SetHidden(false)
 			end
 		else
@@ -479,10 +485,12 @@ function CreateKasenIllusion(self,caster,origin,model)
 	ParticleManager:SetParticleControl(effectIndex, 1, kasen2:GetAbsOrigin())
 	ParticleManager:DestroyParticleSystem(effectIndex,false)
 
-    for i=0,16 do 
-        if kasen2:GetAbilityByIndex(i) and kasen2:GetAbilityByIndex(i) ~= "" then
-            print(kasen2:GetAbilityByIndex(i):GetName())
-            kasen2:RemoveAbilityByHandle(kasen2:GetAbilityByIndex(i))
+    -- 按实际技能槽数量扫描，避免越界触发控制台警告。
+    for i=0,kasen2:GetAbilityCount() - 1 do
+        local ability = kasen2:GetAbilityByIndex(i)
+        if ability and ability ~= "" then
+            print(ability:GetName())
+            kasen2:RemoveAbilityByHandle(ability)
         end
     end
 

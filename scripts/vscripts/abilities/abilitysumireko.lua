@@ -570,8 +570,8 @@ end
 --------------------------------------------------------
 ability_thdots_sumireko04 = {}
 
-function ability_thdots_sumireko04:GetCastRange()
-	return self:GetSpecialValueFor("cast_range")
+function ability_thdots_sumireko04:GetCastRange(location, target)
+	return self:GetSpecialValueFor("cast_range") + self:GetCaster():GetCastRangeBonus()
 end
 
 function ability_thdots_sumireko04:GetCooldown(level)

@@ -1442,9 +1442,11 @@ function THDOTSGameMode:OnPlayerSay( keys )
 				if not v:IsBaseNPC() then return end
 				print("Abilities: ")
 				local cnt = v:GetAbilityCount()
-				for i=0,cnt do
-					if v:GetAbilityByIndex(i) ~= nil then
-						print(v:GetAbilityByIndex(i):GetAbilityName())
+				-- 按实际技能槽数量扫描，避免越界触发控制台警告。
+				for i=0,cnt - 1 do
+					local ability = v:GetAbilityByIndex(i)
+					if ability ~= nil then
+						print(ability:GetAbilityName())
 					end
 				end
 				print('+++++++++++++++++++++++++++++++++++')
@@ -2007,14 +2009,18 @@ function THDOTSGameMode:BotUpGradeAbility(hero)
 		end
 		--print(lvl)
 		for i=G_Bot_Level[v]+1,lvl do
-			local j = G_Bots_Ability_Add[hIndex][i] - 1 --abilitys is 0~n-1, but vals set as 1~n
-			local ability = hero:GetAbilityByIndex(j)
-			if ability~=nil then
-				local oldLevel = ability:GetLevel()
-				local level = math.min((ability:GetLevel() + 1),ability:GetMaxLevel())
-				ability:SetLevel(level)
-				if level > oldLevel then
-					THD2_OnAbilityLearned(hero, ability)
+			local abilitySlot = G_Bots_Ability_Add[hIndex][i]
+			-- 0 表示该等级不点技能，不能传给 GetAbilityByIndex。
+			if abilitySlot ~= nil and abilitySlot > 0 and abilitySlot <= hero:GetAbilityCount() then
+				local j = abilitySlot - 1 --abilitys is 0~n-1, but vals set as 1~n
+				local ability = hero:GetAbilityByIndex(j)
+				if ability~=nil then
+					local oldLevel = ability:GetLevel()
+					local level = math.min((ability:GetLevel() + 1),ability:GetMaxLevel())
+					ability:SetLevel(level)
+					if level > oldLevel then
+						THD2_OnAbilityLearned(hero, ability)
+					end
 				end
 			end
 		end
@@ -3151,6 +3157,12 @@ function THDOTSGameMode:OnTHDOTSDamageFilter(keys)
 	end
 	local unit = EntIndexToHScript(keys.entindex_attacker_const) --施加伤害者
 	local target = EntIndexToHScript(keys.entindex_victim_const) --受伤害者
+	if THD2_ApplyLaneCreepMarchProtectionDamage ~= nil then
+		THD2_ApplyLaneCreepMarchProtectionDamage(keys)
+	end
+	if THD2_ApplyBotCourierShieldDamage ~= nil then
+		THD2_ApplyBotCourierShieldDamage(keys)
+	end
 	target.damage = keys.damage
 	if target:IsHero() and not target:IsIllusion() then
 		if target:HasModifier("modifier_item_aegis") then
@@ -3371,10 +3383,12 @@ Cast_xianzhezhishi = function (keys)
 		local hero = PlayerResource:GetPlayer(plyid):GetAssignedHero()
 		if hero == nil then return end
 		local ability = nil 
-		for i=0,29 do
-			if hero:GetAbilityByIndex(i):GetAbilityName() ==
+		-- 按实际技能槽数量扫描，避免越界触发控制台警告。
+		for i=0,hero:GetAbilityCount() - 1 do
+			local currentAbility = hero:GetAbilityByIndex(i)
+			if currentAbility ~= nil and currentAbility:GetAbilityName() ==
 			"ability_thdots_patchouli_xianzhezhishi" then
-				ability = hero:GetAbilityByIndex(i)
+				ability = currentAbility
 			end
 		end
 			

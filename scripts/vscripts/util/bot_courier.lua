@@ -1,7 +1,17 @@
-LinkLuaModifier("modifier_bot_courier_shield", "util/bot_courier.lua", LUA_MODIFIER_MOTION_NONE)
-
 local BOT_COURIER_OWNER_RETRY_INTERVAL = 0.1
 local BOT_COURIER_OWNER_RETRY_COUNT = 100
+local BOT_COURIER_SHIELD_CONTEXT = "thd2_bot_courier_shield"
+
+THD_BOT_COURIER_SHIELD_ENABLED = false
+
+local function BotCourier_IsValidCourier(unit)
+	return unit ~= nil and unit.IsNull ~= nil and not unit:IsNull()
+		and unit.IsCourier ~= nil and unit:IsCourier()
+end
+
+function THD_GetBotCourierShieldEnabled()
+	return THD_BOT_COURIER_SHIELD_ENABLED == true
+end
 
 local function BotCourier_IsBotPlayerID(playerID)
 	if playerID == nil or playerID < 0 or not PlayerResource:IsValidPlayerID(playerID) then return false end
@@ -36,20 +46,38 @@ local function BotCourier_GetOwnerPlayerID(courier)
 end
 
 function THD2_ApplyBotCourierShield(unit)
-	if unit == nil or unit:IsNull() or unit.IsCourier == nil or not unit:IsCourier() then return true end
+	if not THD_GetBotCourierShieldEnabled() then return true end
+	if not BotCourier_IsValidCourier(unit) then return true end
 
 	local playerID = BotCourier_GetOwnerPlayerID(unit)
 	if playerID < 0 then return false end
 	if not BotCourier_IsBotPlayerID(playerID) then return true end
 
-	if not unit:HasModifier("modifier_bot_courier_shield") then
-		unit:AddNewModifier(unit, nil, "modifier_bot_courier_shield", {})
+	unit:SetContextNum(BOT_COURIER_SHIELD_CONTEXT, 1, 0)
+	if not unit:HasModifier("modifier_invulnerable") then
+		-- 使用引擎内建无敌 modifier，避免自定义 Lua modifier 注册失败。
+		unit:AddNewModifier(unit, nil, "modifier_invulnerable", {duration = -1})
 	end
-	return unit:HasModifier("modifier_bot_courier_shield")
+	return unit:HasModifier("modifier_invulnerable")
+end
+
+function THD2_IsBotCourierShielded(unit)
+	return BotCourier_IsValidCourier(unit) and unit:GetContext(BOT_COURIER_SHIELD_CONTEXT) == 1
+end
+
+function THD2_ApplyBotCourierShieldDamage(keys)
+	if keys == nil or keys.entindex_victim_const == nil then return end
+	if not THD_GetBotCourierShieldEnabled() then return end
+
+	local target = EntIndexToHScript(keys.entindex_victim_const)
+	if THD2_IsBotCourierShielded(target) then
+		keys.damage = 0
+	end
 end
 
 function THD2_ScheduleBotCourierShield(unit)
-	if unit == nil or unit:IsNull() or unit.IsCourier == nil or not unit:IsCourier() then return end
+	if not THD_GetBotCourierShieldEnabled() then return end
+	if not BotCourier_IsValidCourier(unit) then return end
 
 	-- npc_spawned 触发时信使可能尚未绑定控制者，短时间重试后再结束检查。
 	local retryCount = 0
@@ -64,34 +92,66 @@ function THD2_ScheduleBotCourierShield(unit)
 end
 
 function THD2_RefreshBotCourierShields()
+	if not THD_GetBotCourierShieldEnabled() then return end
 	local couriers = Entities:FindAllByClassname("npc_dota_courier") or {}
 	for _, courier in pairs(couriers) do
 		THD2_ScheduleBotCourierShield(courier)
 	end
 end
 
-modifier_bot_courier_shield = class({})
-
-function modifier_bot_courier_shield:IsHidden() return true end
-function modifier_bot_courier_shield:IsDebuff() return false end
-function modifier_bot_courier_shield:IsPurgable() return false end
-function modifier_bot_courier_shield:RemoveOnDeath() return false end
-
-function modifier_bot_courier_shield:CheckState()
-	-- 信使无敌使用明确状态实现，三类绝对无伤属性继续作为伤害事件兜底。
-	return {
-		[MODIFIER_STATE_INVULNERABLE] = true,
-	}
+local function BotCourier_ClearShield(unit)
+	if not THD2_IsBotCourierShielded(unit) then return end
+	unit:SetContextNum(BOT_COURIER_SHIELD_CONTEXT, 0, 0)
+	if unit:HasModifier("modifier_invulnerable") then
+		unit:RemoveModifierByName("modifier_invulnerable")
+	end
 end
 
-function modifier_bot_courier_shield:DeclareFunctions()
-	return {
-		MODIFIER_PROPERTY_ABSOLUTE_NO_DAMAGE_PHYSICAL,
-		MODIFIER_PROPERTY_ABSOLUTE_NO_DAMAGE_MAGICAL,
-		MODIFIER_PROPERTY_ABSOLUTE_NO_DAMAGE_PURE,
-	}
+local function BotCourier_ClearAllShields()
+	local couriers = Entities:FindAllByClassname("npc_dota_courier") or {}
+	for _, courier in pairs(couriers) do
+		BotCourier_ClearShield(courier)
+	end
 end
 
-function modifier_bot_courier_shield:GetAbsoluteNoDamagePhysical() return 1 end
-function modifier_bot_courier_shield:GetAbsoluteNoDamageMagical() return 1 end
-function modifier_bot_courier_shield:GetAbsoluteNoDamagePure() return 1 end
+function THD_SetBotCourierShieldEnabled(enabled, source)
+	THD_BOT_COURIER_SHIELD_ENABLED = enabled == true
+	local message = string.format(
+		"[THD][BotCourierShield] enabled=%s source=%s",
+		tostring(THD_BOT_COURIER_SHIELD_ENABLED),
+		tostring(source or "unknown")
+	)
+	print(message)
+	if not THD_BOT_COURIER_SHIELD_ENABLED then
+		BotCourier_ClearAllShields()
+	else
+		THD2_RefreshBotCourierShields()
+	end
+	return THD_BOT_COURIER_SHIELD_ENABLED
+end
+
+local function BotCourier_ParseEnabled(value)
+	local arg = string.lower(tostring(value or ""))
+	local enable = arg == "1" or arg == "true" or arg == "on"
+	if not enable and not (arg == "0" or arg == "false" or arg == "off") then
+		print("[THD][BotCourierShield] usage: thd_bot_courier_shield on|off")
+		return nil
+	end
+	return enable
+end
+
+Convars:RegisterCommand("thd_bot_courier_shield", function(_, value)
+	local enable = BotCourier_ParseEnabled(value)
+	if enable == nil then return end
+	THD_SetBotCourierShieldEnabled(enable, "console")
+end, "Enable or disable bot courier invulnerable shield", 0)
+
+Convars:RegisterCommand("thd_bot_courier_shield_on", function()
+	THD_SetBotCourierShieldEnabled(true, "console")
+end, "Enable bot courier invulnerable shield", 0)
+
+Convars:RegisterCommand("thd_bot_courier_shield_off", function()
+	THD_SetBotCourierShieldEnabled(false, "console")
+end, "Disable bot courier invulnerable shield", 0)
+
+BotCourier_ClearAllShields()

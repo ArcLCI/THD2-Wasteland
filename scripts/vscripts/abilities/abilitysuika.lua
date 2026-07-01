@@ -110,6 +110,27 @@ local SUIKA03_AUTO_ATTACK_FLAGS = DOTA_UNIT_TARGET_FLAG_FOW_VISIBLE +
 	DOTA_UNIT_TARGET_FLAG_NO_INVIS +
 	DOTA_UNIT_TARGET_FLAG_NOT_ATTACK_IMMUNE +
 	DOTA_UNIT_TARGET_FLAG_MAGIC_IMMUNE_ENEMIES
+-- 测试开关："auto_attack" 使用自动索敌，"hero_control" 交给施法者所属玩家控制。
+SUIKA03_SUMMON_TEST_MODE = SUIKA03_SUMMON_TEST_MODE or "hero_control"
+
+local function Suika03SetSummonTestMode(value)
+	local mode = value ~= nil and string.lower(tostring(value)) or ""
+	if mode == "auto" or mode == "auto_attack" then
+		SUIKA03_SUMMON_TEST_MODE = "auto_attack"
+	elseif mode == "control" or mode == "hero_control" then
+		SUIKA03_SUMMON_TEST_MODE = "hero_control"
+	else
+		print("[Suika03] usage: thd_suika03_summon_mode auto/control")
+		return
+	end
+	print("[Suika03] summon mode: " .. SUIKA03_SUMMON_TEST_MODE)
+end
+
+if IsServer() then
+	Convars:RegisterCommand("thd_suika03_summon_mode", function(_, value)
+		Suika03SetSummonTestMode(value)
+	end, "Switch Suika03 summons between automatic attack and player control", 0)
+end
 
 local function Suika03IsValidAttackTarget(unit, target)
 	return target ~= nil and not target:IsNull() and target:IsAlive() and
@@ -160,6 +181,19 @@ local function Suika03StartAutoAttack(unit)
 	end, 0)
 end
 
+local function Suika03SetupSummonControl(unit, caster)
+	if SUIKA03_SUMMON_TEST_MODE == "hero_control" then
+		local playerID = caster:GetPlayerOwnerID()
+		if playerID ~= nil and playerID >= 0 then
+			unit:SetOwner(caster)
+			unit:SetIdleAcquire(false)
+			unit:SetControllableByPlayer(playerID, true)
+			return
+		end
+	end
+	Suika03StartAutoAttack(unit)
+end
+
 function OnSuika03Spawn(keys)
 	local caster = EntIndexToHScript(keys.caster_entindex)
 	local Caster = keys.caster
@@ -190,7 +224,7 @@ function OnSuika03Spawn(keys)
 		unit:SetBaseMaxHealth(health)
 		unit:SetBaseDamageMax(Damage)
 		unit:SetBaseDamageMin(Damage)
-		Suika03StartAutoAttack(unit)
+		Suika03SetupSummonControl(unit, Caster)
 		unit:SetContextThink("npc_dota_suika_03_smallsuika_timer",
 		function ()
 			if GameRules:IsGamePaused() then return 0.03 end
@@ -212,7 +246,7 @@ function OnSuika03Spawn(keys)
 		unit:SetBaseMaxHealth(health)
 		unit:SetBaseDamageMax(Damage)
 		unit:SetBaseDamageMin(Damage)
-		Suika03StartAutoAttack(unit)
+		Suika03SetupSummonControl(unit, Caster)
 		unit:SetContextThink("npc_dota_suika_03_smallsuika_timer",
 		function ()
 			if GameRules:IsGamePaused() then return 0.03 end

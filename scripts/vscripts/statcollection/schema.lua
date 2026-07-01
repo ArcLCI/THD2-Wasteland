@@ -288,7 +288,8 @@ function GetAbilityNameList( hero )
     local abilityName
     abilityData = {}
     local abilityCount = 0
-    while abilityCount < 16 do
+    local maxAbilityCount = math.min(hero:GetAbilityCount(), 16)
+    while abilityCount < maxAbilityCount do
         local ab = hero:GetAbilityByIndex(abilityCount)
 
         if IsValidEntity(ab) then
