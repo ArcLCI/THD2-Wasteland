@@ -53,6 +53,7 @@
 #base heroes/reimu/hero.txt
 #base heroes/reisen/hero.txt
 #base heroes/reisen02/hero.txt
+#base heroes/renko/hero.txt
 #base heroes/remilia/hero.txt
 #base heroes/rin/hero.txt
 #base heroes/rumia/hero.txt

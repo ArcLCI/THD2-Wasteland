@@ -55,6 +55,7 @@
 #base "heroes/reimu/npc_abilities_reimu.txt"
 #base "heroes/reisen/npc_abilities_reisen.txt"
 #base "heroes/reisen02/npc_abilities_reisen02.txt"
+#base "heroes/renko/npc_abilities_renko.txt"
 #base "heroes/remilia/npc_abilities_remilia.txt"
 #base "heroes/rin/npc_abilities_rin.txt"
 #base "heroes/rumia/npc_abilities_rumia.txt"

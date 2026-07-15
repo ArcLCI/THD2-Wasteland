@@ -39,7 +39,7 @@
 			}
 			"RunScript"
 			{
-				"ScriptFile"	"scripts/vscripts/abilities/abilityShikieiki.lua"
+				"ScriptFile"	"scripts/vscripts/abilities/abilityshikieiki.lua"
 				"Function"	"Shikieiki01_OnSpellStart"
 				"ModifierName"	"modifier_thdots_shikieiki01_accusation_timer"
 				"Duration"	"%accusation_duration"
@@ -57,7 +57,7 @@
 				{
 					"RunScript"
 					{
-						"ScriptFile"	"scripts/vscripts/abilities/abilityShikieiki.lua"
+						"ScriptFile"	"scripts/vscripts/abilities/abilityshikieiki.lua"
 						"Function"	"Shikieiki01_Modifier_Accusation_OnKill"
 						"DamageHpPctOnkillHero"	"%damage_hp_pct_onkill_hero"
 						"DamageHpPctOnkillCreep"	"%damage_hp_pct_onkill_creep"
@@ -76,7 +76,7 @@
 				{
 					"RunScript"
 					{
-						"ScriptFile"	"scripts/vscripts/abilities/abilityShikieiki.lua"
+						"ScriptFile"	"scripts/vscripts/abilities/abilityshikieiki.lua"
 						"Function"	"Shikieiki01_Modifier_AccusationTimer_OnCreated"
 						"MaxAccusationNum"	"%max_accusation_num"
 					}
@@ -85,7 +85,7 @@
 				{
 					"RunScript"
 					{
-						"ScriptFile"	"scripts/vscripts/abilities/abilityShikieiki.lua"
+						"ScriptFile"	"scripts/vscripts/abilities/abilityshikieiki.lua"
 						"Function"	"Shikieiki01_Modifier_AccusationTimer_OnDestroy"
 					}
 				}
@@ -151,7 +151,7 @@
 				{
 					"RunScript"
 					{
-						"ScriptFile"	"scripts/vscripts/abilities/abilityShikieiki.lua"
+						"ScriptFile"	"scripts/vscripts/abilities/abilityshikieiki.lua"
 						"Function"	"Shikieiki02_OnSpellStart"
 						"StunDurationBase"	"%stun_duration_base"
 						"StunDurationAccusation"	"%stun_duration_accusation"
@@ -199,7 +199,7 @@
 				{
 					"RunScript"
 					{
-						"ScriptFile"	"scripts/vscripts/abilities/abilityShikieiki.lua"
+						"ScriptFile"	"scripts/vscripts/abilities/abilityshikieiki.lua"
 						"Function"	"Shikieiki03_OnAttackLanded"
 						"AccusationDuration"	"%accusation_duration"
 						"MaxAccusationNum"	"%max_accusation_num"
@@ -278,7 +278,7 @@
 			// }
 			"RunScript"
 			{
-				"ScriptFile"	"scripts/vscripts/abilities/abilityShikieiki.lua"
+				"ScriptFile"	"scripts/vscripts/abilities/abilityshikieiki.lua"
 				"Function"	"Shikieiki04_OnSpellStart"
 			}
 		}
@@ -307,13 +307,13 @@
 				{
 					"RunScript"
 					{
-						"ScriptFile"	"scripts/vscripts/abilities/abilityShikieiki.lua"
+						"ScriptFile"	"scripts/vscripts/abilities/abilityshikieiki.lua"
 						"Function"	"Shikieiki04_ModifierDebuff_OnIntervalThink"
 						"DamagePerSec"	"%debuff_damage_per_sec"
 					}
 					"RunScript"
 					{
-						"ScriptFile"	"scripts/vscripts/abilities/abilityShikieiki.lua"
+						"ScriptFile"	"scripts/vscripts/abilities/abilityshikieiki.lua"
 						"Function"	"Shikieiki04_ModifierKeepDebuffDuration_OnIntervalThink"
 						"RadiusKeepDuration"	"%radius_keep_duration"
 						"DebuffName"	"modifier_thdots_shikieiki04_debuff"
@@ -323,12 +323,12 @@
 				{
 					"RunScript"
 					{
-						"ScriptFile"	"scripts/vscripts/abilities/abilityShikieiki.lua"
+						"ScriptFile"	"scripts/vscripts/abilities/abilityshikieiki.lua"
 						"Function"	"Shikieiki04_ModifierDebuff_OnCreated"
 					}
 					"RunScript"
 					{
-						"ScriptFile"	"scripts/vscripts/abilities/abilityShikieiki.lua"
+						"ScriptFile"	"scripts/vscripts/abilities/abilityshikieiki.lua"
 						"Function"	"Shikieiki04_ModifierKeepDebuffDuration_OnCreated"
 						"DebuffDuration"	"%debuff_duration"
 					}
@@ -337,7 +337,7 @@
 				{
 					"RunScript"
 					{
-						"ScriptFile"	"scripts/vscripts/abilities/abilityShikieiki.lua"
+						"ScriptFile"	"scripts/vscripts/abilities/abilityshikieiki.lua"
 						"Function"	"Shikieiki04_ModifierKeepDebuffDuration_OnDestroy"
 					}
 				}

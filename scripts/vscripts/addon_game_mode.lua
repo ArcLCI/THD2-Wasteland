@@ -2638,6 +2638,9 @@ function THDOTSGameMode:PrecacheHeroResource(hero)
 	elseif (heroName == "npc_dota_hero_skywrath_mage") then
 		abilityEx = hero:FindAbilityByName("ability_thdots_sumirekoEx")
 		abilityEx:SetLevel(1)
+	elseif (heroName == "npc_dota_hero_marci") then
+		abilityEx = hero:FindAbilityByName("ability_thdots_renkoEx")
+		abilityEx:SetLevel(1)
 	elseif (heroName == "npc_dota_hero_broodmother") then
 		abilityEx = hero:FindAbilityByName("ability_thdots_yamameEx")
 		abilityEx:SetLevel(1)
@@ -3177,6 +3180,13 @@ function THDOTSGameMode:OnTHDOTSDamageFilter(keys)
 		SendOverheadEventMessage(nil,OVERHEAD_ALERT_BONUS_SPELL_DAMAGE,target,keys.damage,nil)
 	end
 	if unit ~= nil and unit:IsNull() == false and target ~= nil and target:IsNull() == false then
+		--莲子4技能物理伤害增幅监听
+		if (keys.damagetype_const == DAMAGE_TYPE_PHYSICAL or keys.damagetype_const == 1) and unit:HasModifier("modifier_ability_thdots_renko04_physical_damage") then
+			local renko04PhysicalDamageBonusPct = unit:GetModifierStackCount("modifier_ability_thdots_renko04_physical_damage", nil)
+			if renko04PhysicalDamageBonusPct > 0 then
+				keys.damage = keys.damage * (1 + renko04PhysicalDamageBonusPct / 100)
+			end
+		end
 		--提琴伤害监听
 		if unit:IsHero() and unit:GetName() == "npc_dota_hero_dazzle" and keys.entindex_inflictor_const ~= nil then --entindex_inflictor_const是伤害来源,普攻为nil
 			local LUNASA_DAMAGE_BONUS_PERCENT = unit:GetModifierStackCount("modifier_lunasa03", unit)/100 --法术暴击几率

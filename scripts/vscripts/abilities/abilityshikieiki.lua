@@ -4,6 +4,33 @@
 
 local MODIFIER_NAME_ACCUSATION_TIMER="modifier_thdots_shikieiki01_accusation_timer"
 local MODIFIER_NAME_ACCUSATION="modifier_thdots_shikieiki1_accusation"
+
+local function ApplyShikieiki01Accusation(Caster, Target, Duration)
+	local AbilityShikieiki01=Caster:FindAbilityByName("ability_thdots_shikieiki01")
+	if not AbilityShikieiki01 then return nil end
+	local ability_level=AbilityShikieiki01:GetLevel()
+	if ability_level<=0 then
+		AbilityShikieiki01:SetLevel(1)
+	end
+	AbilityShikieiki01:ApplyDataDrivenModifier(Caster,Target,MODIFIER_NAME_ACCUSATION_TIMER,{Duration=Duration})
+	if ability_level<=0 then
+		AbilityShikieiki01:SetLevel(ability_level)
+	end
+	return AbilityShikieiki01
+end
+
+local function DestroyShikieiki04Effect(Caster, Target)
+	if not Caster or not Target then return end
+	if Caster:IsNull() or Target:IsNull() then return end
+	if not Target.ability_shikieiki_04_effectIndex then return end
+	local caster_index=Caster:entindex()
+	local effectIndex=Target.ability_shikieiki_04_effectIndex[caster_index]
+	if effectIndex then
+		ParticleManager:DestroyParticleSystem(effectIndex,true)
+		Target.ability_shikieiki_04_effectIndex[caster_index]=nil
+	end
+end
+
 function GetAccusationCount(Caster,Target)
 	local modifiers=Target:FindAllModifiersByName(MODIFIER_NAME_ACCUSATION_TIMER)
 	local ModifierCount=0
@@ -230,22 +257,13 @@ function Shikieiki03_OnAttackLanded(keys)
 	if keys.target:IsBuilding() then return end
 	local MaxAccusationNum=keys.MaxAccusationNum
 	--if Target:IsRealHero() then
-	local AbilityShikieiki01=Caster:FindAbilityByName("ability_thdots_Shikieiki01")
-	--print("ability_thdots_Shikieiki01:"..tostring(AbilityShikieiki01))
-	if AbilityShikieiki01 then
-		if AbilityShikieiki01:GetLevel()<=0 then
-			AbilityShikieiki01:SetLevel(1)
-			AbilityShikieiki01:ApplyDataDrivenModifier(Caster,Target,MODIFIER_NAME_ACCUSATION_TIMER,{Duration=keys.AccusationDuration})
-			AbilityShikieiki01:SetLevel(0)
-		else
-			AbilityShikieiki01:ApplyDataDrivenModifier(Caster,Target,MODIFIER_NAME_ACCUSATION_TIMER,{Duration=keys.AccusationDuration})
-		end
-	end
+	-- 三技能借用一技能的叠罪 modifier，避免大小写错误导致万宝槌分支空引用。
+	local AbilityShikieiki01=ApplyShikieiki01Accusation(Caster,Target,keys.AccusationDuration)
 
-	if Caster:HasModifier("modifier_item_wanbaochui") then
+	if AbilityShikieiki01 and Caster:HasModifier("modifier_item_wanbaochui") then
 		local RandomNumber = RandomInt(1,100)
 		if RandomNumber<51 then
-			AbilityShikieiki01:ApplyDataDrivenModifier(Caster,Target,MODIFIER_NAME_ACCUSATION_TIMER,{Duration=keys.AccusationDuration})
+			ApplyShikieiki01Accusation(Caster,Target,keys.AccusationDuration)
 		end
 	end
 	local Damage= ( keys.DamageOnMaxAccusation + FindTelentValue(Caster,"special_bonus_unique_shikieiki_1") ) * GetAccusationCount(Caster,Target)
@@ -285,7 +303,7 @@ function Shikieiki04_ModifierKeepDebuffDuration_OnDestroy(keys)
 	local Target=keys.target
 	
 	Target.Shikieiki04_Debuff_Duration=nil
-	ParticleManager:DestroyParticleSystem(Caster.ability_shikieiki_04_effectIndex,true)
+	DestroyShikieiki04Effect(Caster,Target)
 end
 function Shikieiki04_ModifierKeepDebuffDuration_OnIntervalThink(keys)
 	local Ability=keys.ability
@@ -314,6 +332,8 @@ end
 function Shikieiki04_ModifierDebuff_OnCreated(keys)
 	local Caster=keys.caster
 	local Target=keys.target
+	-- 特效索引按目标和施法者保存，避免同一施法者多个审判互相覆盖。
+	DestroyShikieiki04Effect(Caster,Target)
 	local effectIndex = ParticleManager:CreateParticle(
 		"particles/heroes/shikieiki/ability_shikieiki_04.vpcf", 
 		PATTACH_CUSTOMORIGIN, 
@@ -321,7 +341,8 @@ function Shikieiki04_ModifierDebuff_OnCreated(keys)
 	ParticleManager:SetParticleControlEnt(effectIndex , 0, Target, 5, "follow_origin", Vector(0,0,0), true)
 	ParticleManager:SetParticleControlEnt(effectIndex , 1, Target, 5, "follow_origin", Vector(0,0,0), true)
 	ParticleManager:SetParticleControlEnt(effectIndex , 4, Target, 5, "follow_origin", Vector(0,0,0), true)
-	Caster.ability_shikieiki_04_effectIndex = effectIndex
+	Target.ability_shikieiki_04_effectIndex=Target.ability_shikieiki_04_effectIndex or {}
+	Target.ability_shikieiki_04_effectIndex[Caster:entindex()] = effectIndex
 end
 
 function Shikieiki04_OnSpellStart(keys)

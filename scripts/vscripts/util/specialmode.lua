@@ -106,7 +106,7 @@ function THD2_GetJFFMode() return cur_jff end
 
 
 --to ban some girls(which is not work done XD)
-cur_bot_heros_size = 45
+cur_bot_heros_size = 44
 tot_bot_heros_size = 67
 G_BOT_USED = 
 {
@@ -126,7 +126,7 @@ G_BOT_USED =
 	false ,			--虫子
 	false ,			--⑨
 	true ,			--二妹
-	false ,			--四季
+	true ,			--四季
 	
 	false ,			--衣玖
 	false ,			--白莲
@@ -240,7 +240,7 @@ G_Bot_Random_Hero =
 	"npc_dota_hero_doom_bringer",			--皮丝
 	"npc_dota_hero_rattletrap",				--桑尼
 	"npc_dota_hero_luna",					--露娜
-	"npc_dota_hero_chen",	--斯塔
+	"npc_dota_hero_chen",					--斯塔
 	
 	"npc_dota_hero_night_stalker",			--夜雀
 	"npc_dota_hero_nyx_assassin",			--大妖精

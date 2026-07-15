@@ -2,7 +2,7 @@ local BOT_COURIER_OWNER_RETRY_INTERVAL = 0.1
 local BOT_COURIER_OWNER_RETRY_COUNT = 100
 local BOT_COURIER_SHIELD_CONTEXT = "thd2_bot_courier_shield"
 
-THD_BOT_COURIER_SHIELD_ENABLED = false
+THD_BOT_COURIER_SHIELD_ENABLED = true
 
 local function BotCourier_IsValidCourier(unit)
 	return unit ~= nil and unit.IsNull ~= nil and not unit:IsNull()

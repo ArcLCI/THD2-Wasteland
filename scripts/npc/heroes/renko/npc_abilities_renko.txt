@@ -1,0 +1,239 @@
+"DOTAAbilities"
+{
+	"ability_thdots_renko01"
+	{
+		"BaseClass"	"ability_lua"
+		"ScriptFile"	"scripts/vscripts/abilities/abilityrenko.lua"
+		"AbilityTextureName"	"custom/sumireko/ability_thdots_sumireko01"
+		"AbilityBehavior"	"DOTA_ABILITY_BEHAVIOR_NO_TARGET"
+		"AbilityUnitTargetType"	"DOTA_UNIT_TARGET_HERO | DOTA_UNIT_TARGET_BASIC"
+		"AbilityUnitTargetTeam"	"DOTA_UNIT_TARGET_TEAM_ENEMY"
+		"AbilityUnitDamageType"	"DAMAGE_TYPE_PHYSICAL"
+		"SpellImmunityType"	"SPELL_IMMUNITY_ENEMIES_NO"
+		"MaxLevel"	"4"
+		"AbilityCastPoint"	"0.2"
+		"AbilityCooldown"	"9.5 8 6.5 5"
+		"AbilityManaCost"	"40"
+		"precache"
+		{
+			"particle"	"particles/units/heroes/hero_antimage/antimage_manavoid.vpcf"
+			"soundfile"	"soundevents/game_sounds_heroes/game_sounds_antimage.vsndevts"
+		}
+		"AbilityValues"
+		{
+			"damage"	"40 65 90 115"
+			"attack_damage_factor"
+			{
+				"value"	"0.35"
+				"LinkedSpecialBonus"	"special_bonus_unique_renko_2"
+			}
+			"search_radius"	"750"
+			"aoe_radius"
+			{
+				"value"	"300"
+				"affected_by_aoe_increase"	"1"
+			}
+		}
+	}
+
+	"ability_thdots_renko02"
+	{
+		"BaseClass"	"ability_lua"
+		"ScriptFile"	"scripts/vscripts/abilities/abilityrenko.lua"
+		"AbilityTextureName"	"custom/sumireko/ability_thdots_sumireko02"
+		"AbilityBehavior"	"DOTA_ABILITY_BEHAVIOR_POINT"
+		"AbilityUnitTargetType"	"DOTA_UNIT_TARGET_HERO | DOTA_UNIT_TARGET_BASIC"
+		"AbilityUnitTargetTeam"	"DOTA_UNIT_TARGET_TEAM_ENEMY"
+		"AbilityUnitDamageType"	"DAMAGE_TYPE_PHYSICAL"
+		"SpellImmunityType"	"SPELL_IMMUNITY_ENEMIES_NO"
+		"MaxLevel"	"4"
+		"AbilityCastPoint"	"0.2"
+		"AbilityCooldown"	"9.5 8 6.5 5"
+		"AbilityManaCost"	"40"
+		"AbilityCastRange"	"600"
+		"precache"
+		{
+			"particle"	"models/toyohime/fx/toyohime_cast1.vpcf"
+			"soundfile"	"soundevents/game_sounds_heroes/game_sounds_drowranger.vsndevts"
+		}
+		"AbilityValues"
+		{
+			"damage"	"40 65 90 115"
+			"attack_damage_factor"
+			{
+				"value"	"0.35"
+				"LinkedSpecialBonus"	"special_bonus_unique_renko_2"
+			}
+			"projectile_width"	"150"
+			"projectile_speed"	"1200"
+			"projectile_distance"	"600"
+			"debuff_duration"	"4"
+			"stun_duration"	"1.5"
+			"damage_reduce_pct"	"30"
+			"move_slow_pct"	"30"
+			"armor_reduction"	"4"
+			"strong_move_slow_pct"	"75"
+		}
+	}
+
+	"ability_thdots_renko03"
+	{
+		"BaseClass"	"ability_lua"
+		"ScriptFile"	"scripts/vscripts/abilities/abilityrenko.lua"
+		"AbilityTextureName"	"custom/sumireko/ability_thdots_sumireko03"
+		"AbilityBehavior"	"DOTA_ABILITY_BEHAVIOR_NO_TARGET"
+		"AbilityUnitTargetType"	"DOTA_UNIT_TARGET_HERO | DOTA_UNIT_TARGET_BASIC"
+		"AbilityUnitTargetTeam"	"DOTA_UNIT_TARGET_TEAM_ENEMY"
+		"AbilityUnitDamageType"	"DAMAGE_TYPE_PHYSICAL"
+		"SpellImmunityType"	"SPELL_IMMUNITY_ENEMIES_NO"
+		"MaxLevel"	"4"
+		"AbilityCastPoint"	"0.0"
+		"AbilityCooldown"	"9.5 8 6.5 5"
+		"AbilityManaCost"	"40"
+		"precache"
+		{
+			"particle"	"particles/units/heroes/hero_centaur/centaur_warstomp.vpcf"
+			"soundfile"	"soundevents/game_sounds_heroes/game_sounds_centaur.vsndevts"
+		}
+		"AbilityValues"
+		{
+			"damage"	"40 65 90 115"
+			"attack_damage_factor"
+			{
+				"value"	"0.35"
+				"LinkedSpecialBonus"	"special_bonus_unique_renko_2"
+			}
+			"radius"
+			{
+				"value"	"300"
+				"affected_by_aoe_increase"	"1"
+				"LinkedSpecialBonus"	"special_bonus_unique_renko_1"
+			}
+			"buff_duration"	"4"
+			"bonus_attack_damage"	"35"
+			"bonus_attack_speed_pct"	"35"
+			"bonus_armor"	"12"
+			"bonus_magic_resistance"	"12"
+			"radius_bonus_pct"	"100"
+			"mana_restore_pct"	"40"
+			"omnivamp_pct"	"40"
+		}
+	}
+
+	"ability_thdots_renkoEx"
+	{
+		"BaseClass"	"ability_lua"
+		"ScriptFile"	"scripts/vscripts/abilities/abilityrenko.lua"
+		"AbilityTextureName"	"touhoutd/close_star"
+		"AbilityBehavior"	"DOTA_ABILITY_BEHAVIOR_PASSIVE"
+		"HasScepterUpgrade"	"1"
+		"HasShardUpgrade"	"1"
+		"MaxLevel"	"1"
+		"precache"
+		{
+			"particle"	"particles/units/heroes/hero_invoker/invoker_quas_orb.vpcf"
+			"particle"	"particles/units/heroes/hero_invoker/invoker_wex_orb.vpcf"
+			"particle"	"particles/units/heroes/hero_invoker/invoker_exort_orb.vpcf"
+		}
+		"AbilityValues"
+		{
+			"bonus_damage"	"10"
+			"stack_duration"	"8"
+			"max_stack_count"	"20"
+		}
+	}
+
+	"ability_thdots_renko04"
+	{
+		"BaseClass"	"ability_lua"
+		"ScriptFile"	"scripts/vscripts/abilities/abilityrenko.lua"
+		"AbilityTextureName"	"sven_gods_strength"
+		"AbilityBehavior"	"DOTA_ABILITY_BEHAVIOR_NO_TARGET"
+		"AbilityType"	"DOTA_ABILITY_TYPE_ULTIMATE"
+		"SpellDispellableType" 		"SPELL_DISPELLABLE_NO"
+		"MaxLevel"	"3"
+		"AbilityCastPoint"	"0.3"
+		"AbilityCooldown"	"40 35 30"
+		"AbilityCharges"
+		{
+			"value"	"1"
+			"special_bonus_unique_renko_5"	"+1"
+		}
+		"AbilityChargeRestoreTime"	"40 35 30"
+		"AbilityManaCost"	"100"
+		"precache"
+		{
+			"soundfile"	"soundevents/game_sounds_heroes/game_sounds_sven.vsndevts"
+			"particle"	"particles/units/heroes/hero_sven/sven_spell_gods_strength.vpcf"
+			"particle"	"particles/status_fx/status_effect_gods_strength.vpcf"
+			"particle"	"particles/units/heroes/hero_sven/sven_gods_strength_hero_effect.vpcf"
+			"particle"	"particles/units/heroes/hero_sven/sven_spell_gods_strength_ambient.vpcf"
+		}
+		"AbilityValues"
+		{
+			"duration"	"8"
+			"physical_damage_bonus_pct"	"20 30 40"
+			"bonus_effect_pct"	"50"
+			"duration_bonus_pct"	"100"
+			"ally_radius"	"450"
+			"crit_chance"	"25"
+			"crit_damage"	"250"
+		}
+	}
+
+	"special_bonus_unique_renko_1"
+	{
+		"BaseClass"	"special_bonus_undefined"
+		"AbilityBehavior"	"DOTA_ABILITY_BEHAVIOR_PASSIVE"
+		"AbilityType"	"DOTA_ABILITY_TYPE_ATTRIBUTES"
+		"AbilityValues"
+		{
+			"value"	"100"
+		}
+	}
+
+	"special_bonus_unique_renko_2"
+	{
+		"BaseClass"	"special_bonus_undefined"
+		"AbilityBehavior"	"DOTA_ABILITY_BEHAVIOR_PASSIVE"
+		"AbilityType"	"DOTA_ABILITY_TYPE_ATTRIBUTES"
+		"AbilityValues"
+		{
+			"value"	"0.15"
+		}
+	}
+
+	"special_bonus_unique_renko_3"
+	{
+		"BaseClass"	"special_bonus_undefined"
+		"AbilityBehavior"	"DOTA_ABILITY_BEHAVIOR_PASSIVE"
+		"AbilityType"	"DOTA_ABILITY_TYPE_ATTRIBUTES"
+		"AbilityValues"
+		{
+			"value"	"1"
+		}
+	}
+
+	"special_bonus_unique_renko_4"
+	{
+		"BaseClass"	"special_bonus_undefined"
+		"AbilityBehavior"	"DOTA_ABILITY_BEHAVIOR_PASSIVE"
+		"AbilityType"	"DOTA_ABILITY_TYPE_ATTRIBUTES"
+		"AbilityValues"
+		{
+			"value"	"1"
+		}
+	}
+
+	"special_bonus_unique_renko_5"
+	{
+		"BaseClass"	"special_bonus_undefined"
+		"AbilityBehavior"	"DOTA_ABILITY_BEHAVIOR_PASSIVE"
+		"AbilityType"	"DOTA_ABILITY_TYPE_ATTRIBUTES"
+		"AbilityValues"
+		{
+			"value"	"1"
+		}
+	}
+
+}
