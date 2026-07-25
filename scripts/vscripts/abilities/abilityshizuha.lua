@@ -23,7 +23,7 @@ function ability_thdots_shizuhaEXNew:OnSpellStart()
     local pOrg = caster:GetAbsOrigin()
     local pTgt = ability:GetCursorPosition()
     local tree_duration = self:GetSpecialValueFor("tree_duration")
-    local modifier_duration = self:GetSpecialValueFor("modifier_duration")
+    local modifier_duration = self:GetSpecialValueFor("active_modifier_duration")
 
     local p = pTgt - pOrg
     local vn = Vector(p.x, p.y, 0)

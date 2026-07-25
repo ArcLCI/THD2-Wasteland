@@ -19,6 +19,38 @@ cur_jff = 1 -- ordinary
 fast_respawn_val = 25 -- fast respawn mode's default value
 G_Bot_Push_All_Time = {40,30,20,10}
 
+-- 新Bot测试开关：启用后，普通随机模式会优先把列表内英雄放到天辉Bot槽位。
+-- 支持原版英雄名或自定义文件夹名，例如 {"npc_dota_hero_invoker", "flandre", "momiji"}。
+THD2_RADIANT_BOT_TEST = THD2_RADIANT_BOT_TEST or {
+	enabled = true,
+	heroes = {
+		"patchouli",
+	},
+}
+
+function THD2_SetRadiantBotTest(enabled, heroNames)
+	THD2_RADIANT_BOT_TEST.enabled = enabled == true or enabled == 1
+		or enabled == "1" or enabled == "true" or enabled == "on"
+	if type(heroNames) == "table" then
+		THD2_RADIANT_BOT_TEST.heroes = heroNames
+	end
+	print("[BOT][RadiantTest] enabled=" .. tostring(THD2_RADIANT_BOT_TEST.enabled)
+		.. " heroes=" .. table.concat(THD2_RADIANT_BOT_TEST.heroes or {}, ","))
+end
+
+if Convars ~= nil and not THD2_RADIANT_BOT_TEST_COMMAND_REGISTERED then
+	THD2_RADIANT_BOT_TEST_COMMAND_REGISTERED = true
+	Convars:RegisterCommand("thd_bot_test_radiant", function(_, enabled, ...)
+		local heroes = {}
+		for _, value in ipairs({...}) do
+			for heroName in string.gmatch(tostring(value), "[^,%s]+") do
+				table.insert(heroes, heroName)
+			end
+		end
+		THD2_SetRadiantBotTest(enabled, #heroes > 0 and heroes or nil)
+	end, "thd_bot_test_radiant <0|1> [hero1 hero2 ...]", 0)
+end
+
 G_Bot_List = {}
 G_Bot_Buff_List = {}
 G_Bot_Diff_Text = {"easy","normal","hard","lunatic","extra"}
@@ -106,8 +138,8 @@ function THD2_GetJFFMode() return cur_jff end
 
 
 --to ban some girls(which is not work done XD)
-cur_bot_heros_size = 44
-tot_bot_heros_size = 67
+cur_bot_heros_size = 47
+tot_bot_heros_size = 68
 G_BOT_USED = 
 {
 	false ,			--红白
@@ -125,7 +157,7 @@ G_BOT_USED =
 	true ,			--西瓜
 	false ,			--虫子
 	false ,			--⑨
-	true ,			--二妹
+	false ,			--二妹
 	true ,			--四季
 	
 	false ,			--衣玖
@@ -142,7 +174,7 @@ G_BOT_USED =
 	
 	true ,			--神妈
 	true ,			--大妹
-	true ,			--狗花
+	false ,			--狗花
 	true ,			--永琳
 	true ,			--紫
 	
@@ -190,6 +222,7 @@ G_BOT_USED =
 	true ,			--紫苑
 	false ,			--女苑
 	false ,			--莉莉白
+	false ,			--patchouli
 }
 
 G_Bot_Random_Hero = 
@@ -274,6 +307,7 @@ G_Bot_Random_Hero =
 	"npc_dota_hero_death_prophet",			--紫苑
 	"npc_dota_hero_meepo",					--女苑
 	"npc_dota_hero_leshrac",				--莉莉白
+	"npc_dota_hero_invoker",				--帕秋莉
 }
 
 G_Bot_Hero_Folder = {
@@ -357,7 +391,63 @@ G_Bot_Hero_Folder = {
 
 	"jyoon",
 	"lilywhite",
+	"patchouli",
 }
+
+local function THD2_FindBotHeroID(testName)
+	if type(testName) ~= "string" or testName == "" then return nil end
+	local fullName = testName
+	if string.sub(fullName, 1, 14) ~= "npc_dota_hero_" then
+		fullName = "npc_dota_hero_" .. fullName
+	end
+	for heroID, heroName in ipairs(G_Bot_Random_Hero) do
+		if heroName == testName
+		or heroName == fullName
+		or G_Bot_Hero_Folder[heroID] == testName
+		then
+			return heroID
+		end
+	end
+	return nil
+end
+
+local function THD2_BuildRadiantBotTestQueue(maxBotCount, playerPickedHeroIDs)
+	local queue = {}
+	if cur_jff ~= 1
+	or THD2_RADIANT_BOT_TEST.enabled ~= true
+	or maxBotCount <= 0
+	then
+		return queue
+	end
+
+	local included = {}
+	for _, testName in ipairs(THD2_RADIANT_BOT_TEST.heroes or {}) do
+		local heroID = THD2_FindBotHeroID(testName)
+		if heroID == nil then
+			print("[BOT][RadiantTest] unknown hero: " .. tostring(testName))
+		elseif playerPickedHeroIDs[heroID] then
+			print("[BOT][RadiantTest] unavailable, picked by player: "
+				.. tostring(G_Bot_Random_Hero[heroID]))
+		elseif not included[heroID] then
+			if #queue >= maxBotCount then
+				print("[BOT][RadiantTest] no Radiant bot slot for: "
+					.. tostring(G_Bot_Random_Hero[heroID]))
+			else
+				-- 测试指定项覆盖默认禁用/手动禁用状态，但仍由选中后的G_BOT_USED阻止双方重复。
+				G_BOT_USED[heroID] = false
+				included[heroID] = true
+				table.insert(queue, heroID)
+			end
+		end
+	end
+
+	local names = {}
+	for _, heroID in ipairs(queue) do
+		table.insert(names, G_Bot_Hero_Folder[heroID] .. "(" .. G_Bot_Random_Hero[heroID] .. ")")
+	end
+	print("[BOT][RadiantTest] forced queue=" .. (#names > 0 and table.concat(names, ", ") or "<empty>"))
+	return queue
+end
 
 local THD2_BOT_ROLE_ORDER = {"damage", "frontline", "support"}
 local THD2_BOT_ROLE_GROUPS = {
@@ -480,6 +570,67 @@ local function THD2_GetBotRolePools()
 	return THD2_BOT_ROLE_POOLS
 end
 
+local function THD2_GetBotHeroDebugName(heroID)
+	local heroName = G_Bot_Random_Hero[heroID] or ("unknown_" .. tostring(heroID))
+	local folder = G_Bot_Hero_Folder[heroID]
+	if folder ~= nil then
+		return folder .. "(" .. heroName .. ")"
+	end
+	return heroName
+end
+
+local function THD2_PrintBotHeroList(poolName, heroIDs)
+	local heroNames = {}
+	for _, heroID in ipairs(heroIDs) do
+		if G_BOT_USED[heroID] == false then
+			table.insert(heroNames, THD2_GetBotHeroDebugName(heroID))
+		end
+	end
+
+	print("[BOT][HeroPool] " .. poolName .. " available=" .. tostring(#heroNames))
+	if #heroNames == 0 then
+		print("[BOT][HeroPool] " .. poolName .. ": <empty>")
+		return
+	end
+
+	-- 分段输出，避免英雄池过长时控制台截断单行内容。
+	for startIndex = 1, #heroNames, 8 do
+		local chunk = {}
+		for i = startIndex, math.min(startIndex + 7, #heroNames) do
+			table.insert(chunk, heroNames[i])
+		end
+		print("[BOT][HeroPool] " .. poolName .. ": " .. table.concat(chunk, ", "))
+	end
+end
+
+local function THD2_PrintBotRolePools()
+	local pools = THD2_GetBotRolePools()
+	local included = {}
+	for _, roleName in ipairs(THD2_BOT_ROLE_ORDER) do
+		THD2_PrintBotHeroList(roleName, pools[roleName] or {})
+		for _, heroID in ipairs(pools[roleName] or {}) do
+			if G_BOT_USED[heroID] == false then
+				included[heroID] = true
+			end
+		end
+	end
+
+	local includedCount = 0
+	for _ in pairs(included) do
+		includedCount = includedCount + 1
+	end
+
+	local unassigned = {}
+	for heroID = 1, tot_bot_heros_size do
+		if G_BOT_USED[heroID] == false and not included[heroID] then
+			table.insert(unassigned, heroID)
+		end
+	end
+
+	print("[BOT][HeroPool] unique available heroes=" .. tostring(includedCount))
+	THD2_PrintBotHeroList("unassigned", unassigned)
+end
+
 local function THD2_GetBalancedBotRole(botIndex)
 	return THD2_BOT_ROLE_ORDER[((botIndex - 1) % #THD2_BOT_ROLE_ORDER) + 1]
 end
@@ -522,10 +673,10 @@ G_Bots_Ability_Add = {
 	{1,2,1,2,1,  6,1,2,2,11,  3,6,3,3,13, 3,0,6,0,14,  0,0,0,0,16,  0,10,12,15,17  }, -- suika wait for fix
 	{2,1,2,3,2,  6,2,3,3,11,  3,6,1,1,13, 1,0,6,0,14,  0,0,0,0,17,  0,10,12,15,16  },
 	{3,2,1,3,1,  6,3,1,2,11,  3,6,1,2,13, 2,0,6,0,14,  0,0,0,0,16,  0,10,12,15,17  }, --cirno
-	{1,2,1,2,1,  6,1,2,2,10,  3,6,3,3,13, 3,0,6,0,14,  0,0,0,0,17,  0,11,12,15,16  },
+	{2,1,3,2,2,  6,2,1,1,10,  1,6,3,3,12, 3,0,6,0,15,  0,0,0,0,17,  0,11,13,14,16  }, --flandre
 	{3,2,1,2,2,  6,2,3,1,11,  1,6,1,3,13, 3,0,6,0,14,  0,0,0,0,16,  0,10,12,15,17  }, --shikieiki
 	
-	{3,1,2,3,1,  6,3,1,3,10,  1,6,2,2,12, 2,0,6,0,15,  0,0,0,0,16,  0,11,13,14,17  }, --iku(x)
+	{3,1,2,3,1,  6,3,1,3,10,  1,6,2,2,12, 2,0,6,0,15,  0,0,0,0,16,  0,11,13,14,17  }, --iku
 	{1,2,1,2,1,  6,1,2,2,11,  3,6,3,3,13, 3,0,6,0,14,  0,0,0,0,17,  0,10,12,15,16  },
 	{1,2,1,2,1,  6,1,2,2,11,  3,6,3,3,12, 3,0,6,0,15,  0,0,0,0,17,  0,10,13,14,16  },
 	{1,2,1,2,1,  6,1,2,2,10,  3,6,3,3,13, 3,0,6,0,14,  0,0,0,0,17,  0,11,12,15,16  },
@@ -540,7 +691,7 @@ G_Bots_Ability_Add = {
 	
 	{1,2,1,2,1,  6,1,2,2,11,  3,6,3,3,13, 3,0,6,0,14,  0,0,0,0,16,  0,10,12,15,17  },
 	{1,2,1,2,1,  6,1,2,2,11,  3,6,3,3,13, 3,0,6,0,14,  0,0,0,0,17,  0,10,12,15,16  },
-	{1,2,1,2,1,  6,1,2,2,11,  3,6,3,3,12, 3,0,6,0,15,  0,0,0,0,17,  0,10,15,14,16  },
+	{1,3,1,2,1,  6,1,3,3,11,  3,6,2,2,12, 2,0,6,0,14,  0,0,0,0,16,  0,10,13,15,17  }, --momiji
 	{1,2,1,2,1,  6,1,2,2,10,  3,6,3,3,13, 3,0,6,0,14,  0,0,0,0,17,  0,11,12,15,16  },
 	{1,2,3,1,1,  6,1,3,3,11,  3,6,2,2,12, 2,0,6,0,15,  0,0,0,0,16,  0,10,15,14,17  },
 	
@@ -555,7 +706,7 @@ G_Bots_Ability_Add = {
 	{3,2,1,3,2,  6,3,2,3,11,  2,6,1,1,12, 1,0,6,0,15,  0,0,0,0,16,  0,10,13,14,17  }, --clown
 	{2,3,1,2,2,  6,2,3,3,10,  3,6,1,1,12, 1,0,6,0,15,  0,0,0,0,17,  0,11,13,14,16  }, --sunny
 	{3,1,2,3,3,  6,3,1,1,10,  1,6,2,2,12, 2,0,6,0,15,  0,0,0,0,17,  0,11,13,14,16  }, --luna
-	{1,2,1,2,1,  6,1,2,3,12,  2,6,3,3,14, 3,0,6,0,16,  0,0,0,0,17,  0,11,13,15,18  }, --star(x)
+	{1,2,1,2,1,  6,1,2,3,12,  2,6,3,3,14, 3,0,6,0,16,  0,0,0,0,17,  0,11,13,15,18  }, --star
 	
 	--4X
 	{1,2,3,1,2,  6,3,1,2,11,  3,6,1,2,12, 3,0,6,0,14,  0,0,0,0,16,  0,10,13,15,17  }, --mystia
@@ -592,7 +743,32 @@ G_Bots_Ability_Add = {
 	{2,1,3,1,3,  6,1,3,1,10,  3,6,2,2,13, 2,0,6,0,14,  0,0,0,0,17,  0,11,12,15,16  }, --shion
 	{1,2,3,1,2,  6,1,2,1,10,  2,6,3,3,12, 3,0,6,0,15,  0,0,0,0,16,  0,11,13,14,17  }, --Jyoon
 	{1,3,1,1,3,  6,1,2,3,11,  3,6,2,2,13, 2,0,6,0,15,  0,0,0,0,17,  0,10,12,14,16  }, --lily
+	{0,0,0,0,0,  0,0,0,0,0,   0,0,0,0,0,  0,0,0,0,0,   0,0,0,0,0,   0,0,0,0,0  }, --patchouli: special multi-point plan
 }
+
+-- 帕秋莉在3的倍数等级会获得额外技能点，27-30级还要补学另一侧天赋。
+-- 普通单槽加点表无法表达同一级多次升级，因此按实际等级逐级回放。
+local THD2_PATCHOULI_LEVEL_PLAN = {
+	[1] = {4}, [2] = {1}, [3] = {2, 4}, [4] = {2}, [5] = {1}, [6] = {5, 3},
+	[7] = {4}, [8] = {4}, [9] = {4, 5}, [10] = {23}, [11] = {4}, [12] = {2, 5},
+	[13] = {4}, [14] = {2}, [15] = {25, 5}, [16] = {2}, [17] = {5}, [18] = {2, 5},
+	[19] = {2}, [20] = {26}, [21] = {5, 1}, [22] = {1}, [23] = {1}, [24] = {1, 1},
+	[25] = {28}, [26] = {3}, [27] = {22, 3}, [28] = {24},
+	-- 29级游戏侧会给出一批补点；Bot只补满仍缺的四级木，避免保留无意义技能点。
+	[29] = {27, 3, 3, 3, 3}, [30] = {29},
+}
+
+local function THD2_UpgradeAbilitySlot(hero, abilitySlot)
+	if abilitySlot == nil or abilitySlot <= 0 or abilitySlot > hero:GetAbilityCount() then return end
+	local ability = hero:GetAbilityByIndex(abilitySlot - 1)
+	if ability == nil then return end
+	local oldLevel = ability:GetLevel()
+	local newLevel = math.min(oldLevel + 1, ability:GetMaxLevel())
+	ability:SetLevel(newLevel)
+	if newLevel > oldLevel then
+		THD2_OnAbilityLearned(hero, ability)
+	end
+end
 
 function check_H_name(H_name)
 	for i=1,tot_bot_heros_size do
@@ -626,6 +802,17 @@ function THD2_BotUpGradeAbility(hero)
 		end
 		if G_Bot_Level[v] == nil then
 			G_Bot_Level[v] = 0
+		end
+		if hName == "npc_dota_hero_invoker" then
+			-- 帕秋莉30级时五元素满级且八个天赋全部生效；不复现玩家侧反复补15点。
+			for i = G_Bot_Level[v] + 1, math.min(lvl, 30) do
+				for _, abilitySlot in ipairs(THD2_PATCHOULI_LEVEL_PLAN[i] or {}) do
+					THD2_UpgradeAbilitySlot(hero, abilitySlot)
+				end
+			end
+			G_Bot_Level[v] = lvl
+			hero:SetAbilityPoints(0)
+			return
 		end
 		--print(lvl)
 		for i=G_Bot_Level[v]+1,lvl do
@@ -862,6 +1049,7 @@ function THD2_AddBot()
 			THD2_ForceClone()
 			
 			local player_hero_table = {}
+			local playerPickedBotHeroIDs = {}
 			--清除玩家选择的英雄
 			if not G_IsCloneMode then
 				for i=0,233 do
@@ -874,6 +1062,7 @@ function THD2_AddBot()
 							for j=0,233 do
 								if G_Bot_Random_Hero[j] == tHeroName then
 									G_BOT_USED[j] = true
+									playerPickedBotHeroIDs[j] = true
 									break
 								end
 							end
@@ -891,7 +1080,16 @@ function THD2_AddBot()
 					end
 				end
 			end
+			local radiantTestQueue = THD2_BuildRadiantBotTestQueue(
+				math.max(0, player_per_team - goodcnt),
+				playerPickedBotHeroIDs
+			)
+			local radiantTestPickIndex = 1
 			-- 创建bot
+			-- 玩家英雄排除完成后、普通模式抽取 bot 前打印当前定位池，便于检查漏配。
+			if cur_jff == 1 then
+				THD2_PrintBotRolePools()
+			end
 			if cur_jff == 4 then--gaishi
 				for i=1,tot_bot_heros_size do
 					if i==2 or i==3 or i==7 or i==8 or i==9 or i==10 or i==17 or i==39 or i==42 
@@ -951,9 +1149,16 @@ function THD2_AddBot()
 							badBotPickCount = badBotPickCount + 1
 							targetRole = THD2_GetBalancedBotRole(badBotPickCount)
 						end
-						H_id = THD2_GetUsableBotHeroByRole(targetRole)
-						if H_id ~= nil then
+						if bot_team and radiantTestQueue[radiantTestPickIndex] ~= nil then
+							H_id = radiantTestQueue[radiantTestPickIndex]
+							radiantTestPickIndex = radiantTestPickIndex + 1
 							H_name = G_Bot_Random_Hero[H_id]
+							print("[BOT][RadiantTest] selected: " .. tostring(H_name))
+						else
+							H_id = THD2_GetUsableBotHeroByRole(targetRole)
+							if H_id ~= nil then
+								H_name = G_Bot_Random_Hero[H_id]
+							end
 						end
 					elseif cur_jff == 2 then
 						--allsame

@@ -4,6 +4,7 @@ local BOT_DYNAMIC_STAGE_MAX = 5
 local BOT_OBJECTIVE_CACHE_INTERVAL = 5.0
 local BOT_DYNAMIC_BONUS_REFRESH_INTERVAL = 1.0
 local BOT_GEM_SELL_GOLD = 2000
+local BOT_KUSANAGI_SELL_GOLD = 30000
 local BOT_GEM_LAST_ITEM_SLOT = 14
 
 -- 动态阶段奖励：阶段3/5才给移速、施法距离、攻击距离、冷却减少、技能强度和法术抗性。
@@ -538,6 +539,25 @@ function modifier_bot_buff:SellGemItems()
     end
 end
 
+function modifier_bot_buff:SellKusanagiItems()
+    if self.caster == nil or self.caster:IsNull() then return end
+
+    local kusanagiCount = 0
+    -- Bot 拾取天丛云剑后按鸦天狗的处理方式直接移除，并兑换为固定金币。
+    for slot = 0, BOT_GEM_LAST_ITEM_SLOT do
+        local item = self.caster:GetItemInSlot(slot)
+        if item ~= nil and not item:IsNull() and item:GetAbilityName() == "item_kusanagi" then
+            self.caster:RemoveItem(item)
+            UTIL_Remove(item)
+            kusanagiCount = kusanagiCount + 1
+        end
+    end
+
+    if kusanagiCount > 0 then
+        self.caster:ModifyGold(kusanagiCount * BOT_KUSANAGI_SELL_GOLD, true, DOTA_ModifyGold_Unspecified)
+    end
+end
+
 function modifier_bot_buff:OnIntervalThink()
     if not IsServer() then return end
 
@@ -548,6 +568,7 @@ function modifier_bot_buff:OnIntervalThink()
     if (nowTime < 1.0) then return end
 
     self:SellGemItems()
+    self:SellKusanagiItems()
 
     -- 按照5分钟分批的索引
     local timeIndex5 = math.ceil(nowTime / 300.0)
