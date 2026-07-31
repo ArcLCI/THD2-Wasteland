@@ -1136,6 +1136,15 @@
 			}
 		}
 	}
+	// Bot 定位只作为地图侧与 Bot API 之间的隐藏标记，等级 1/2/3 对应输出/前排/辅助。
+	"ability_thd2_bot_profile"
+	{
+		"BaseClass" "ability_datadriven"
+		"AbilityBehavior" "DOTA_ABILITY_BEHAVIOR_PASSIVE | DOTA_ABILITY_BEHAVIOR_HIDDEN | DOTA_ABILITY_BEHAVIOR_NOT_LEARNABLE"
+		"AbilityType" "DOTA_ABILITY_TYPE_HIDDEN"
+		"MaxLevel" "3"
+	}
+
 	"ability_common_bot_buff"
 	{
 		// General

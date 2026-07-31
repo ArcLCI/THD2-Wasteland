@@ -442,6 +442,13 @@ end
 --------------------------------------------------------
 ability_thdots_sunny05 = {}
 
+local function IsValidSunny05Caster(caster)
+	return caster ~= nil
+		and not caster:IsNull()
+		and caster:IsRealHero()
+		and not caster:IsIllusion()
+end
+
 function ability_thdots_sunny05:ClearSunnyIllusion(delay)
 	if not IsServer() then return end
 	if not self.illusion or self.illusion:IsNull() then
@@ -468,8 +475,10 @@ end
 
 function ability_thdots_sunny05:OnInventoryContentsChanged()
 	if IsServer() then
-		if not self:GetCaster():IsOwnedByAnyPlayer() then return end
-		if self:GetCaster():HasModifier("modifier_item_wanbaochui") then
+		local caster = self:GetCaster()
+		-- Bot 英雄不属于 IsOwnedByAnyPlayer 的范围，但仍应正常解锁万宝槌技能。
+		if not IsValidSunny05Caster(caster) then return end
+		if caster:HasModifier("modifier_item_wanbaochui") then
 			self:SetHidden(false)
 		else
 			-- 5技能只清理当前缓存的镜像句柄，不再全图99999扫描友方单位。
@@ -486,8 +495,10 @@ end
 function ability_thdots_sunny05:OnSpellStart()
 	if not IsServer() then return end
 	self.caster 						= self:GetCaster()
-	if not self.caster:IsOwnedByAnyPlayer() then return end
+	-- 只排除幻象和非真实英雄，允许真实 Bot 英雄施放并创建镜像。
+	if not IsValidSunny05Caster(self.caster) then return end
 	self.target 						= self:GetCursorTarget()
+	if not self.target or self.target:IsNull() then return end
 	local duration  					= self:GetSpecialValueFor("duration")
 	self:ClearSunnyIllusion()
 	self.caster:SetContextThink("sunny05",
@@ -495,6 +506,8 @@ function ability_thdots_sunny05:OnSpellStart()
 			self.illusion = CreateIllusionTHD(self,self.target,nil,0,0,duration,true)
 			if self.illusion and not self.illusion:IsNull() then
 				self.illusion:AddNewModifier(self.caster, self, "modifier_ability_thdots_sunny05", {})
+			else
+				print("[Sunny05] CreateIllusionTHD failed")
 			end
 		end,
 	0.03)

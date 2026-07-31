@@ -393,6 +393,16 @@ function modifier_thdots_flandre03_life_steal_target:OnAttacked(keys)
 	target:RemoveModifierByName("modifier_thdots_flandre03_life_steal_target")
 end
 
+local FLANDRE04_MULTI_MODIFIER = "modifier_thdots_flandre_04_multi"
+
+local function SyncFlandre04AttackCount(caster, count)
+	if caster == nil or caster:IsNull() then return false end
+	local modifier = caster:FindModifierByName(FLANDRE04_MULTI_MODIFIER)
+	if modifier == nil then return false end
+	modifier:SetStackCount(math.max(count or 0, 0))
+	return true
+end
+
 function OnFlandre04SpellStart(keys)
 	local caster = EntIndexToHScript(keys.caster_entindex)
 	keys.ability:SetContextNum("ability_flandre04_multi_count",0,0)
@@ -439,6 +449,15 @@ function OnFlandre04SpellStart(keys)
 
 	keys.ability:SetContextNum("ability_flandre04_multi_count",count,0)
 	keys.ability:SetContextNum("ability_flandre04_effectIndex",effectIndex,0)
+	-- KV 在 RunScript 之后才施加暴击 modifier，下一帧同步剩余攻击次数供 UI 与 Bot 读取。
+	local syncAttempts = 0
+	caster:SetContextThink(DoUniqueString("ability_flandre04_sync_attack_count"), function()
+		syncAttempts = syncAttempts + 1
+		if SyncFlandre04AttackCount(caster, count) or syncAttempts >= 20 or not caster:IsAlive() then
+			return nil
+		end
+		return 0.01
+	end, 0)
 	
 	caster:StopSound("Voice_Thdots_Flandre.AbilityFlandre01")
 	if RollPercentage(98) then
@@ -452,18 +471,21 @@ end
 
 function OnFlandre04SpellRemove(keys)
 	local caster = EntIndexToHScript(keys.caster_entindex)
-	local count = keys.ability:GetContext("ability_flandre04_multi_count")
-	count = count - 1
+	local count = keys.ability:GetContext("ability_flandre04_multi_count") or 0
+	count = math.max(count - 1, 0)
 	keys.ability:SetContextNum("ability_flandre04_multi_count",count,0)
 	if(count<=0)then
-		caster:RemoveModifierByName("modifier_thdots_flandre_04_multi")
+		caster:RemoveModifierByName(FLANDRE04_MULTI_MODIFIER)
 		caster:RemoveModifierByName("modifier_thdots_flandre04_speed")
+	else
+		SyncFlandre04AttackCount(caster, count)
 	end
 end
 
 function OnFlandre04EffectRemove(keys)
 	local caster = EntIndexToHScript(keys.caster_entindex)
 	caster:RemoveModifierByName("modifier_thdots_flandre04_speed")
+	keys.ability:SetContextNum("ability_flandre04_multi_count",0,0)
 	local effectIndex = keys.ability:GetContext("ability_flandre04_effectIndex")
 	ParticleManager:DestroyParticle(effectIndex,true)
 end

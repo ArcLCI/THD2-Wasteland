@@ -55,13 +55,12 @@ function CreateIllusionTHD(keys, target, illusion_origin, illusion_incoming_dama
 	else
 		caster = keys:GetCaster()
 	end
-
-	local tmp = caster
-	if caster:GetPlayerOwner():GetContext("PlayerIsBot") == 1 then		-- bot bug相关
-		tmp = nil
+	if caster == nil or caster:IsNull() or target == nil or target:IsNull() then
+		return nil
 	end
 
-	local illusions = CreateIllusions(tmp, target, {	-- (owner: CBaseEntity, heroToCopy: CDOTA_BaseNPC_Hero, modifierKeys: CreateIllusionsModifierKeys,
+	-- 7.38 的 CreateIllusions 要求有效实体 owner；Bot 同样使用真实施法者，不能再传 nil。
+	local illusions = CreateIllusions(caster, target, {	-- (owner: CBaseEntity, heroToCopy: CDOTA_BaseNPC_Hero, modifierKeys: CreateIllusionsModifierKeys,
 		outgoing_damage = illusion_outgoing_damage,
 		incoming_damage	= illusion_incoming_damage,
 		bounty_base		= 0,		-- 基础金钱
@@ -71,6 +70,9 @@ function CreateIllusionTHD(keys, target, illusion_origin, illusion_incoming_dama
 		duration		= illusion_duration
 	}
 	, 1, 72, false, bfindClearSpace)		--  numIllusions: int, padding: int, scramblePosition: bool, findClearSpace: bool): [CDOTA_BaseNPC_Hero]
+	if illusions == nil then
+		return nil
+	end
 
 	for i, illusion in pairs(illusions) do
 

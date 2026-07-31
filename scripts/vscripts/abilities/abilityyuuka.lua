@@ -1,5 +1,51 @@
 g_ability_yuukaex_flowers = {}
 
+local YUUKA_FLOWER_NAME = "ability_yuuka_flower"
+local YUUKA_FLOWER_POINT_RADIUS = 250
+
+local function YuukaGetCastPoint(keys)
+    if keys.target_points and keys.target_points[1] then
+        return keys.target_points[1]
+    end
+    if keys.ability and keys.ability.GetCursorPosition then
+        return keys.ability:GetCursorPosition()
+    end
+    return nil
+end
+
+local function YuukaIsOwnedFlower(Caster, Flower)
+    return IsValidEntity(Flower)
+        and Flower:IsAlive()
+        and Flower:GetUnitName() == YUUKA_FLOWER_NAME
+        and Flower.thdots_yuuka_owner_entindex == Caster:entindex()
+end
+
+function YuukaFindOwnedFlower(Caster, Ability, Point, Radius)
+    if not Caster or not Ability or not Point then return nil end
+
+    local cast_range = Ability:GetSpecialValueFor("AbilityCastRange") + Caster:GetCastRangeBonus()
+    local flowers = FindUnitsInRadius(Caster:GetTeamNumber(), Point, nil, Radius,
+        DOTA_UNIT_TARGET_TEAM_FRIENDLY, DOTA_UNIT_TARGET_BASIC + DOTA_UNIT_TARGET_OTHER,
+        DOTA_UNIT_TARGET_FLAG_INVULNERABLE, FIND_CLOSEST, false)
+    for _, flower in pairs(flowers) do
+        if YuukaIsOwnedFlower(Caster, flower)
+            and (flower:GetOrigin() - Caster:GetOrigin()):Length2D() <= cast_range + 64
+        then
+            return flower
+        end
+    end
+    return nil
+end
+
+function YuukaRegisterFlowerControl(Caster, Flower)
+    local player_id = Caster:GetPlayerOwnerID()
+    if player_id == nil or player_id < 0 then return end
+
+    -- 地点施法不依赖这些字段；这里只登记为合法 minion，供 Bot 的 MinionThink 下达攻击命令。
+    Flower:SetOwner(Caster)
+    Flower:SetControllableByPlayer(player_id, true)
+end
+
 function YuukaEx_OnCreateFlower(keys)
     local Caster = keys.caster
     local Flower = keys.target
@@ -83,12 +129,14 @@ function YuukaCreateFlower(Caster, vecPos, fDuration)
     end
     local AbilityEx = Caster:FindAbilityByName("ability_thdots_YuukaEx")
     if AbilityEx then
-        local flower_unit = CreateUnitByName("ability_yuuka_flower", vecPos, true, Caster, Caster, Caster:GetTeam())
+        local flower_unit = CreateUnitByName(YUUKA_FLOWER_NAME, vecPos, true, Caster, Caster, Caster:GetTeam())
+        -- 技能归属只使用游戏侧标记，不再依赖 Bot API 对 PlayerID/Owner 的解释。
+        flower_unit.thdots_yuuka_owner_entindex = Caster:entindex()
+        YuukaRegisterFlowerControl(Caster, flower_unit)
         SetTHD2BlockingNeutrals(flower_unit, false)
         flower_unit:SetBaseMaxHealth(flower_unit:GetBaseMaxHealth() + Caster:GetLevel() *
                                          AbilityEx:GetSpecialValueFor("flower_hp_per_lvl"))
         flower_unit:SetMana(0)
-        flower_unit:SetControllableByPlayer(Caster:GetPlayerOwnerID(), true)
         ResolveNPCPositions(vecPos, 128)
 
         AbilityEx:ApplyDataDrivenModifier(Caster, flower_unit, "modifier_thdots_yuukaex_flower", {
@@ -385,13 +433,8 @@ end
 function Yuuka04_OnSpellStart(keys)
     local Ability = keys.ability
     local Caster = keys.caster
-    local target = keys.target
-    local flower = nil
-    Caster:EmitSound("Voice_Thdots_Yuuka.AbilityYuuka04")
-
-    if target:GetUnitName() == "ability_yuuka_flower" then
-        flower = target
-    end
+    local point = YuukaGetCastPoint(keys)
+    local flower = YuukaFindOwnedFlower(Caster, Ability, point, YUUKA_FLOWER_POINT_RADIUS)
 
     if not flower then
         Ability:EndCooldown()
@@ -399,7 +442,7 @@ function Yuuka04_OnSpellStart(keys)
         return
     end
 
-    -- 需要注意find出来的flower是否死亡!
+    Caster:EmitSound("Voice_Thdots_Yuuka.AbilityYuuka04")
     local pos = flower:GetOrigin()
 
     flower:AddNoDraw()
@@ -476,29 +519,12 @@ end
 function YuukaEx2_OnSpellStart(keys)
     local Ability = keys.ability
     local Caster = keys.caster
-    local target = keys.target
-    local flower = nil
-    local pos = nil
-
-    if target:GetUnitName() == "ability_yuuka_flower" then
-        flower = target
-        pos = flower:GetOrigin()
-    else
-        local targets = FindUnitsInRadius(Caster:GetTeam(), target:GetOrigin(), nil, 100,
-            DOTA_UNIT_TARGET_TEAM_FRIENDLY, keys.ability:GetAbilityTargetType(), DOTA_UNIT_TARGET_NONE, FIND_CLOSEST,
-            false)
-        for _, v in pairs(targets) do
-            if v:GetUnitName() == "ability_yuuka_flower" then
-                flower = v
-                pos = flower:GetOrigin()
-            end
-        end
-    end
+    local point = YuukaGetCastPoint(keys)
+    local flower = YuukaFindOwnedFlower(Caster, Ability, point, YUUKA_FLOWER_POINT_RADIUS)
+    local pos = flower and flower:GetOrigin() or point
 
     if not flower then
-        if Caster:HasModifier("modifier_item_wanbaochui") then
-            pos = target:GetOrigin()
-        else
+        if not Caster:HasModifier("modifier_item_wanbaochui") or not pos then
             Ability:EndCooldown()
             Ability:RefundManaCost()
             return

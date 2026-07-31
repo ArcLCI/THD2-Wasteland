@@ -1,3 +1,5 @@
+local THD2_BotProfile = require("util/bot_profile")
+THD2_BotProfile.RegisterHeroes(require("util/bot_profile_config"))
 
 G_IsAIMode = false
 G_IsFastCDMode = false
@@ -21,34 +23,90 @@ G_Bot_Push_All_Time = {40,30,20,10}
 
 -- 新Bot测试开关：启用后，普通随机模式会优先把列表内英雄放到天辉Bot槽位。
 -- 支持原版英雄名或自定义文件夹名，例如 {"npc_dota_hero_invoker", "flandre", "momiji"}。
+-- 支持定位覆盖，例如 {"momiji:damage", "flandre:frontline"}，会覆盖默认的定位池分配。
 THD2_RADIANT_BOT_TEST = THD2_RADIANT_BOT_TEST or {
 	enabled = true,
 	heroes = {
-		"patchouli",
+		"yuuka:damage",
 	},
 }
 
-function THD2_SetRadiantBotTest(enabled, heroNames)
+local function THD2_NormalizeRadiantBotTestProfile(profile)
+	if type(profile) ~= "string" then return nil end
+	profile = string.lower(string.match(profile, "^%s*(.-)%s*$") or "")
+	return profile ~= "" and profile or nil
+end
+
+-- 测试项支持 hero:profile；第三个函数参数可为列表内所有英雄设置默认定位。
+local function THD2_NormalizeRadiantBotTestEntry(value, defaultProfile)
+	local heroName = nil
+	local profile = THD2_NormalizeRadiantBotTestProfile(defaultProfile)
+	if type(value) == "table" then
+		heroName = value.hero or value.heroName or value[1]
+		profile = THD2_NormalizeRadiantBotTestProfile(value.profile or value[2]) or profile
+	elseif type(value) == "string" then
+		heroName = value
+	end
+	if type(heroName) ~= "string" then return nil end
+
+	local tokenHero, tokenProfile = string.match(heroName, "^([^:]+):([^:]+)$")
+	if tokenHero ~= nil then
+		heroName = tokenHero
+		profile = THD2_NormalizeRadiantBotTestProfile(tokenProfile) or profile
+	end
+	heroName = string.match(heroName, "^%s*(.-)%s*$") or ""
+	if heroName == "" then return nil end
+	return {hero = heroName, profile = profile}
+end
+
+local function THD2_FormatRadiantBotTestEntries(entries)
+	local values = {}
+	for _, value in ipairs(entries or {}) do
+		local entry = THD2_NormalizeRadiantBotTestEntry(value)
+		if entry ~= nil then
+			table.insert(values, entry.hero .. (entry.profile ~= nil and ":" .. entry.profile or ""))
+		end
+	end
+	return #values > 0 and table.concat(values, ",") or "<empty>"
+end
+
+function THD2_SetRadiantBotTest(enabled, heroNames, profile)
 	THD2_RADIANT_BOT_TEST.enabled = enabled == true or enabled == 1
 		or enabled == "1" or enabled == "true" or enabled == "on"
-	if type(heroNames) == "table" then
-		THD2_RADIANT_BOT_TEST.heroes = heroNames
+	local sourceHeroes = type(heroNames) == "table" and heroNames or THD2_RADIANT_BOT_TEST.heroes
+	if type(sourceHeroes) == "table" and (type(heroNames) == "table" or profile ~= nil) then
+		local entries = {}
+		for _, value in ipairs(sourceHeroes) do
+			local entry = THD2_NormalizeRadiantBotTestEntry(value, profile)
+			-- 只给 profile= 时表示重设当前整张测试名单；随英雄传入的 hero:profile 仍优先。
+			if type(heroNames) ~= "table" and entry ~= nil and profile ~= nil then
+				entry.profile = THD2_NormalizeRadiantBotTestProfile(profile)
+			end
+			if entry ~= nil then table.insert(entries, entry) end
+		end
+		THD2_RADIANT_BOT_TEST.heroes = entries
 	end
 	print("[BOT][RadiantTest] enabled=" .. tostring(THD2_RADIANT_BOT_TEST.enabled)
-		.. " heroes=" .. table.concat(THD2_RADIANT_BOT_TEST.heroes or {}, ","))
+		.. " heroes=" .. THD2_FormatRadiantBotTestEntries(THD2_RADIANT_BOT_TEST.heroes))
 end
 
 if Convars ~= nil and not THD2_RADIANT_BOT_TEST_COMMAND_REGISTERED then
 	THD2_RADIANT_BOT_TEST_COMMAND_REGISTERED = true
 	Convars:RegisterCommand("thd_bot_test_radiant", function(_, enabled, ...)
 		local heroes = {}
+		local profile = nil
 		for _, value in ipairs({...}) do
 			for heroName in string.gmatch(tostring(value), "[^,%s]+") do
-				table.insert(heroes, heroName)
+				local requestedProfile = string.match(heroName, "^profile=(.+)$")
+				if requestedProfile ~= nil then
+					profile = requestedProfile
+				else
+					table.insert(heroes, heroName)
+				end
 			end
 		end
-		THD2_SetRadiantBotTest(enabled, #heroes > 0 and heroes or nil)
-	end, "thd_bot_test_radiant <0|1> [hero1 hero2 ...]", 0)
+		THD2_SetRadiantBotTest(enabled, #heroes > 0 and heroes or nil, profile)
+	end, "thd_bot_test_radiant <0|1> [hero[:profile] ...] [profile=damage|frontline|support]", 0)
 end
 
 G_Bot_List = {}
@@ -138,7 +196,7 @@ function THD2_GetJFFMode() return cur_jff end
 
 
 --to ban some girls(which is not work done XD)
-cur_bot_heros_size = 47
+cur_bot_heros_size = 48
 tot_bot_heros_size = 68
 G_BOT_USED = 
 {
@@ -170,7 +228,7 @@ G_BOT_USED =
 	true ,			--蓝
 	true ,			--空
 	false ,			--教授
-	true ,			--花妈
+	false ,			--花妈
 	
 	true ,			--神妈
 	true ,			--大妹
@@ -421,7 +479,10 @@ local function THD2_BuildRadiantBotTestQueue(maxBotCount, playerPickedHeroIDs)
 	end
 
 	local included = {}
-	for _, testName in ipairs(THD2_RADIANT_BOT_TEST.heroes or {}) do
+	for _, testValue in ipairs(THD2_RADIANT_BOT_TEST.heroes or {}) do
+		local testEntry = THD2_NormalizeRadiantBotTestEntry(testValue)
+		local testName = testEntry ~= nil and testEntry.hero or nil
+		local requestedProfile = testEntry ~= nil and testEntry.profile or nil
 		local heroID = THD2_FindBotHeroID(testName)
 		if heroID == nil then
 			print("[BOT][RadiantTest] unknown hero: " .. tostring(testName))
@@ -436,14 +497,25 @@ local function THD2_BuildRadiantBotTestQueue(maxBotCount, playerPickedHeroIDs)
 				-- 测试指定项覆盖默认禁用/手动禁用状态，但仍由选中后的G_BOT_USED阻止双方重复。
 				G_BOT_USED[heroID] = false
 				included[heroID] = true
-				table.insert(queue, heroID)
+				local heroName = G_Bot_Random_Hero[heroID]
+				if requestedProfile ~= nil then
+					local valid, reason = THD2_BotProfile.ValidateProfile(heroName, requestedProfile)
+					if not valid then
+						print("[BOT][RadiantTest] invalid profile hero=" .. tostring(heroName)
+							.. " requested=" .. tostring(requestedProfile) .. " reason=" .. tostring(reason)
+							.. "; hero default will be used")
+					end
+				end
+				table.insert(queue, {heroID = heroID, profile = requestedProfile})
 			end
 		end
 	end
 
 	local names = {}
-	for _, heroID in ipairs(queue) do
-		table.insert(names, G_Bot_Hero_Folder[heroID] .. "(" .. G_Bot_Random_Hero[heroID] .. ")")
+	for _, entry in ipairs(queue) do
+		local heroID = entry.heroID
+		table.insert(names, G_Bot_Hero_Folder[heroID] .. "(" .. G_Bot_Random_Hero[heroID] .. ")"
+			.. (entry.profile ~= nil and ":" .. entry.profile or ""))
 	end
 	print("[BOT][RadiantTest] forced queue=" .. (#names > 0 and table.concat(names, ", ") or "<empty>"))
 	return queue
@@ -512,6 +584,14 @@ local function THD2_AddHeroToRolePools(pools, heroID, heroName, heroData, folder
 		levels[i] = level
 	end
 
+	local overridePools = THD2_BotProfile.GetRolePools(heroName)
+	if overridePools ~= nil then
+		for _, poolName in ipairs(overridePools) do
+			THD2_AddRolePoolHero(pools, poolName, heroID)
+		end
+		return
+	end
+
 	local maxLevel = nil
 	for i, roleName in ipairs(roleList) do
 		if THD2_BOT_ROLE_GROUPS[roleName] ~= nil then
@@ -568,6 +648,17 @@ local function THD2_GetBotRolePools()
 		THD2_BOT_ROLE_POOLS = THD2_BuildBotRolePools()
 	end
 	return THD2_BOT_ROLE_POOLS
+end
+
+local function THD2_GetProfileFromRolePools(heroID)
+	if heroID == nil then return nil end
+	local pools = THD2_GetBotRolePools()
+	for _, profile in ipairs(THD2_BOT_ROLE_ORDER) do
+		for _, poolHeroID in ipairs(pools[profile] or {}) do
+			if poolHeroID == heroID then return profile end
+		end
+	end
+	return nil
 end
 
 local function THD2_GetBotHeroDebugName(heroID)
@@ -796,6 +887,9 @@ function THD2_BotUpGradeAbility(hero)
 	else
 		local v = hero:GetPlayerOwnerID()
 		local lvl = hero:GetLevel()
+		local abilityPlan = G_Bots_Ability_Add[hIndex]
+		THD2_BotProfile.ApplyProfile(hero)
+		abilityPlan = THD2_BotProfile.GetAbilityPlan(hero, abilityPlan)
 		--print(lvl)
 		if lvl == nil then
 			lvl = 1
@@ -816,8 +910,8 @@ function THD2_BotUpGradeAbility(hero)
 		end
 		--print(lvl)
 		for i=G_Bot_Level[v]+1,lvl do
-			if i > 25 then break end 
-			local abilitySlot = G_Bots_Ability_Add[hIndex][i]
+			if i > 30 then break end
+			local abilitySlot = abilityPlan[i]
 			-- 0 表示该等级不点技能，不能传给 GetAbilityByIndex。
 			if abilitySlot ~= nil and abilitySlot > 0 and abilitySlot <= hero:GetAbilityCount() then
 				local j = abilitySlot - 1 --abilitys is 0~n-1, but vals set as 1~n
@@ -1119,6 +1213,9 @@ function THD2_AddBot()
 						H_name=team_hero[3]
 					end
 					local H_id = nil
+					local targetRole = nil
+					local forcedProfile = nil
+					local forcedTestPick = false
 					--[[
 					if (not G_IsFCloneMode) or (not check_H_name(H_name)) then
 						H_id = get_usable_bot_hero()
@@ -1141,7 +1238,6 @@ function THD2_AddBot()
 					-- elseif cur_jff == 1 then
 					if cur_jff == 1 then
 						--ordinary
-						local targetRole = nil
 						if bot_team then
 							goodBotPickCount = goodBotPickCount + 1
 							targetRole = THD2_GetBalancedBotRole(goodBotPickCount)
@@ -1150,10 +1246,14 @@ function THD2_AddBot()
 							targetRole = THD2_GetBalancedBotRole(badBotPickCount)
 						end
 						if bot_team and radiantTestQueue[radiantTestPickIndex] ~= nil then
-							H_id = radiantTestQueue[radiantTestPickIndex]
+							local testEntry = radiantTestQueue[radiantTestPickIndex]
+							forcedTestPick = true
+							H_id = testEntry.heroID
+							forcedProfile = testEntry.profile
 							radiantTestPickIndex = radiantTestPickIndex + 1
 							H_name = G_Bot_Random_Hero[H_id]
-							print("[BOT][RadiantTest] selected: " .. tostring(H_name))
+							print("[BOT][RadiantTest] selected: " .. tostring(H_name)
+								.. " profile=" .. tostring(forcedProfile or targetRole))
 						else
 							H_id = THD2_GetUsableBotHeroByRole(targetRole)
 							if H_id ~= nil then
@@ -1188,6 +1288,17 @@ function THD2_AddBot()
 						print("[BOT][HeroRole] failed to pick bot hero")
 						break
 					end
+
+					local selectedProfile = nil
+					if forcedTestPick then
+						selectedProfile = forcedProfile
+					else
+						selectedProfile = targetRole
+					end
+					if selectedProfile == nil and not THD2_BotProfile.HasHeroConfig(H_name) then
+						selectedProfile = THD2_GetProfileFromRolePools(H_id or THD2_FindBotHeroID(H_name))
+					end
+					THD2_BotProfile.RecordProfile(H_name, selectedProfile)
 
 					if bot_team == true then
 						goodcnt = goodcnt + 1
