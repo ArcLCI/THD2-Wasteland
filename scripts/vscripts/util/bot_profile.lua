@@ -1,11 +1,13 @@
 local BotProfile = {}
 
 BotProfile.DAMAGE = "damage"
+BotProfile.DAMAGE_SPELL = "damage_spell"
 BotProfile.FRONTLINE = "frontline"
 BotProfile.SUPPORT = "support"
 
 local validProfiles = {
 	[BotProfile.DAMAGE] = true,
+	[BotProfile.DAMAGE_SPELL] = true,
 	[BotProfile.FRONTLINE] = true,
 	[BotProfile.SUPPORT] = true,
 }
@@ -13,6 +15,7 @@ local validProfiles = {
 local PROFILE_MARKER_ABILITY = "ability_thd2_bot_profile"
 local profileLevels = {
 	[BotProfile.DAMAGE] = 1,
+	[BotProfile.DAMAGE_SPELL] = 2,
 	[BotProfile.FRONTLINE] = 2,
 	[BotProfile.SUPPORT] = 3,
 }
@@ -45,7 +48,31 @@ end
 
 function BotProfile.GetRolePools(heroName)
 	local config = heroConfigs[heroName]
-	return config ~= nil and config.rolePools or nil
+	if config == nil or type(config.rolePools) ~= "table" then return nil end
+	local result = {}
+	for _, profile in ipairs(config.rolePools) do
+		-- damage_spell 复用标记 2，但在普通选人中仍归入输出池。
+		local role = profile == BotProfile.DAMAGE_SPELL and BotProfile.DAMAGE or profile
+		local exists = false
+		for _, oldRole in ipairs(result) do
+			if oldRole == role then exists = true break end
+		end
+		if not exists then table.insert(result, role) end
+	end
+	return result
+end
+
+function BotProfile.ResolveProfileForRole(heroName, roleName)
+	local config = heroConfigs[heroName]
+	if config == nil or type(config.rolePools) ~= "table" then return roleName end
+	local candidates = {}
+	for _, profile in ipairs(config.rolePools) do
+		local role = profile == BotProfile.DAMAGE_SPELL and BotProfile.DAMAGE or profile
+		if role == roleName then table.insert(candidates, profile) end
+	end
+	if #candidates == 0 then return roleName end
+	if #candidates == 1 then return candidates[1] end
+	return candidates[RandomInt(1, #candidates)]
 end
 
 function BotProfile.HasHeroConfig(heroName)
@@ -57,7 +84,9 @@ function BotProfile.IsValidProfile(profile)
 end
 
 local function IsProfileAllowed(config, profile)
-	if config == nil or type(config.rolePools) ~= "table" then return true end
+	if config == nil or type(config.rolePools) ~= "table" then
+		return profile ~= BotProfile.DAMAGE_SPELL
+	end
 	for _, allowedProfile in ipairs(config.rolePools) do
 		if allowedProfile == profile then return true end
 	end

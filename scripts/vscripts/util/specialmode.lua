@@ -25,9 +25,9 @@ G_Bot_Push_All_Time = {40,30,20,10}
 -- 支持原版英雄名或自定义文件夹名，例如 {"npc_dota_hero_invoker", "flandre", "momiji"}。
 -- 支持定位覆盖，例如 {"momiji:damage", "flandre:frontline"}，会覆盖默认的定位池分配。
 THD2_RADIANT_BOT_TEST = THD2_RADIANT_BOT_TEST or {
-	enabled = true,
+	enabled = false,
 	heroes = {
-		"yuuka:damage",
+		"nitori:damage_spell",
 	},
 }
 
@@ -106,7 +106,7 @@ if Convars ~= nil and not THD2_RADIANT_BOT_TEST_COMMAND_REGISTERED then
 			end
 		end
 		THD2_SetRadiantBotTest(enabled, #heroes > 0 and heroes or nil, profile)
-	end, "thd_bot_test_radiant <0|1> [hero[:profile] ...] [profile=damage|frontline|support]", 0)
+	end, "thd_bot_test_radiant <0|1> [hero[:profile] ...] [profile=damage|damage_spell|frontline|support]", 0)
 end
 
 G_Bot_List = {}
@@ -196,8 +196,8 @@ function THD2_GetJFFMode() return cur_jff end
 
 
 --to ban some girls(which is not work done XD)
-cur_bot_heros_size = 48
-tot_bot_heros_size = 68
+cur_bot_heros_size = 49
+tot_bot_heros_size = 69
 G_BOT_USED = 
 {
 	false ,			--红白
@@ -281,6 +281,7 @@ G_BOT_USED =
 	false ,			--女苑
 	false ,			--莉莉白
 	false ,			--patchouli
+	false ,			--nitori
 }
 
 G_Bot_Random_Hero = 
@@ -366,6 +367,7 @@ G_Bot_Random_Hero =
 	"npc_dota_hero_meepo",					--女苑
 	"npc_dota_hero_leshrac",				--莉莉白
 	"npc_dota_hero_invoker",				--帕秋莉
+	"npc_dota_hero_spectre",				--荷取
 }
 
 G_Bot_Hero_Folder = {
@@ -450,6 +452,7 @@ G_Bot_Hero_Folder = {
 	"jyoon",
 	"lilywhite",
 	"patchouli",
+	"nitori",
 }
 
 local function THD2_FindBotHeroID(testName)
@@ -835,6 +838,7 @@ G_Bots_Ability_Add = {
 	{1,2,3,1,2,  6,1,2,1,10,  2,6,3,3,12, 3,0,6,0,15,  0,0,0,0,16,  0,11,13,14,17  }, --Jyoon
 	{1,3,1,1,3,  6,1,2,3,11,  3,6,2,2,13, 2,0,6,0,15,  0,0,0,0,17,  0,10,12,14,16  }, --lily
 	{0,0,0,0,0,  0,0,0,0,0,   0,0,0,0,0,  0,0,0,0,0,   0,0,0,0,0,   0,0,0,0,0  }, --patchouli: special multi-point plan
+	{3,2,3,1,3,  6,3,1,1,10,  1,6,2,2,12,  2,0,6,0,15,  0,0,0,0,16,  0,11,13,14,17  }, --nitori: innate slot 4 is initialized separately
 }
 
 -- 帕秋莉在3的倍数等级会获得额外技能点，27-30级还要补学另一侧天赋。
@@ -1293,7 +1297,7 @@ function THD2_AddBot()
 					if forcedTestPick then
 						selectedProfile = forcedProfile
 					else
-						selectedProfile = targetRole
+						selectedProfile = THD2_BotProfile.ResolveProfileForRole(H_name, targetRole)
 					end
 					if selectedProfile == nil and not THD2_BotProfile.HasHeroConfig(H_name) then
 						selectedProfile = THD2_GetProfileFromRolePools(H_id or THD2_FindBotHeroID(H_name))
