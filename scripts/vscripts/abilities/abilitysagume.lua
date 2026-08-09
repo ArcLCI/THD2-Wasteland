@@ -29,9 +29,9 @@ end
 
 function ability_thdots_sagume_2:GetBehavior()
 	if self:GetCaster():HasModifier("modifier_ability_sagume_telent7_check") then
-		return DOTA_ABILITY_BEHAVIOR_NO_TARGET
+		return DOTA_ABILITY_BEHAVIOR_NO_TARGET + DOTA_ABILITY_BEHAVIOR_ROOT_DISABLES
 	else
-		return DOTA_ABILITY_BEHAVIOR_POINT
+		return DOTA_ABILITY_BEHAVIOR_POINT + DOTA_ABILITY_BEHAVIOR_ROOT_DISABLES
 	end
 end
 

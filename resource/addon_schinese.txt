@@ -2890,6 +2890,8 @@
 		"DOTA_Tooltip_ability_special_bonus_unique_patchouli_10"						"+250「森林大火」树木判定范围"
 
 		// --------------------
+		"DOTA_Tooltip_ability_special_bonus_unique_patchouli_11" "日符「皇家烈焰」"
+		"DOTA_Tooltip_ability_special_bonus_unique_patchouli_11_Description" "+{s:bonus_sun_damage}%百分比伤害，+{s:bonus_sun_stun_duration}秒眩晕，+{s:bonus_sun_range}范围"
 		// Satori
 		// --------------------
 		"npc_dota_hero_rubick"	"古明地觉"
@@ -4516,10 +4518,10 @@
 		"DOTA_Tooltip_modifier_suwako_aghs_shield_Description"	    		"护盾效果"
 		
 		"DOTA_Tooltip_ability_ability_thdots_suwako05"						"神具「洩矢之小铁轮」"		
-		"DOTA_Tooltip_ability_ability_thdots_suwako05_Description"			"向前发射铁轮，对目标点%suwakoex_radius%范围内随机%max_target%个目标造成伤害。\n自动施法开启时，可通过普通攻击触发，本次攻击攻击距离将提高至%AbilityCastRange%。"
+		"DOTA_Tooltip_ability_ability_thdots_suwako05_Description"			"向前发射铁轮，对目标点%suwakoex_radius%范围内随机%max_target%个目标造成伤害。\n自动施法开启时，可通过普通攻击触发。"
 		"DOTA_Tooltip_ability_ability_thdots_suwako05_int_multi"						"智力加成："
 		"DOTA_Tooltip_ability_ability_thdots_suwako05_AbilityCastRange"		"施法距离："
-		"DOTA_Tooltip_ability_ability_thdots_suwako05_shard_description"	"移除本技能冷却时间。"
+		"DOTA_Tooltip_ability_ability_thdots_suwako05_cooldown"	"冷却时间："
 		// "DOTA_Tooltip_ability_ability_thdots_suwako05_light_strike_array_aoe"			"影响范围： "																										
 		// "DOTA_Tooltip_ability_special_bonus_unique_suwako_1"				"+50 「赤口吞噬」伤害"																																																				
 		"DOTA_Tooltip_ability_special_bonus_unique_suwako_2"				"-7秒 「岩浆的两栖类」冷却"

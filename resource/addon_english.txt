@@ -3621,6 +3621,8 @@
 		"DOTA_Tooltip_ability_special_bonus_unique_patchouli_9" 						"+40「Emerald Megalith」DPS"
 		"DOTA_Tooltip_ability_special_bonus_unique_patchouli_10"  					    "+250「Forest Blaze」tree area"
 		//--------------------
+		"DOTA_Tooltip_ability_special_bonus_unique_patchouli_11" "Sun Sign 「Royal Flare」"
+		"DOTA_Tooltip_ability_special_bonus_unique_patchouli_11_Description" "+{s:bonus_sun_damage}% pct damage, +{s:bonus_sun_stun_duration}s stun, +{s:bonus_sun_range} range"
 		//koakuma by 「水色绒毯」
 		//--------------------
 
@@ -4211,10 +4213,10 @@
 		"DOTA_Tooltip_ability_ability_thdots_suwako_aghs_Description"	    "Consumes %mana_cost%% of current mana, granting an ally a shield that absorbs all damage for %shield_base% + consumed mana * %shield_factor%, lasting %duration%s.\nWhen the shield is applied, destroyed, or expires, a dispel effect is applied to the target.\nWhen the shield expires, %heal_percent%% of the remaining shield is converted to health."
 
 		"DOTA_Tooltip_ability_ability_thdots_suwako05"						"Divine Instrument「Moriya's Iron Ring」"
-		"DOTA_Tooltip_ability_ability_thdots_suwako05_Description"			"Launches an iron ring forward dealing damage to the target. \n Maximum %max_target% targets.\nWhen autocast is enabled, can be triggered by normal attacks, increasing attack range to %AbilityCastRange%."
+		"DOTA_Tooltip_ability_ability_thdots_suwako05_Description"			"Launches an iron ring forward dealing damage to the target. \n Maximum %max_target% targets.\nWhen autocast is enabled, can be triggered by normal attacks."
 		"DOTA_Tooltip_ability_ability_thdots_suwako05_int_multi"						"Bonus damage per INT:"
 		"DOTA_Tooltip_ability_ability_thdots_suwako05_AbilityCastRange"		"Cast Range:"
-		"DOTA_Tooltip_ability_ability_thdots_suwako05_shard_description"	"Removes this ability's cooldown."
+		"DOTA_Tooltip_ability_ability_thdots_suwako05_cooldown"	"Cooldown:"
 		"DOTA_Tooltip_ability_ability_thdots_suwako05_light_strike_array_aoe"			"Area: " 
 		// "DOTA_Tooltip_ability_special_bonus_unique_suwako_1"				"+50 Curse God「Mishaguji-sama」damage"
 		"DOTA_Tooltip_ability_special_bonus_unique_suwako_2"				"-7s cd Native God「Magma Amphibian」"

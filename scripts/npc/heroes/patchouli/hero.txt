@@ -37,7 +37,7 @@
 		"Ability26"				"special_bonus_unique_patchouli_7"
 		"Ability27"				"special_bonus_unique_patchouli_1"
 		"Ability28"				"special_bonus_unique_patchouli_8"
-		"Ability29"				"special_bonus_spell_amplify_15"
+		"Ability29"				"special_bonus_unique_patchouli_11"
 
 		"Facets"
 		{

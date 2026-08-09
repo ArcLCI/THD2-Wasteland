@@ -1526,7 +1526,7 @@ function modifier_ability_thdots_shion_04_caster:CheckState()
         [MODIFIER_STATE_ROOTED] = true,
         [MODIFIER_STATE_IGNORING_MOVE_AND_ATTACK_ORDERS] = true,
     }
-    if self:GetCaster():HasShard() and not self:GetAbility().target:IsNull() and self:GetCaster():GetTeamNumber() == self:GetAbility().target:GetTeamNumber() then
+    if self:GetCaster():HasModifier("modifier_item_aghanims_shard") and not self:GetAbility().target:IsNull() and self:GetCaster():GetTeamNumber() == self:GetAbility().target:GetTeamNumber() then
         states[MODIFIER_STATE_FLYING] = true
     end
     return states
@@ -1651,7 +1651,7 @@ end
 function modifier_ability_thdots_shion_04_target:CheckState()
     local funcs = {}
     if self:GetCaster():GetTeamNumber() == self:GetParent():GetTeamNumber() then
-        if self:GetCaster():HasShard() then
+        if self:GetCaster():HasModifier("modifier_item_aghanims_shard") then
             funcs[MODIFIER_STATE_FLYING] = true
         end
     else

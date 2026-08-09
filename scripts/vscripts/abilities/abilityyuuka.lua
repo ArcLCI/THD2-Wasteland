@@ -158,6 +158,14 @@ function YuukaEx_IllusionCastAnimation(keys)
     end
 end
 
+function YuukaEx2_IllusionCastAnimation(keys)
+    local Caster = keys.caster
+    local illusion = Yuuka04_GetIllusion(Caster)
+    if illusion then
+        illusion:StartGesture(ACT_DOTA_CAST_ABILITY_1)
+    end
+end
+
 function YuukaEx_OnSpellStart(keys)
     local Ability = keys.ability
     local Caster = keys.caster
@@ -531,7 +539,12 @@ function YuukaEx2_OnSpellStart(keys)
         end
     end
 
+    local illusion = Yuuka04_GetIllusion(Caster)
     Caster:EmitSound("Hero_VengefulSpirit.NetherSwap")
     FindClearSpaceForUnit(Caster, pos, true)
+    if illusion then
+        -- 分身不能通过 modifier_illusion 自行施法，女王瞬闪需要由游戏侧镜像位移。
+        FindClearSpaceForUnit(illusion, pos, true)
+    end
 end
 

@@ -559,6 +559,31 @@ function OnPatchouliFireEarth(keys)
     end, 0)
 end
 
+LinkLuaModifier("modifier_movespeed_cap_low", "scripts/vscripts/abilities/abilitypatchouli.lua",
+    LUA_MODIFIER_MOTION_NONE)
+modifier_movespeed_cap_low = class({})
+
+function modifier_movespeed_cap_low:IsHidden()
+    return true
+end
+
+function modifier_movespeed_cap_low:IsPurgable()
+    return false
+end
+
+function modifier_movespeed_cap_low:RemoveOnDeath()
+    return true
+end
+
+function modifier_movespeed_cap_low:DeclareFunctions()
+    return {MODIFIER_PROPERTY_MOVESPEED_ABSOLUTE_MIN}
+end
+
+-- 边界减速需要把引擎默认的最低移速下限降到 0，才能形成不可穿越的光圈边界。
+function modifier_movespeed_cap_low:GetModifierMoveSpeed_AbsoluteMin()
+    return 0
+end
+
 function CheckPosition(keys)
     local caster = keys.caster
     local target = keys.unit
@@ -1704,13 +1729,21 @@ function OnPatchouliRoyalFlame(keys)
         "particles/econ/items/monkey_king/arcana/fire/mk_arcana_fire_spring_ring_radial.vpcf", PATTACH_CUSTOMORIGIN,
         caster)
     ParticleManager:SetParticleControlEnt(effectIndex1, 0, caster, 5, "attach_hitloc", Vector(0, 0, 0), true)
-    local targets = FindUnitsInRadius(caster:GetTeam(), -- caster team
-    vec_caster, -- find position
-    nil, -- find entity
-    800, -- find radius
-    DOTA_UNIT_TARGET_TEAM_ENEMY, keys.ability:GetAbilityTargetType(), 0, FIND_CLOSEST, false)
+
+    local range = keys.range
+    local damage = keys.Damage
+    local stunDuration = keys.stun_duration
+
+    local targets = FindUnitsInRadius(
+        caster:GetTeam(), -- caster team
+        vec_caster, -- find position
+        nil, -- find entity
+        range,            -- find radius
+        DOTA_UNIT_TARGET_TEAM_ENEMY, keys.ability:GetAbilityTargetType(), 0, FIND_CLOSEST, false
+    )
+
     for _, v in pairs(targets) do
-        local deal_damage = v:GetMaxHealth() * keys.Damage * 0.01
+        local deal_damage = v:GetMaxHealth() * damage * 0.01
         local damage_table = {
             ability = keys.ability,
             victim = v,
@@ -1719,6 +1752,11 @@ function OnPatchouliRoyalFlame(keys)
             damage_type = keys.ability:GetAbilityDamageType(),
             damage_flags = 0
         }
+
+        if stunDuration ~= nil and stunDuration > 0 then
+            UtilStun:UnitStunTarget(caster, v, stunDuration)
+        end
+
         local effectIndex = ParticleManager:CreateParticle(
             "particles/econ/items/invoker/invoker_apex/invoker_sun_strike_beam_immortal1.vpcf", PATTACH_CUSTOMORIGIN,
             caster)

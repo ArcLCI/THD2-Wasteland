@@ -503,6 +503,15 @@
 			}
 		}
 
+		"OnAbilityPhaseStart"
+		{
+			"RunScript"
+			{
+				"ScriptFile"		"scripts/vscripts/abilities/abilityYuuka.lua"
+				"Function"			"YuukaEx2_IllusionCastAnimation"
+			}
+		}
+
 		"OnSpellStart"
 		{
 			"RunScript"

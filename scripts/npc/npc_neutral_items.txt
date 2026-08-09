@@ -32,54 +32,54 @@
 		}
 	}
     //=================================================================================================================
-	// Wind Waker
+	// Wind Waker 已改为商店销售，不再作为中立装备
 	//=================================================================================================================
-	"item_wind_waker"
-	{
-		// General
-		//-------------------------------------------------------------------------------------------------------------
-		"ID"							"610"														// unique ID number for this item.  Do not change this once established or it will invalidate collected stats.
-		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | DOTA_ABILITY_BEHAVIOR_DONT_RESUME_ATTACK"
-		"AbilityUnitTargetTeam"			"DOTA_UNIT_TARGET_TEAM_CUSTOM"
-		"AbilityUnitTargetType"			"DOTA_UNIT_TARGET_CUSTOM"
-		"FightRecapLevel"				"1"
-		"SpellDispellableType"			"SPELL_DISPELLABLE_YES"
+	// "item_wind_waker"
+	// {
+	// 	// General
+	// 	//-------------------------------------------------------------------------------------------------------------
+	// 	"ID"							"610"														// unique ID number for this item.  Do not change this once established or it will invalidate collected stats.
+	// 	"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | DOTA_ABILITY_BEHAVIOR_DONT_RESUME_ATTACK"
+	// 	"AbilityUnitTargetTeam"			"DOTA_UNIT_TARGET_TEAM_CUSTOM"
+	// 	"AbilityUnitTargetType"			"DOTA_UNIT_TARGET_CUSTOM"
+	// 	"FightRecapLevel"				"1"
+	// 	"SpellDispellableType"			"SPELL_DISPELLABLE_YES"
 
-		// Stats
-		//-------------------------------------------------------------------------------------------------------------
-		"AbilityCastRange"				"550"
-		"AbilityCastPoint"				"0.0"
+	// 	// Stats
+	// 	//-------------------------------------------------------------------------------------------------------------
+	// 	"AbilityCastRange"				"550"
+	// 	"AbilityCastPoint"				"0.0"
 
-		// Stats		
-		//-------------------------------------------------------------------------------------------------------------
-		"AbilityCooldown"				"18.0"
-		"AbilitySharedCooldown"			"cyclone"
+	// 	// Stats
+	// 	//-------------------------------------------------------------------------------------------------------------
+	// 	"AbilityCooldown"				"18.0"
+	// 	"AbilitySharedCooldown"			"cyclone"
 
-		// Item Info
-		//-------------------------------------------------------------------------------------------------------------
-		"AbilityManaCost"				"175"
-        "ItemCost"						"0"
-		"ItemQuality"					"rare"
-		"ItemAliases"					"cyclone;wind waker;ww"
-		"ItemDeclarations"				"DECLARE_PURCHASES_TO_TEAMMATES | DECLARE_PURCHASES_IN_SPEECH | DECLARE_PURCHASES_TO_SPECTATORS"
-		"ItemShareability"				"ITEM_FULLY_SHAREABLE"
-		"ShouldBeSuggested"				"0"
-        "ItemIsNeutralDrop"				"1"
-        "ItemPurchasable"				"0"
-		"IsTempestDoubleClonable"		"0"
-		"ItemSellable"					"0"
-		// Special	
-		//-------------------------------------------------------------------------------------------------------------
-		"AbilityValues"
-		{
-			"bonus_movement_speed"	"50"
-			"bonus_mana_regen"		"6.0"
-			"bonus_intellect"		"35"
-			"cyclone_duration"		"2.5"
-			"tooltip_drop_damage"	"50"
-			"tornado_speed"	"360"
-		}
-	}
+	// 	// Item Info
+	// 	//-------------------------------------------------------------------------------------------------------------
+	// 	"AbilityManaCost"				"175"
+        //     "ItemCost"						"0"
+	// 	"ItemQuality"					"rare"
+	// 	"ItemAliases"					"cyclone;wind waker;ww"
+	// 	"ItemDeclarations"				"DECLARE_PURCHASES_TO_TEAMMATES | DECLARE_PURCHASES_IN_SPEECH | DECLARE_PURCHASES_TO_SPECTATORS"
+	// 	"ItemShareability"				"ITEM_FULLY_SHAREABLE"
+	// 	"ShouldBeSuggested"				"0"
+        //     "ItemIsNeutralDrop"				"1"
+        //     "ItemPurchasable"				"0"
+	// 	"IsTempestDoubleClonable"		"0"
+	// 	"ItemSellable"					"0"
+	// 	// Special
+	// 	//-------------------------------------------------------------------------------------------------------------
+	// 	"AbilityValues"
+	// 	{
+	// 		"bonus_movement_speed"	"50"
+	// 		"bonus_mana_regen"		"6.0"
+	// 		"bonus_intellect"		"35"
+	// 		"cyclone_duration"		"2.5"
+	// 		"tooltip_drop_damage"	"50"
+	// 		"tornado_speed"	"360"
+	// 	}
+	// }
 	//=================================================================================================================
 	// Maelstrom
 	//=================================================================================================================
@@ -197,10 +197,10 @@
 	{
 		"ItemShareability"				"ITEM_FULLY_SHAREABLE"
 	}
-	"item_wind_waker"
-	{
-		"ItemShareability"				"ITEM_FULLY_SHAREABLE"
-	}
+	// "item_wind_waker"
+	// {
+	// 	"ItemShareability"				"ITEM_FULLY_SHAREABLE"
+	// }
 	"item_heavy_blade"
 	{
 		"ItemShareability"				"ITEM_FULLY_SHAREABLE"

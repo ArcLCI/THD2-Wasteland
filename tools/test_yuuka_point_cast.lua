@@ -20,6 +20,7 @@ DOTA_UNIT_TARGET_BASIC = 2
 DOTA_UNIT_TARGET_OTHER = 4
 DOTA_UNIT_TARGET_FLAG_INVULNERABLE = 8
 FIND_CLOSEST = 0
+ACT_DOTA_CAST_ABILITY_1 = 1
 
 function IsValidEntity(unit) return unit ~= nil and not unit.removed end
 
@@ -29,8 +30,15 @@ function FindUnitsInRadius()
 end
 
 local clearedPosition = nil
-function FindClearSpaceForUnit(_, position)
+local clearCalls = {}
+function FindClearSpaceForUnit(unit, position)
     clearedPosition = position
+    table.insert(clearCalls, {unit = unit, position = position})
+end
+
+local function ResetClearCalls()
+    clearedPosition = nil
+    clearCalls = {}
 end
 
 dofile("scripts/vscripts/abilities/abilityyuuka.lua")
@@ -72,6 +80,10 @@ local function NewFlower(x, ownerIndex)
     return flower
 end
 
+local syncIllusion = {alive = true}
+function syncIllusion:IsAlive() return self.alive end
+function syncIllusion:StartGesture(gesture) self.lastGesture = gesture end
+
 local foreignFlower = NewFlower(90, 99)
 local ownedFlower = NewFlower(120, caster.ownerIndex)
 YuukaRegisterFlowerControl(caster, ownedFlower)
@@ -87,24 +99,35 @@ Assert(YuukaFindOwnedFlower(caster, ability, Vec(800), 250) == nil,
     "point resolver must reject an owned flower outside cast range")
 
 worldUnits = {foreignFlower, ownedFlower}
-clearedPosition = nil
+caster.ability_yuuka04_illusion = syncIllusion
+ResetClearCalls()
 YuukaEx2_OnSpellStart({caster = caster, ability = ability, target_points = {Vec(100)}})
 Assert(clearedPosition == ownedFlower.origin, "Ex2 must jump to the resolved owned flower")
+Assert(#clearCalls == 2 and clearCalls[1].unit == caster and clearCalls[2].unit == syncIllusion,
+    "Ex2 must move both the caster and its illusion")
+Assert(clearCalls[1].position == ownedFlower.origin and clearCalls[2].position == ownedFlower.origin,
+    "Ex2 must move the illusion to the same resolved flower")
+YuukaEx2_IllusionCastAnimation({caster = caster})
+Assert(syncIllusion.lastGesture == ACT_DOTA_CAST_ABILITY_1,
+    "Ex2 phase start must mirror the cast gesture")
 
 worldUnits = {}
+caster.ability_yuuka04_illusion = nil
 ability.cooldownEnded = false
 ability.manaRefunded = false
-clearedPosition = nil
+ResetClearCalls()
 YuukaEx2_OnSpellStart({caster = caster, ability = ability, target_points = {Vec(300)}})
-Assert(clearedPosition == nil and ability.cooldownEnded and ability.manaRefunded,
+Assert(clearedPosition == nil and #clearCalls == 0 and ability.cooldownEnded and ability.manaRefunded,
     "unupgraded Ex2 must reject a point without an owned flower")
 
 caster.wanbao = true
 ability.cooldownEnded = false
 ability.manaRefunded = false
 local wanbaoPoint = Vec(300)
+ResetClearCalls()
 YuukaEx2_OnSpellStart({caster = caster, ability = ability, target_points = {wanbaoPoint}})
-Assert(clearedPosition == wanbaoPoint and not ability.cooldownEnded and not ability.manaRefunded,
+Assert(clearedPosition == wanbaoPoint and #clearCalls == 1 and clearCalls[1].unit == caster
+    and not ability.cooldownEnded and not ability.manaRefunded,
     "Wanbaochui Ex2 must jump directly to a point when no flower exists")
 
 caster.wanbao = false

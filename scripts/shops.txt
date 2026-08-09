@@ -138,6 +138,7 @@
         "item" "item_hetongtuijinzhuangzhi"
         "item" "item_third_eyes"
         "item" "item_cyclone"
+        "item" "item_wind_waker"
         "item" "item_pomojinlingli"
         "item" "item_three_dimension"
         "item" "item_fan"

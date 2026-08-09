@@ -45,6 +45,7 @@
 			"int_multi"	"0.8"
 			"max_target"		"4"
 			"show_cast_range"	"1"
+			"cooldown"			"2.2"
 		}
 		
 		// 技能升级时添加永久被动修饰器
@@ -64,6 +65,7 @@
 			{
 				"ScriptFile"	"scripts/vscripts/abilities/abilitysuwako.lua"
 				"Function"		"OnsuwakoexSpellStart2"
+				"cooldown"		"%cooldown"
 			}
 		}
 

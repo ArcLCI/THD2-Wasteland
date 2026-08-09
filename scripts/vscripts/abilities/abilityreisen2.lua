@@ -788,8 +788,10 @@ function ability_thdots_reisen_2_ultimate:OnSpellStart()
     -- end
 
     --天赋判定：减少cd
-    if caster:HasAbility(abilityName) and caster:FindAbilityByName(abilityName):GetLevel()>0 then 
-        local cooldown = self:GetCooldown(self:GetLevel() - 1)-caster:FindAbilityByName(abilityName):GetSpecialValueFor("value")
+    local talent = caster and caster:FindAbilityByName(abilityName)
+    -- 部分运行时单位句柄没有 HasAbility，直接用查找结果判断天赋是否存在。
+    if talent and talent:GetLevel()>0 then
+        local cooldown = self:GetCooldown(self:GetLevel() - 1)-talent:GetSpecialValueFor("value")
         self:EndCooldown()
         self:StartCooldown(cooldown)
     end 
@@ -887,7 +889,9 @@ function modifier_ability_thdots_reisen2_ultimate:DeclareFunctions()
     }
     local caster = self:GetCaster()
     local abilityName="special_bonus_unique_Reisen_2_ability4_reduce_attacktime"
-    if caster and caster:HasAbility(abilityName) and caster:FindAbilityByName(abilityName):GetLevel()>0 then
+    local talent = caster and caster:FindAbilityByName(abilityName)
+    -- 部分运行时单位句柄没有 HasAbility，直接用查找结果判断天赋是否存在。
+    if talent and talent:GetLevel()>0 then
         table.insert(funcs, MODIFIER_PROPERTY_BASE_ATTACK_TIME_CONSTANT)
     end
     
@@ -901,8 +905,10 @@ function modifier_ability_thdots_reisen2_ultimate:OnCreated()
     local abilityName="special_bonus_unique_Reisen_2_ability4_reduce_attacktime"
 
     --天赋判定：减少攻击间隔
-    if caster:HasAbility(abilityName) and caster:FindAbilityByName(abilityName):GetLevel()>0 then
-        self.ultimate_base_attack_time = caster:FindAbilityByName(abilityName):GetSpecialValueFor("value")
+    local talent = caster and caster:FindAbilityByName(abilityName)
+    -- 部分运行时单位句柄没有 HasAbility，直接用查找结果判断天赋是否存在。
+    if talent and talent:GetLevel()>0 then
+        self.ultimate_base_attack_time = talent:GetSpecialValueFor("value")
     end
 
     if not IsServer() then return end

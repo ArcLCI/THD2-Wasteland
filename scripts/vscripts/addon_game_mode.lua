@@ -3601,6 +3601,32 @@ function THDOTSGameMode:On_dota_inventory_item_added(keys)
 			end
 		end
 
+		if heroEntity:IsRealHero()
+			and _G.THD2_IsBotHero(heroEntity)
+			and itemEntity:GetAbilityName() == "item_kusanagi"
+		then
+			-- 拾取事件下一帧立即复用 Bot Buff 兑换，缩短临时腾格物品的落地时间。
+			local modifierName = "modifier_bot_buff"
+			if heroEntity:GetTeamNumber() == DOTA_TEAM_GOODGUYS then
+				modifierName = "modifier_bot_buff_radiant"
+			elseif heroEntity:GetTeamNumber() == DOTA_TEAM_BADGUYS then
+				modifierName = "modifier_bot_buff_dire"
+			end
+
+			THD_SetContextThink(heroEntity,
+				"bot_kusanagi_pickup__" .. tostring(keys.item_entindex),
+				function ()
+					if heroEntity == nil or heroEntity:IsNull() then return nil end
+					local botBuff = heroEntity:FindModifierByName(modifierName)
+					if botBuff ~= nil and botBuff.SellKusanagiItems ~= nil then
+						botBuff:SellKusanagiItems()
+					end
+					return nil
+				end,
+				0,
+				"bot_kusanagi_pickup")
+		end
+
 		--不知道
 		if itemEntity:GetShareability() ~= 2 then return end
 		if itemEntity:GetPurchaser() ~= nil then

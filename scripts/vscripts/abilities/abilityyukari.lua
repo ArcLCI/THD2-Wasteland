@@ -885,7 +885,7 @@ end
 
 -- 新增：英雄生成监听
 function Yukari_OnHeroSpawn(keys)
-    local hero = EntIndexToHScript(keys.hero_entindex)
+    local hero = EntIndexToHScript(keys.entindex)
     if hero:GetUnitName() == "npc_dota_hero_obsidian_destroyer" then
         Yukari_SyncAbilityLevels(hero)
     end

@@ -507,19 +507,8 @@ function modifier_suwako05_passive:RemoveOnDeath() return false end
 
 function modifier_suwako05_passive:DeclareFunctions()
     return {
-        MODIFIER_EVENT_ON_ATTACK_LANDED,
-        MODIFIER_PROPERTY_ATTACK_RANGE_BONUS
+        MODIFIER_EVENT_ON_ATTACK_LANDED
     }
-end
-
-function modifier_suwako05_passive:GetModifierAttackRangeBonus()
-    local ability = self:GetAbility()
-    if not ability then return 0 end
-    -- 自动施法开启且技能可用时，提供原本的额外攻击距离
-    if ability:GetAutoCastState() and ability:IsCooldownReady() then
-        return 600
-    end
-    return 0
 end
 
 function modifier_suwako05_passive:OnAttackLanded(keys)
@@ -535,14 +524,13 @@ function modifier_suwako05_passive:OnAttackLanded(keys)
 
     local manaCost = ability:GetManaCost(ability:GetLevel() - 1)
     if caster:GetMana() < manaCost then return end
+    local cooldown = ability:GetSpecialValueFor("cooldown")
 
     caster:SpendMana(manaCost, ability)
     CastSuwako05AtLocation(caster, ability, target:GetOrigin())
 
-    if not caster:HasModifier("modifier_item_aghanims_shard") then
-        -- 无魔晶时沿用脚本冷却；魔晶时不启动冷却
-        ability:StartCooldown(2.2)
-    end
+    -- 冷却统一读取 KV，避免魔晶分支绕过自动触发冷却。
+    ability:StartCooldown(cooldown)
 end
 
 function ApplySuwako05Passive(keys)
@@ -603,6 +591,8 @@ function OnsuwakoexSpellStart2(keys)
     local targetUnit = keys.target
     if not targetUnit then return end
 
+    local cooldown = keys.cooldown
+
     -- 检查手动冷却修饰器（魔晶后专用）
     if caster:HasModifier("modifier_suwako05_manual_cooldown") then
         -- 仍在冷却中，拒绝施放
@@ -615,14 +605,8 @@ function OnsuwakoexSpellStart2(keys)
     -- 施放技能效果
     CastSuwako05AtLocation(caster, ability, targetUnit:GetOrigin())
 
-    -- 处理冷却
-    if caster:HasModifier("modifier_item_aghanims_shard") then
-        -- 魔晶后手动冷却为0.5秒（添加手动冷却修饰器）
-        ability:ApplyDataDrivenModifier(caster, caster, "modifier_suwako05_manual_cooldown", {})
-    else
-        -- 无魔晶时，启动2.2秒技能冷却
-        ability:StartCooldown(2.2)
-    end
+    -- 冷却统一读取 KV，魔晶不再绕过手动施法冷却。
+    ability:StartCooldown(cooldown)
 end
 
 -- 攻击命中回调（自动施法触发）
