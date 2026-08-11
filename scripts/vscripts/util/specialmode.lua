@@ -196,8 +196,8 @@ function THD2_GetJFFMode() return cur_jff end
 
 
 --to ban some girls(which is not work done XD)
-cur_bot_heros_size = 49
-tot_bot_heros_size = 69
+cur_bot_heros_size = 50
+tot_bot_heros_size = 70
 G_BOT_USED = 
 {
 	false ,			--红白
@@ -282,6 +282,7 @@ G_BOT_USED =
 	false ,			--莉莉白
 	false ,			--patchouli
 	false ,			--nitori
+	false ,			--橙
 }
 
 G_Bot_Random_Hero = 
@@ -368,6 +369,7 @@ G_Bot_Random_Hero =
 	"npc_dota_hero_leshrac",				--莉莉白
 	"npc_dota_hero_invoker",				--帕秋莉
 	"npc_dota_hero_spectre",				--荷取
+	"npc_dota_hero_terrorblade",			--橙
 }
 
 G_Bot_Hero_Folder = {
@@ -453,6 +455,7 @@ G_Bot_Hero_Folder = {
 	"lilywhite",
 	"patchouli",
 	"nitori",
+	"chen",
 }
 
 local function THD2_FindBotHeroID(testName)
@@ -561,12 +564,13 @@ local function THD2_FindHeroKVByOverride(heroKV, overrideHeroName)
 	return nil
 end
 
-local function THD2_AddRolePoolHero(pools, roleName, heroID)
+local function THD2_AddRolePoolCandidate(pools, roleName, heroID, profile)
 	if pools[roleName] == nil then return end
-	for _, oldHeroID in pairs(pools[roleName]) do
-		if oldHeroID == heroID then return end
+	profile = profile or roleName
+	for _, oldCandidate in pairs(pools[roleName]) do
+		if oldCandidate.heroID == heroID and oldCandidate.profile == profile then return end
 	end
-	table.insert(pools[roleName], heroID)
+	table.insert(pools[roleName], {heroID = heroID, profile = profile})
 end
 
 local function THD2_AddHeroToRolePools(pools, heroID, heroName, heroData, folder)
@@ -587,10 +591,10 @@ local function THD2_AddHeroToRolePools(pools, heroID, heroName, heroData, folder
 		levels[i] = level
 	end
 
-	local overridePools = THD2_BotProfile.GetRolePools(heroName)
-	if overridePools ~= nil then
-		for _, poolName in ipairs(overridePools) do
-			THD2_AddRolePoolHero(pools, poolName, heroID)
+	local overrideCandidates = THD2_BotProfile.GetRoleCandidates(heroName)
+	if overrideCandidates ~= nil then
+		for _, candidate in ipairs(overrideCandidates) do
+			THD2_AddRolePoolCandidate(pools, candidate.role, heroID, candidate.profile)
 		end
 		return
 	end
@@ -610,7 +614,7 @@ local function THD2_AddHeroToRolePools(pools, heroID, heroName, heroData, folder
 		for i, roleName in ipairs(roleList) do
 			local poolName = THD2_BOT_ROLE_GROUPS[roleName]
 			if poolName ~= nil and levels[i] == maxLevel then
-				THD2_AddRolePoolHero(pools, poolName, heroID)
+				THD2_AddRolePoolCandidate(pools, poolName, heroID, poolName)
 				added = true
 			end
 		end
@@ -656,12 +660,30 @@ end
 local function THD2_GetProfileFromRolePools(heroID)
 	if heroID == nil then return nil end
 	local pools = THD2_GetBotRolePools()
-	for _, profile in ipairs(THD2_BOT_ROLE_ORDER) do
-		for _, poolHeroID in ipairs(pools[profile] or {}) do
-			if poolHeroID == heroID then return profile end
+	for _, roleName in ipairs(THD2_BOT_ROLE_ORDER) do
+		for _, candidate in ipairs(pools[roleName] or {}) do
+			if candidate.heroID == heroID then return candidate.profile or roleName end
 		end
 	end
 	return nil
+end
+
+local function THD2_GetRandomProfileFromRolePools(heroID)
+	if heroID == nil then return nil end
+	local pools = THD2_GetBotRolePools()
+	local profiles = {}
+	local included = {}
+	for _, roleName in ipairs(THD2_BOT_ROLE_ORDER) do
+		for _, candidate in ipairs(pools[roleName] or {}) do
+			local profile = candidate.heroID == heroID and (candidate.profile or roleName) or nil
+			if profile ~= nil and not included[profile] then
+				included[profile] = true
+				table.insert(profiles, profile)
+			end
+		end
+	end
+	if #profiles == 0 then return nil end
+	return profiles[RandomInt(1, #profiles)]
 end
 
 local function THD2_GetBotHeroDebugName(heroID)
@@ -673,11 +695,14 @@ local function THD2_GetBotHeroDebugName(heroID)
 	return heroName
 end
 
-local function THD2_PrintBotHeroList(poolName, heroIDs)
+local function THD2_PrintBotHeroList(poolName, candidates)
 	local heroNames = {}
-	for _, heroID in ipairs(heroIDs) do
+	for _, candidate in ipairs(candidates) do
+		local heroID = type(candidate) == "table" and candidate.heroID or candidate
 		if G_BOT_USED[heroID] == false then
-			table.insert(heroNames, THD2_GetBotHeroDebugName(heroID))
+			local profile = type(candidate) == "table" and candidate.profile or nil
+			table.insert(heroNames, THD2_GetBotHeroDebugName(heroID)
+				.. (profile ~= nil and ":" .. profile or ""))
 		end
 	end
 
@@ -702,7 +727,8 @@ local function THD2_PrintBotRolePools()
 	local included = {}
 	for _, roleName in ipairs(THD2_BOT_ROLE_ORDER) do
 		THD2_PrintBotHeroList(roleName, pools[roleName] or {})
-		for _, heroID in ipairs(pools[roleName] or {}) do
+		for _, candidate in ipairs(pools[roleName] or {}) do
+			local heroID = candidate.heroID
 			if G_BOT_USED[heroID] == false then
 				included[heroID] = true
 			end
@@ -729,11 +755,12 @@ local function THD2_GetBalancedBotRole(botIndex)
 	return THD2_BOT_ROLE_ORDER[((botIndex - 1) % #THD2_BOT_ROLE_ORDER) + 1]
 end
 
-local function THD2_GetRandomAvailableHeroID(heroIDs)
+local function THD2_GetRandomAvailableCandidate(candidates)
 	local available = {}
-	for _, heroID in ipairs(heroIDs or {}) do
-		if G_BOT_USED[heroID] == false then
-			table.insert(available, heroID)
+	for _, candidate in ipairs(candidates or {}) do
+		-- 定位候选独立入池，但同一英雄任一定位被选后会由全局占用一起过滤。
+		if G_BOT_USED[candidate.heroID] == false then
+			table.insert(available, candidate)
 		end
 	end
 	if #available == 0 then return nil end
@@ -742,11 +769,12 @@ end
 
 local function THD2_GetUsableBotHeroByRole(roleName)
 	local pools = THD2_GetBotRolePools()
-	local heroID = THD2_GetRandomAvailableHeroID(pools[roleName])
-	if heroID ~= nil then return heroID end
+	local candidate = THD2_GetRandomAvailableCandidate(pools[roleName])
+	if candidate ~= nil then return candidate end
 
 	print("[BOT][HeroRole] role pool empty, fallback to any hero: " .. tostring(roleName))
-	return get_usable_bot_hero()
+	local heroID = get_usable_bot_hero()
+	return heroID ~= nil and {heroID = heroID, profile = nil} or nil
 end
 
 G_Bots_Ability_Add = {
@@ -839,6 +867,8 @@ G_Bots_Ability_Add = {
 	{1,3,1,1,3,  6,1,2,3,11,  3,6,2,2,13, 2,0,6,0,15,  0,0,0,0,17,  0,10,12,14,16  }, --lily
 	{0,0,0,0,0,  0,0,0,0,0,   0,0,0,0,0,  0,0,0,0,0,   0,0,0,0,0,   0,0,0,0,0  }, --patchouli: special multi-point plan
 	{3,2,3,1,3,  6,3,1,1,10,  1,6,2,2,12,  2,0,6,0,15,  0,0,0,0,16,  0,11,13,14,17  }, --nitori: innate slot 4 is initialized separately
+	-- 橙的大招与Ex技能出生时已初始化，常规点数只补一至三技能和大招余下三级。
+	{3,1,3,2,3,  6,3,1,1,10,  1,6,2,2,12,  2,0,6,0,14,  0,0,0,0,17,  0,11,13,15,16  }, --chen
 }
 
 -- 帕秋莉在3的倍数等级会获得额外技能点，27-30级还要补学另一侧天赋。
@@ -1220,6 +1250,7 @@ function THD2_AddBot()
 					local targetRole = nil
 					local forcedProfile = nil
 					local forcedTestPick = false
+					local poolProfile = nil
 					--[[
 					if (not G_IsFCloneMode) or (not check_H_name(H_name)) then
 						H_id = get_usable_bot_hero()
@@ -1257,10 +1288,12 @@ function THD2_AddBot()
 							radiantTestPickIndex = radiantTestPickIndex + 1
 							H_name = G_Bot_Random_Hero[H_id]
 							print("[BOT][RadiantTest] selected: " .. tostring(H_name)
-								.. " profile=" .. tostring(forcedProfile or targetRole))
+								.. " requestedProfile=" .. tostring(forcedProfile))
 						else
-							H_id = THD2_GetUsableBotHeroByRole(targetRole)
-							if H_id ~= nil then
+							local candidate = THD2_GetUsableBotHeroByRole(targetRole)
+							if candidate ~= nil then
+								H_id = candidate.heroID
+								poolProfile = candidate.profile
 								H_name = G_Bot_Random_Hero[H_id]
 							end
 						end
@@ -1295,7 +1328,9 @@ function THD2_AddBot()
 
 					local selectedProfile = nil
 					if forcedTestPick then
-						selectedProfile = forcedProfile
+						selectedProfile = forcedProfile or THD2_GetRandomProfileFromRolePools(H_id)
+					elseif poolProfile ~= nil then
+						selectedProfile = poolProfile
 					else
 						selectedProfile = THD2_BotProfile.ResolveProfileForRole(H_name, targetRole)
 					end

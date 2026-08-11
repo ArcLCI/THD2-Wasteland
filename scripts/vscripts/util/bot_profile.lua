@@ -23,6 +23,10 @@ local profileLevels = {
 local heroConfigs = {}
 local selectedProfiles = {}
 
+local function GetRoleName(profile)
+	return profile == BotProfile.DAMAGE_SPELL and BotProfile.DAMAGE or profile
+end
+
 --[[
 	注册表是英雄接入定位系统的唯一入口。rolePools 控制地图选人候选池，
 	abilityPlans 按定位覆盖默认加点；未注册英雄仍会收到通用定位标记并沿用原加点。
@@ -52,7 +56,7 @@ function BotProfile.GetRolePools(heroName)
 	local result = {}
 	for _, profile in ipairs(config.rolePools) do
 		-- damage_spell 复用标记 2，但在普通选人中仍归入输出池。
-		local role = profile == BotProfile.DAMAGE_SPELL and BotProfile.DAMAGE or profile
+		local role = GetRoleName(profile)
 		local exists = false
 		for _, oldRole in ipairs(result) do
 			if oldRole == role then exists = true break end
@@ -62,12 +66,23 @@ function BotProfile.GetRolePools(heroName)
 	return result
 end
 
+function BotProfile.GetRoleCandidates(heroName)
+	local config = heroConfigs[heroName]
+	if config == nil or type(config.rolePools) ~= "table" then return nil end
+	local result = {}
+	for _, profile in ipairs(config.rolePools) do
+		-- 每个定位都是独立候选；即使归入同一角色池也不能提前合并。
+		table.insert(result, {role = GetRoleName(profile), profile = profile})
+	end
+	return result
+end
+
 function BotProfile.ResolveProfileForRole(heroName, roleName)
 	local config = heroConfigs[heroName]
 	if config == nil or type(config.rolePools) ~= "table" then return roleName end
 	local candidates = {}
 	for _, profile in ipairs(config.rolePools) do
-		local role = profile == BotProfile.DAMAGE_SPELL and BotProfile.DAMAGE or profile
+		local role = GetRoleName(profile)
 		if role == roleName then table.insert(candidates, profile) end
 	end
 	if #candidates == 0 then return roleName end
