@@ -73,7 +73,9 @@ end
 --Calls when Destroy
 function ItemAbility_Crit_Recycle(keys)
 	local caster = keys.caster
-	local data = GetCritData(keys)
+	-- OnDestroy 不携带创建事件的暴击参数，缺少缓存时不能反向执行 Refresh。
+	local data = caster["Data_Item_"..keys.ability:GetName()]
+	if not data then return end
 	data.LastTriggerTime = 0
 	data.DamageCount = 0
 	-- recycle for crit modifier

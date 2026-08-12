@@ -78,6 +78,7 @@ require ( "util/stun" )
 require ( "util/pauseunit" )
 require ( "util/silence" )
 require ( "util/magic_immune" )
+local BotBackpackCastBridge = require ( "util/bot_backpack_cast_bridge" )
 require ( "util/timers" )
 require ( "util/util" )
 require ( "util/mode_select" )
@@ -3285,6 +3286,10 @@ function THDOTSGameMode:OnTHDOTSOrderFilter(keys)
 
 	local target = keys.entindex_target ~= 0 and EntIndexToHScript(keys.entindex_target) or nil
 	local ability = keys.entindex_ability ~= 0 and EntIndexToHScript(keys.entindex_ability) or nil
+
+	-- 实验性 Bot 副包施法桥接默认关闭；启用时由模块接管白名单消耗品并重发原生订单。
+	local bridgeResult = BotBackpackCastBridge.FilterOrder(keys)
+	if bridgeResult ~= nil then return bridgeResult end
 
 	if ability ~= nil then
 		if ability.selfCastToFountain == true then

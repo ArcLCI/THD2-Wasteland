@@ -3408,9 +3408,11 @@ function modifier_item_cirno_claymore_kill_atk_buff:IsDebuff()
     return false
 end
 
-function modifier_item_cirno_claymore_kill_atk_buff:OnCreated()
-    if not IsServer() then
-        return
+function modifier_item_cirno_claymore_kill_atk_buff:OnCreated(keys)
+    self.atk_per_stack = tonumber(keys and keys.atk_per_stack)
+    local ability = self:GetAbility()
+    if self.atk_per_stack == nil and ability ~= nil then
+        self.atk_per_stack = ability:GetSpecialValueFor("atk_per_stack")
     end
 end
 
@@ -3419,7 +3421,14 @@ function modifier_item_cirno_claymore_kill_atk_buff:DeclareFunctions()
 end
 
 function modifier_item_cirno_claymore_kill_atk_buff:GetModifierPreAttack_BonusDamage()
-    return self:GetAbility():GetSpecialValueFor("atk_per_stack") * self:GetStackCount()
+    -- 白楼剑消失后增伤仍应永久保留，不能继续依赖已经失效的物品句柄。
+    if self.atk_per_stack == nil then
+        local ability = self:GetAbility()
+        if ability ~= nil then
+            self.atk_per_stack = ability:GetSpecialValueFor("atk_per_stack")
+        end
+    end
+    return (self.atk_per_stack or 0) * self:GetStackCount()
 end
 
 function ItemAbility_cirno_claymore_kill_hero(keys)
@@ -3436,7 +3445,8 @@ function ItemAbility_cirno_claymore_kill_hero(keys)
     if attacker == caster and keys.unit:IsRealHero() then
         if not caster:HasModifier(atkbuff_name) then
             caster:AddNewModifier(caster, ItemAbility, atkbuff_name, {
-                duration = -1
+                duration = -1,
+                atk_per_stack = ItemAbility:GetSpecialValueFor("atk_per_stack")
             })
             caster:FindModifierByName(atkbuff_name):SetStackCount(1)
         else

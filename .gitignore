@@ -10,6 +10,7 @@ particles
 sounds
 soundevents
 vgui
+tests
 
 #file
 *.cfg
