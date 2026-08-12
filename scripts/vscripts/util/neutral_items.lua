@@ -47,7 +47,6 @@ local Tier4NeutralItems = {
     "item_crippling_crossbow",
     "item_ceremonial_robe",
     "item_mind_breaker",
-    "item_pyrrhic_cloak",
 }
 
 local Tier5NeutralItems = {

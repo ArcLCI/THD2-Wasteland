@@ -29,7 +29,7 @@ local function Yugi04_ApplyBotCircle(caster, ability, target, duration)
 	if Yugi04_IsBotUnit(target) then
 		local center = target:GetAbsOrigin()
 		-- 仅给 bot 脚本提供可读标记，实际技能效果仍由原本的勇仪4 modifier处理。
-		ability:ApplyDataDrivenModifier(caster, target, "modifier_thdots_yugi04_bot_no_displacement", {duration = duration})
+		target:AddNewModifier(caster, ability, "modifier_thdots_yugi04_bot_no_displacement", {duration = duration})
 		target:AddNewModifier(caster, ability, "modifier_thdots_yugi04_bot_circle", {
 			duration = duration,
 			center_x = center.x,
@@ -333,6 +333,13 @@ function modifier_thdots_yugi04_think_interval:IsPurgable()			return false end
 function modifier_thdots_yugi04_think_interval:RemoveOnDeath()		return true end
 function modifier_thdots_yugi04_think_interval:IsDebuff()			return true end
 function modifier_thdots_yugi04_think_interval:GetAttributes()		return MODIFIER_ATTRIBUTE_IGNORE_INVULNERABLE end
+
+modifier_thdots_yugi04_bot_no_displacement = {}
+LinkLuaModifier("modifier_thdots_yugi04_bot_no_displacement", "scripts/vscripts/abilities/abilityYugi.lua", LUA_MODIFIER_MOTION_NONE)
+function modifier_thdots_yugi04_bot_no_displacement:IsHidden()		return false end
+function modifier_thdots_yugi04_bot_no_displacement:IsPurgable()		return false end
+function modifier_thdots_yugi04_bot_no_displacement:RemoveOnDeath()	return true end
+function modifier_thdots_yugi04_bot_no_displacement:IsDebuff()		return true end
 
 modifier_thdots_yugi04_bot_circle = {}
 LinkLuaModifier("modifier_thdots_yugi04_bot_circle", "scripts/vscripts/abilities/abilityYugi.lua", LUA_MODIFIER_MOTION_NONE)

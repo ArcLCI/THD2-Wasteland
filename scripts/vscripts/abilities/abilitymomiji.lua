@@ -70,8 +70,9 @@ function OnMomiji01Spawn(keys)
                 -- end
                 local abilityMomiji04 = unit:FindAbilityByName("ability_thdots_momiji04")
                 if abilityMomiji04 ~= nil then
-                    unit:RemoveAbility("ability_thdots_momiji04")
+                    -- 先移除固有光环，再删除临时技能，避免光环回调拿到已失效的技能句柄。
                     unit:RemoveModifierByName("passive_momiji04_bonus")
+                    unit:RemoveAbility("ability_thdots_momiji04")
                 end
             end
             return 0.2
@@ -365,7 +366,8 @@ function passive_momiji04_bonus:IsAura()
     return true
 end
 function passive_momiji04_bonus:GetAuraRadius()
-    return self:GetAbility():GetSpecialValueFor("radius")
+    local ability = self:GetAbility()
+    return ability ~= nil and ability:GetSpecialValueFor("radius") or 0
 end -- global
 function passive_momiji04_bonus:GetAuraSearchFlags()
     return DOTA_UNIT_TARGET_FLAG_NONE
@@ -385,7 +387,8 @@ function passive_momiji04_bonus:DeclareFunctions()
 end
 
 function passive_momiji04_bonus:GetModifierMoveSpeedBonus_Percentage()
-    return self:GetAbility():GetSpecialValueFor("move_speed")
+    local ability = self:GetAbility()
+    return ability ~= nil and ability:GetSpecialValueFor("move_speed") or 0
 end
 
 -- 被动光环
@@ -408,16 +411,28 @@ function modifier_momiji04_bonus:DeclareFunctions()
 end
 
 function modifier_momiji04_bonus:OnCreated()
-    self.aura_move_speed = self:GetAbility():GetSpecialValueFor("aura_move_speed")
-    self.aura_attack_speed = self:GetAbility():GetSpecialValueFor("aura_attack_speed")
+    self.aura_move_speed = 0
+    self.aura_attack_speed = 0
+
+    local ability = self:GetAbility()
+    if ability == nil then
+        -- 临时光环技能被移除时，丢弃没有来源的残留光环效果。
+        if IsServer() then
+            self:Destroy()
+        end
+        return
+    end
+
+    self.aura_move_speed = ability:GetSpecialValueFor("aura_move_speed")
+    self.aura_attack_speed = ability:GetSpecialValueFor("aura_attack_speed")
 end
 
 function modifier_momiji04_bonus:GetModifierMoveSpeedBonus_Percentage()
-    return self.aura_move_speed
+    return self.aura_move_speed or 0
 end
 
 function modifier_momiji04_bonus:GetModifierAttackSpeedBonus_Constant()
-    return self.aura_attack_speed
+    return self.aura_attack_speed or 0
 end
 
 function ability_thdots_momiji04:OnSpellStart()

@@ -179,6 +179,8 @@ local function AddKoakuma02ModifierStack(caster, target, ability, modifierName, 
 	local modifier = target:FindModifierByName(modifierName)
 	if modifier == nil then
 		modifier = target:AddNewModifier(caster, ability, modifierName, { duration = duration })
+		-- 弹道飞行期间目标状态可能变化，减益施加失败时仍继续结算伤害和弹射。
+		if modifier == nil then return end
 		modifier:SetStackCount(1)
 	else
 		modifier:SetDuration(duration, true)
