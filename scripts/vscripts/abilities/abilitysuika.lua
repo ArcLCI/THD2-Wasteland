@@ -263,7 +263,8 @@ function OnSuika04SpellStart(keys)
 	local Caster = keys.caster
 	local CasterName = Caster:GetClassname()
 	local ability = keys.ability
-	local duration = ability:GetSpecialValueFor("duration") + FindTelentValue(caster,"special_bonus_unique_suika_3") * 7/6
+	-- duration 已由 KV 的 LinkedSpecialBonus 结算，避免再次手工叠加天赋。
+	local duration = ability:GetSpecialValueFor("duration")
 	if FindTelentValue(caster,"special_bonus_unique_suika_1")~=0 then --无视眩晕
 		keys.ability:ApplyDataDrivenModifier( caster, caster, "modifier_thdots_Suika_04_telent", {duration = duration} )
 	end

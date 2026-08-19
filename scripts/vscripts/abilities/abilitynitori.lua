@@ -224,7 +224,10 @@ function ability_thdots_nitori02:OnProjectileHit(target, location)
 			if target:IsBuilding() then 
 				self.damage = self.damage * self:GetSpecialValueFor("building_reduce") / 100
 			end
-			target:AddNewModifier(self:GetCaster(), self, "modifier_ability_thdots_nitori02_debuff", {duration = self.duration})
+			-- 建筑物没有状态抗性接口，也不应获得移动减速；仅对可移动单位创建减速效果。
+			if not target:IsBuilding() then
+				target:AddNewModifier(self:GetCaster(), self, "modifier_ability_thdots_nitori02_debuff", {duration = self.duration})
+			end
 			local damage_tabel = ({
 				victim 			= target,
 				-- Damage starts ramping from when cast time starts, so just gonna simiulate the effects by adding the cast point
@@ -312,7 +315,14 @@ function modifier_ability_thdots_nitori02_debuff:DeclareFunctions()
 end
 
 function modifier_ability_thdots_nitori02_debuff:GetModifierMoveSpeedBonus_Percentage()
-	return self:GetAbility():GetSpecialValueFor("movement_slow")* (1 - self:GetParent():GetStatusResistance())
+	local ability = self:GetAbility()
+	local parent = self:GetParent()
+	if ability == nil or parent == nil or parent:IsNull()
+	or parent:IsBuilding() or parent.GetStatusResistance == nil
+	then
+		return 0
+	end
+	return ability:GetSpecialValueFor("movement_slow") * (1 - parent:GetStatusResistance())
 end
 
 --------------------------------------------------------

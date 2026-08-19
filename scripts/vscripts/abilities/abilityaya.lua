@@ -124,11 +124,20 @@ function modifier_thdots_aya01_think_interval:OnDestroy()
     if not IsServer() then
         return
     end
+    -- 先停止可能尚未出队的移动回调，再释放命中冷却状态。
+    self:StartIntervalThink(-1)
     self.aya01_next_damage_time = nil
     self.aya01_last_search_origin = nil
 end
 
 function modifier_thdots_aya01_think_interval:OnIntervalThink()
+    if not IsServer() then
+        return
+    end
+    local next_damage_times = self.aya01_next_damage_time
+    if not next_damage_times then
+        return
+    end
     local caster = self:GetCaster()
     local vecCaster = caster:GetOrigin()
     local ability = self:GetAbility()
@@ -159,7 +168,7 @@ function modifier_thdots_aya01_think_interval:OnIntervalThink()
             if v and not v:IsNull() and AyaDistancePointToSegment2D(v:GetAbsOrigin(), search_start, search_end) <=
                 damage_radius then
                 local index = v:GetEntityIndex()
-                local next_damage_time = self.aya01_next_damage_time[index] or 0
+                local next_damage_time = next_damage_times[index] or 0
                 if now >= next_damage_time then
                     local damage_table = {
                         ability = ability,
@@ -185,7 +194,7 @@ function modifier_thdots_aya01_think_interval:OnIntervalThink()
                         end
                     end
 
-                    self.aya01_next_damage_time[index] = now + 0.4
+                    next_damage_times[index] = now + 0.4
                 end
             end
         end

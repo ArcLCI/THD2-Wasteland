@@ -78,25 +78,41 @@ function modifier_item_third_eyes_debuff:GetEffectAttachType()
 end
 
 function modifier_item_third_eyes_debuff:OnCreated()
+	local ability = self:GetAbility()
+	-- 物品可能在减益结束前被出售/移除，先缓存所有后续仍需使用的数值。
+	if ability ~= nil and IsValidEntity(ability) then
+		self.regen_reduce = ability:GetSpecialValueFor("regen_reduce")
+	else
+		self.regen_reduce = 0
+	end
 	if not IsServer() then return end
+	if ability == nil or not IsValidEntity(ability) then
+		self:Destroy()
+		return
+	end
 	self.caster 						= self:GetCaster()
-	self.ability						= self:GetAbility()
-	self.damage							= self.ability:GetSpecialValueFor("damage")
-	self.duration						= self.ability:GetSpecialValueFor("duration")
-	self.max_duration					= self.ability:GetSpecialValueFor("max_duration") - self.duration
+	self.ability						= ability
+	self.damage							= ability:GetSpecialValueFor("damage")
+	self.damage_flags					= ability:GetAbilityTargetFlags()
+	self.duration						= ability:GetSpecialValueFor("duration")
+	self.max_duration					= ability:GetSpecialValueFor("max_duration") - self.duration
 	self:StartIntervalThink(1)
 end
 
 function modifier_item_third_eyes_debuff:OnIntervalThink()
 	if not IsServer() then return end
 	local damage = self.damage
+	local ability = nil
+	if self.ability ~= nil and IsValidEntity(self.ability) then
+		ability = self.ability
+	end
 	local damage_tabel = {
 				victim 			= self:GetParent(),
 				damage 			= damage,
 				damage_type		= DAMAGE_TYPE_PURE,
-				damage_flags 	= self.ability:GetAbilityTargetFlags(),
+				damage_flags 	= self.damage_flags or 0,
 				attacker 		= self.caster,
-				ability 		= self.ability
+				ability 		= ability
 			}
 	-- print("damage count")
 	local effectIndex = ParticleManager:CreateParticle("particles/econ/items/dazzle/dazzle_ti9/dazzle_shadow_wave_ti9_impact_damage.vpcf", PATTACH_CUSTOMORIGIN, self:GetParent())
@@ -132,13 +148,13 @@ function modifier_item_third_eyes_debuff:OnTakeDamage(keys)
 end
 
 function modifier_item_third_eyes_debuff:GetModifierHealAmplify_PercentageTarget()
-	return self:GetAbility():GetSpecialValueFor("regen_reduce")
+	return self.regen_reduce or 0
 end
 
 function modifier_item_third_eyes_debuff:GetModifierHPRegenAmplify_Percentage()
-	return self:GetAbility():GetSpecialValueFor("regen_reduce")
+	return self.regen_reduce or 0
 end
 
 function modifier_item_third_eyes_debuff:OnTooltip()
-	return self:GetAbility():GetSpecialValueFor("regen_reduce")
+	return self.regen_reduce or 0
 end

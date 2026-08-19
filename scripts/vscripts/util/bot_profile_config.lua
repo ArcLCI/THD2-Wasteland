@@ -3,6 +3,18 @@
 	specialmode.lua 中原有加点表，但仍会获得地图选定的通用定位标记。
 ]]
 return {
+	["npc_dota_hero_tidehunter"] = {
+		defaultProfile = "frontline",
+		rolePools = {"frontline", "damage"},
+		abilityPlans = {
+			-- 前排优先投掷与被动清线，保留原兜底天赋路线并在中期补满雾化。
+			frontline =
+				{1,2,1,2,1, 6,1,2,2,11, 3,6,3,3,13, 3,0,6,0,14, 0,0,0,0,17, 0,10,12,15,16},
+			-- 输出优先范围被动，4 级取得雾化保命，再补满投掷与输出型天赋。
+			damage =
+				{2,1,2,3,2, 6,2,1,1,10, 1,6,3,3,12, 3,0,6,0,14, 0,0,0,0,16, 0,11,13,15,17},
+		},
+	},
 	["npc_dota_hero_bounty_hunter"] = {
 		defaultProfile = "frontline",
 		rolePools = {"damage", "frontline"},

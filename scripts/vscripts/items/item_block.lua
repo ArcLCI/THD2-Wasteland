@@ -30,6 +30,8 @@ end
 function ItemAbility_Block_Recycle(keys)
 	local caster = keys.caster
 	local data = caster["Data_Item_"..keys.ability:GetName()]
+	-- OnDestroy 不携带创建事件参数，缓存缺失时不能反向执行 Refresh。
+	if not data then return end
 	if caster:HasModifier(data.BlockModifierName) then
 		caster:RemoveModifierByName(data.BlockModifierName)
 	end

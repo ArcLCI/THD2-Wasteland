@@ -176,8 +176,8 @@ function modifier_item_feixiangjian_disable:IsDebuff() return true end
 function modifier_item_feixiangjian_disable:IsPurgable() return true end
 
 function modifier_item_feixiangjian_disable:OnCreated()
-    if not IsServer() then return end
     self.ability = self:GetAbility()
+    if not IsServer() then return end
     
     -- 创建残废特效
     self.particle = ParticleManager:CreateParticle(
@@ -206,5 +206,7 @@ end
 -- end
 
 function modifier_item_feixiangjian_disable:GetModifierMoveSpeedBonus_Percentage()
-    return self.ability:GetSpecialValueFor("maim_movement_speed")
+    local ability = self.ability or self:GetAbility()
+    if ability == nil then return 0 end
+    return ability:GetSpecialValueFor("maim_movement_speed")
 end
