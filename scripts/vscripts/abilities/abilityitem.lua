@@ -2879,6 +2879,9 @@ function modifier_item_grudge_bow_damage_debuff:OnCreated()
     self.ability = self:GetAbility()
     self.manadamage = self.ability:GetSpecialValueFor("damage_bonus_mana_attack")
     self.damage_duration = self.ability:GetSpecialValueFor("int_atk_duration")
+    -- 伤害效果可能晚于物品本体消失，后续 tick 只使用创建时缓存的数据。
+    self.damage_type = self.ability:GetAbilityDamageType()
+    self.damage_flags = self.ability:GetAbilityTargetFlags()
 
     self.icon_particle = ParticleManager:CreateParticle("particles/thd2/items/item_grudge_bow_grudge.vpcf",
         PATTACH_OVERHEAD_FOLLOW, self:GetParent())
@@ -2889,13 +2892,17 @@ function modifier_item_grudge_bow_damage_debuff:OnIntervalThink()
     if not IsServer() then
         return
     end
+    local ability = nil
+    if IsValidEntity(self.ability) then
+        ability = self.ability
+    end
     local damage_tabel = {
         victim = self:GetParent(),
         damage = self.caster:GetMaxMana() * self.manadamage * 0.01,
-        damage_type = self.ability:GetAbilityDamageType(),
-        damage_flags = self.ability:GetAbilityTargetFlags(),
+        damage_type = self.damage_type,
+        damage_flags = self.damage_flags,
         attacker = self.caster,
-        ability = self.ability
+        ability = ability
     }
     if self:GetRemainingTime() >= 1 then
         if self.icon_particle then
@@ -3054,6 +3061,9 @@ function modifier_item_nuetrident_damage_debuff:OnCreated()
     self.ability = self:GetAbility()
     self.manadamage = self.ability:GetSpecialValueFor("damage_bonus_mana_attack")
     self.damage_duration = self.ability:GetSpecialValueFor("int_atk_duration")
+    -- 伤害效果可能晚于物品本体消失，后续 tick 只使用创建时缓存的数据。
+    self.damage_type = self.ability:GetAbilityDamageType()
+    self.damage_flags = self.ability:GetAbilityTargetFlags()
 
     self.icon_particle = ParticleManager:CreateParticle("particles/thd2/items/item_grudge_bow_grudge.vpcf",
         PATTACH_OVERHEAD_FOLLOW, self:GetParent())
@@ -3064,13 +3074,17 @@ function modifier_item_nuetrident_damage_debuff:OnIntervalThink()
     if not IsServer() then
         return
     end
+    local ability = nil
+    if IsValidEntity(self.ability) then
+        ability = self.ability
+    end
     local damage_tabel = {
         victim = self:GetParent(),
         damage = self.caster:GetMaxMana() * self.manadamage * 0.01,
-        damage_type = self.ability:GetAbilityDamageType(),
-        damage_flags = self.ability:GetAbilityTargetFlags(),
+        damage_type = self.damage_type,
+        damage_flags = self.damage_flags,
         attacker = self.caster,
-        ability = self.ability
+        ability = ability
     }
     if self:GetRemainingTime() >= 1 then
         if self.icon_particle then
