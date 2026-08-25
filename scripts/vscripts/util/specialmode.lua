@@ -25,9 +25,9 @@ G_Bot_Push_All_Time = {40,30,20,10}
 -- 支持原版英雄名或自定义文件夹名，例如 {"npc_dota_hero_invoker", "flandre", "momiji"}。
 -- 支持定位覆盖，例如 {"momiji:damage", "flandre:frontline"}，会覆盖默认的定位池分配。
 THD2_RADIANT_BOT_TEST = THD2_RADIANT_BOT_TEST or {
-	enabled = true,
+	enabled = false,
 	heroes = {
-		"suika:damage",
+		"yumemi",
 	},
 }
 

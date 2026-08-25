@@ -399,12 +399,18 @@ end
 
 function modifier_ability_thdots_miyako02_caster_paticle:OnRemoved()
 	if not IsServer() then return end
-	--删除特效
-	ParticleManager:DestroyParticle(self.miyako02_particle, false)
-	ParticleManager:DestroyParticle(self.miyako02_particle2, false)
-	ParticleManager:ReleaseParticleIndex(self.miyako02_particle)
-	ParticleManager:ReleaseParticleIndex(self.miyako02_particle2)
-	self.caster:EmitSound("Voice_Thdots_Miyako.AbilityMiyako02_End")
+	-- Modifier 可能晚于施法者实体销毁；清理特效后只对仍有效的实体播放结束音效。
+	if self.miyako02_particle ~= nil then
+		ParticleManager:DestroyParticle(self.miyako02_particle, false)
+		ParticleManager:ReleaseParticleIndex(self.miyako02_particle)
+	end
+	if self.miyako02_particle2 ~= nil then
+		ParticleManager:DestroyParticle(self.miyako02_particle2, false)
+		ParticleManager:ReleaseParticleIndex(self.miyako02_particle2)
+	end
+	if self.caster ~= nil and IsValidEntity(self.caster) then
+		self.caster:EmitSound("Voice_Thdots_Miyako.AbilityMiyako02_End")
+	end
 end
 
 

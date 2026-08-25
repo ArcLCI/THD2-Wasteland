@@ -2,6 +2,50 @@ if AbilityReisen == nil then
     AbilityReisen = class({})
 end
 
+-- 铃仙幻象调试总开关；关闭时仅跳过幻象创建，技能的位移、耗蓝和冷却等流程照常执行。
+if THD2_REISEN_ILLUSIONS_ENABLED == nil then
+    THD2_REISEN_ILLUSIONS_ENABLED = false
+end
+
+local function CreateReisenOld02Illusions(caster, hero, keys, count)
+    if not THD2_REISEN_ILLUSIONS_ENABLED then
+        return
+    end
+
+    if (hero.ability_reisen02_illusion_max == nil) then
+        hero.ability_reisen02_illusion_max = 0
+    end
+    if (hero.ability_reisen02_illusion_max >= keys.Max_illusions) then
+        return
+    end
+
+    hero.ability_reisen02_illusion_max = hero.ability_reisen02_illusion_max + count
+    local illusions = CreateIllusions(caster, caster, {
+        outgoing_damage = keys.Illusion_damage_out_pct,
+        incoming_damage = keys.Illusion_damage_in_pct,
+        bounty_base = 5,
+        bounty_growth = 0,
+        outgoing_damage_structure = nil,
+        outgoing_damage_roshan = nil,
+        duration = keys.Illusion_duration
+    }, count, caster:GetHullRadius(), true, true)
+
+    for _, illusion in pairs(illusions) do
+        if (illusion ~= nil) then
+            local effectIndex = ParticleManager:CreateParticle(
+                "particles/units/heroes/hero_phantom_lancer/phantom_lancer_spawn_smoke.vpcf", PATTACH_CUSTOMORIGIN,
+                hero)
+            ParticleManager:SetParticleControl(effectIndex, 0, illusion:GetOrigin())
+            ParticleManager:SetParticleControl(effectIndex, 1, illusion:GetOrigin())
+            if (hero:HasModifier("modifier_illusion")) then
+                illusion:SetContextNum("ReisenOld02IllusionCaster", hero:GetContext("ReisenOld02IllusionCaster"), 0)
+            else
+                illusion:SetContextNum("ReisenOld02IllusionCaster", hero:GetEntityIndex(), 0)
+            end
+        end
+    end
+end
+
 function OnReisenExSpellStart(caster, target)
     for i = 1, 1 do
         local rad = RandomFloat(-math.pi, math.pi)
@@ -377,45 +421,17 @@ function OnReisenOld02SpellStart(keys)
 
     local VecCaster = caster:GetOrigin()
     local radian = RandomFloat(0, 6.28)
-    local passive_flag = 0
     VecCaster.x = VecCaster.x + math.cos(radian) * 50
     VecCaster.y = VecCaster.y + math.sin(radian) * 50
     FindClearSpaceForUnit(caster, VecCaster, true)
 
-    if (caster.ability_reisen02_illusion_max == nil) then
-        caster.ability_reisen02_illusion_max = 0
-    end
-    if (caster.ability_reisen02_illusion_max < keys.Max_illusions) then
-        caster.ability_reisen02_illusion_max = caster.ability_reisen02_illusion_max + 2
-
-        local illusions = CreateIllusions(caster, caster, {
-            outgoing_damage = keys.Illusion_damage_out_pct,
-            incoming_damage = keys.Illusion_damage_in_pct,
-            bounty_base = 5,
-            bounty_growth = 0,
-            outgoing_damage_structure = nil,
-            outgoing_damage_roshan = nil,
-            duration = keys.Illusion_duration
-        }, 2, caster:GetHullRadius(), true, true)
-        for i, illusion in pairs(illusions) do
-            if (illusion ~= nil) then
-                local effectIndex = ParticleManager:CreateParticle(
-                    "particles/units/heroes/hero_phantom_lancer/phantom_lancer_spawn_smoke.vpcf", PATTACH_CUSTOMORIGIN,
-                    caster)
-                ParticleManager:SetParticleControl(effectIndex, 0, illusion:GetOrigin())
-                ParticleManager:SetParticleControl(effectIndex, 1, illusion:GetOrigin())
-                -- illusion.illusioncaster = caster
-                illusion:SetContextNum("ReisenOld02IllusionCaster", caster:GetEntityIndex(), 0)
-            end
-        end
-    end
+    CreateReisenOld02Illusions(caster, caster, keys, 2)
 end
 
 function OnReisenOld02SpellSuccess(keys)
     local caster = EntIndexToHScript(keys.caster_entindex)
     local hero
     local chance = RandomFloat(0, 100)
-    local passive_flag = 1
 
     if (caster:HasModifier("modifier_illusion")) then
         -- hero = caster.illusioncaster
@@ -441,37 +457,8 @@ function OnReisenOld02SpellSuccess(keys)
             return
         end
     end
-    if (hero.ability_reisen02_illusion_max == nil) then
-        hero.ability_reisen02_illusion_max = 0
-    end
-    if (hero.ability_reisen02_illusion_max < keys.Max_illusions) then
-        hero.ability_reisen02_illusion_max = hero.ability_reisen02_illusion_max + 1
 
-        local illusions = CreateIllusions(caster, caster, {
-            outgoing_damage = keys.Illusion_damage_out_pct,
-            incoming_damage = keys.Illusion_damage_in_pct,
-            bounty_base = 5,
-            bounty_growth = 0,
-            outgoing_damage_structure = nil,
-            outgoing_damage_roshan = nil,
-            duration = keys.Illusion_duration
-        }, 1, caster:GetHullRadius(), true, true)
-        for i, illusion in pairs(illusions) do
-            if (illusion ~= nil) then
-                local effectIndex = ParticleManager:CreateParticle(
-                    "particles/units/heroes/hero_phantom_lancer/phantom_lancer_spawn_smoke.vpcf", PATTACH_CUSTOMORIGIN,
-                    hero)
-                ParticleManager:SetParticleControl(effectIndex, 0, illusion:GetOrigin())
-                ParticleManager:SetParticleControl(effectIndex, 1, illusion:GetOrigin())
-                if (hero:HasModifier("modifier_illusion")) then
-                    -- illusion.illusioncaster = hero.illusioncaster
-                    illusion:SetContextNum("ReisenOld02IllusionCaster", hero:GetContext("ReisenOld02IllusionCaster"), 0)
-                else
-                    illusion:SetContextNum("ReisenOld02IllusionCaster", hero:GetEntityIndex(), 0)
-                end
-            end
-        end
-    end
+    CreateReisenOld02Illusions(caster, hero, keys, 1)
 end
 
 function OnReisenOld02OnDeath(keys)
