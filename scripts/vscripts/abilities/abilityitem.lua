@@ -2073,6 +2073,9 @@ function ItemAbility_InabaIllusionWeapon_Ranged_OnAttack(keys)
     local ItemAbility = keys.ability
     local Caster = keys.caster
     local Target = keys.target
+    if Caster.inaba_illusion_weapon_ranged_attack_lock then
+        return
+    end
     if Caster:HasModifier("modifier_ability_thdots_tei03") then
         return
     end -- 黑兔子开启枪斗术禁用兔炮效果
@@ -2093,6 +2096,8 @@ function ItemAbility_InabaIllusionWeapon_Ranged_OnAttack(keys)
         local Targets = FindUnitsInRadius(Caster:GetTeamNumber(), Caster:GetAbsOrigin(), nil, RangedSplitRadius,
             DOTA_UNIT_TARGET_TEAM_ENEMY, DOTA_UNIT_TARGET_HERO + DOTA_UNIT_TARGET_CREEP, DOTA_UNIT_TARGET_FLAG_NONE,
             FIND_ANY_ORDER, --[[FIND_CLOSEST,]] false)
+        -- PerformAttack 仍会触发 data-driven OnAttack，阻止分裂攻击同步重入。
+        Caster.inaba_illusion_weapon_ranged_attack_lock = true
         for _, unit in pairs(Targets) do
             if MaxTargets > 0 then
                 if unit and unit:IsAlive() and unit ~= Target and Caster:CanEntityBeSeenByMyTeam(unit) then
@@ -2103,6 +2108,7 @@ function ItemAbility_InabaIllusionWeapon_Ranged_OnAttack(keys)
                 break
             end
         end
+        Caster.inaba_illusion_weapon_ranged_attack_lock = false
     end
 end
 
