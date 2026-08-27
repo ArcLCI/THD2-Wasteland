@@ -4923,7 +4923,8 @@
 
 	"npc_thdots_unit_reisenEx_unit"
 	{
-		"model"	"models/telepo/telepo.vmdl"
+		"model"	"models/reisen/reisen.vmdl"
+		"ModelScale"	"0.75"
 		"BaseClass"	"npc_dota_base_additive"
 		"Ability1"	"ability_dummy_unit"
 		"SoundSet"	"Tower.Water"
@@ -4951,7 +4952,7 @@
 		"ProjectileModel"	"particles/items_fx/desolator_projectile.vpcf"
 		// "ProjectileModel"			"particles/base_attacks/ranged_tower_good.vpcf"
 		// Speed of projectile.
-		"ProjectileSpeed"	"300"
+		"ProjectileSpeed"	"1200"
 		"VisionDaytimeRange"	"100"
 		"VisionNighttimeRange"	"100"
 		"HasInventory"	"0"

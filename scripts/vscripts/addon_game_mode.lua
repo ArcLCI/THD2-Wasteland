@@ -2433,7 +2433,8 @@ function THDOTSGameMode:PrecacheHeroResource(hero)
 	elseif(heroName == "npc_dota_hero_sniper")then
 		--hero:EnableMotion()
 	elseif(heroName == "npc_dota_hero_mirana")then
-		abilityEx = hero:FindAbilityByName("ability_thdots_reisenOldex")
+		-- 当前临时技能组使用不带 Old 的天生技能。
+		abilityEx = hero:FindAbilityByName("ability_thdots_reisenEx")
 		abilityEx:SetLevel(1)
 		--hero:EnableMotion()
 	elseif(heroName == "npc_dota_hero_silencer")then

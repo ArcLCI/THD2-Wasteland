@@ -39,7 +39,7 @@
 			"RunScript"
 			{
 				"ScriptFile"	"scripts/vscripts/abilities/abilityReisen.lua"
-				"Function"	"OnReisenExSpellStart"
+				"Function"	"OnReisen01SpellStart"
 				"Caster"	"CASTER"
 				"Target"	"POINT"
 			}
@@ -203,7 +203,7 @@
 		"AbilityChannelTime"	"1.0"
 		"precache"
 		{
-			"particle"	"particles/heroes/reisen/ability_reisen_01_e.vpcf"
+			"particle"	"particles/units/heroes/hero_tinker/tinker_laser.vpcf"
 			// "particle_folder"			"particles/thd2/heroes/marisa"
 			"soundfile"	"soundevents/thdots_hero_sounds/thdots_reisen_sounds.vsndevts"
 		}

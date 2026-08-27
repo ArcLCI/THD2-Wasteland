@@ -60,6 +60,11 @@ return {
 				{2,3,2,1,2, 6,2,3,3,11, 3,6,1,1,13, 1,0,6,0,14, 0,0,0,0,17, 0,10,12,15,16},
 		},
 	},
+	["npc_dota_hero_storm_spirit"] = {
+		-- 四季映姬当前暂按单一输出定位入池，技能加点继续沿用原专属路线。
+		defaultProfile = "damage",
+		rolePools = {"damage"},
+	},
 	["npc_dota_hero_terrorblade"] = {
 		defaultProfile = "damage",
 		rolePools = {"damage"},

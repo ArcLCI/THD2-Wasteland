@@ -47,6 +47,11 @@ local function CreateReisenOld02Illusions(caster, hero, keys, count)
 end
 
 function OnReisenExSpellStart(caster, target)
+    -- 天生只响应实际命中的有效单位，避免错误事件或失效目标进入召唤流程。
+    if caster == nil or target == nil or not IsValidEntity(caster) or not IsValidEntity(target) then
+        return
+    end
+
     for i = 1, 1 do
         local rad = RandomFloat(-math.pi, math.pi)
         local dis = RandomFloat(400, 700)
@@ -60,7 +65,7 @@ function OnReisenExSpellStart(caster, target)
             if GameRules:IsGamePaused() then
                 return 0.03
             end
-            if (target == nil) then
+            if (target == nil or not IsValidEntity(target)) then
                 return nil
             end
             local newOrder = {
@@ -105,6 +110,9 @@ function OnReisen01SpellMove(keys)
     local vecCaster = caster:GetOrigin()
     local targets = keys.target_entities
     local Reisen01rad = keys.ability:GetContext("ability_Reisen01_Rad")
+    if Reisen01rad == nil then
+        return
+    end
 
     local vec = Vector(vecCaster.x - math.cos(Reisen01rad) * keys.MoveSpeed / 50,
         vecCaster.y - math.sin(Reisen01rad) * keys.MoveSpeed / 50, vecCaster.z)
@@ -117,7 +125,7 @@ function OnReisen01SpellHit(keys)
         ability = keys.ability,
         victim = keys.target,
         attacker = caster,
-        damage = keys.ability:GetAbilityDamageType(),
+        damage = keys.ability:GetAbilityDamage(),
         damage_type = keys.ability:GetAbilityDamageType(),
         damage_flags = 0
     }
@@ -160,9 +168,11 @@ function OnReisen02SpellStart(keys)
 end
 
 function OnReisen02DealDamage(caster, targets)
+    -- 范围追加伤害归属于二技能，而不是触发它的子弹或激光。
+    local ability = caster:FindAbilityByName("ability_thdots_reisen02")
     for _, v in pairs(targets) do
         local damage_table = {
-            ability = keys.ability,
+            ability = ability,
             victim = v,
             attacker = caster,
             damage = caster:GetContext("ability_reisen02_buff_damage"),
@@ -189,7 +199,8 @@ function OnReisen03SpellStart(keys)
     local targetPoint = keys.ability:GetCursorPosition()
     local reisen03rad = GetRadBetweenTwoVec2D(caster:GetOrigin(), targetPoint) + math.pi / 3
     local reisen03dis = GetDistanceBetweenTwoVec2D(caster:GetOrigin(), targetPoint)
-    local effectIndex = ParticleManager:CreateParticle("particles/heroes/reisen/ability_reisen_01_e.vpcf",
+    -- 沿用桑尼二技能已验证可用的激光粒子；两者均以 0/1/9 控制起点和终点。
+    local effectIndex = ParticleManager:CreateParticle("particles/units/heroes/hero_tinker/tinker_laser.vpcf",
         PATTACH_CUSTOMORIGIN, caster)
     local originVector = caster:GetOrigin() +
                              Vector(math.cos(reisen03rad - math.pi / 37.5) * reisen03dis,
@@ -218,9 +229,10 @@ function OnReisen03SpellMove(keys)
         local vecV = v:GetOrigin()
         if (IsRadInRect(vecV, vecCaster, 100, originDis, originRad)) then
             local damage_table = {
+                ability = keys.ability,
                 victim = v,
                 attacker = caster,
-                damage = keys.ability:GetSpecialValueFor("total_damage"),
+                damage = keys.ability:GetAbilityDamage(),
                 damage_type = keys.ability:GetAbilityDamageType(),
                 ability_damage_target_type = keys.ability:GetAbilityTargetType(),
                 damage_flags = 0
@@ -303,24 +315,29 @@ function OnReisen04SpellStart(keys)
 end
 
 function OnReisen04ProjectileOnHit(caster, targets, ability)
+    local target = targets and targets[1]
+    if caster == nil or target == nil or ability == nil then
+        return
+    end
+
     local damage_table = {
-        ability = keys.ability,
-        victim = targets[1],
+        ability = ability,
+        victim = target,
         attacker = caster,
         damage = ability:GetAbilityDamage(),
         damage_type = ability:GetAbilityDamageType(),
         damage_flags = ability:GetAbilityTargetFlags()
     }
-    OnReisenExSpellStart(caster, targets[1])
+    OnReisenExSpellStart(caster, target)
     UnitDamageTarget(damage_table)
     if (caster:GetContext("ability_reisen02_buff") == TRUE and
-        (GetDistanceBetweenTwoVec2D(caster:GetOrigin(), targets[1]:GetOrigin()) >= 200)) then
+        (GetDistanceBetweenTwoVec2D(caster:GetOrigin(), target:GetOrigin()) >= 200)) then
         local targets02 = FindUnitsInRadius(caster:GetTeam(), -- caster team
-        targets[1]:GetOrigin(), -- find position
+        target:GetOrigin(), -- find position
         nil, -- find entity
         caster:GetContext("ability_reisen02_buff_radius"), -- find radius
         DOTA_UNIT_TARGET_TEAM_ENEMY, ability:GetAbilityTargetType(), 0, FIND_CLOSEST, false)
-        OnReisen02FireEffect(targets[1])
+        OnReisen02FireEffect(target)
         OnReisen02DealDamage(caster, targets02)
     end
 end

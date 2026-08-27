@@ -216,7 +216,7 @@ G_BOT_USED =
 	false ,			--虫子
 	false ,			--⑨
 	false ,			--二妹
-	true ,			--四季
+	false ,			--四季
 	
 	false ,			--衣玖
 	false ,			--白莲
