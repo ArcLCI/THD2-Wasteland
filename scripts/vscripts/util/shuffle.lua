@@ -9,27 +9,57 @@ RANK = {}
 EnableShffleBasedOnRank = false		-- 是否启用根据rank洗牌
 
 function THD2_Rating_Catcher( args )
-	--check
-	if args["Ratings"] == nil or args["Rounds"] == nil then
-		--old style load
-		for k,v in pairs( args ) do
-			if v then
-				PlayerRatings[k] = v
-				PlayerRounds[k] = 4 --default
-			end
-		end
+	-- 独立保护直接调用；拒绝空/异常结构，保留已有评分，不输出响应体或玩家标识。
+	if type(args) ~= 'table' then
+		print('[THD][Rating] result=rejected reason=non_table_payload')
 		return
 	end
+	local function ValidNumber(value)
+		if type(value) ~= 'number' and type(value) ~= 'string' then return nil end
+		local number = tonumber(value)
+		if number == nil or number ~= number or number == math.huge or number == -math.huge then return nil end
+		return number
+	end
+	if args["Ratings"] == nil and args["Rounds"] == nil then
+		--old style load
+		local accepted, skipped = 0, 0
+		for k,v in pairs( args ) do
+			local number = ValidNumber(v)
+			if number ~= nil then
+				PlayerRatings[k] = number
+				PlayerRounds[k] = 4 --default
+				accepted = accepted + 1
+			else
+				skipped = skipped + 1
+			end
+		end
+		print(string.format('[THD][Rating] result=accepted format=legacy ratings=%d skipped=%d', accepted, skipped))
+		return
+	end
+	if type(args["Ratings"]) ~= 'table' or type(args["Rounds"]) ~= 'table' then
+		print('[THD][Rating] result=rejected reason=invalid_rating_schema')
+		return
+	end
+	local ratings, rounds, skipped = 0, 0, 0
 	for k,v in pairs( args["Ratings"] ) do
-		if v then
-			PlayerRatings[k] = v
+		local number = ValidNumber(v)
+		if number ~= nil then
+			PlayerRatings[k] = number
+			ratings = ratings + 1
+		else
+			skipped = skipped + 1
 		end
 	end
 	for k,v in pairs( args["Rounds"] ) do
-		if v then
-			PlayerRounds[k] = v
+		local number = ValidNumber(v)
+		if number ~= nil then
+			PlayerRounds[k] = number
+			rounds = rounds + 1
+		else
+			skipped = skipped + 1
 		end
 	end
+	print(string.format('[THD][Rating] result=accepted format=nested ratings=%d rounds=%d skipped=%d', ratings, rounds, skipped))
 	-- GetTHDPlayerRank()
 end
 

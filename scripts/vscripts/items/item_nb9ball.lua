@@ -1,13 +1,14 @@
 item_nb9ball = {}
 
 function item_nb9ball:GetCastRange()
+    -- 服务端保留原有任意点施法，再由 OnSpellStart 截断距离；UI 查询须独立取得施法者。
+    if not IsClient() then return 99999 end
     local base_range = self:GetSpecialValueFor("AbilityCastRange")
-    local bonus_range = caster:GetCastRangeBonus()  -- 获取英雄的施法距离加成
-    if IsClient() then
-        return base_range + bonus_range
-    else
-        return 99999
+    local caster = self:GetCaster()
+    if caster == nil or caster:IsNull() then
+        return base_range
     end
+    return base_range + caster:GetCastRangeBonus()
 end
 
 function item_nb9ball:GetIntrinsicModifierName()

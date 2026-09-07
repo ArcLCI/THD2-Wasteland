@@ -41,6 +41,14 @@ function WebApi:Send(path, data, onSuccess, onError)
 					data = response.Body
 				end
 			end
+			-- beforematch 必须解码为对象；HTTP 200 本身不能保证评分回调的输入有效。
+			if path == 'beforematch' and (not status or type(data) ~= 'table') then
+				local reason = not response.Body and 'missing_body'
+					or (not status and 'decode_failed' or 'non_table_payload')
+				print('[THD][WebApi] endpoint=beforematch result=rejected reason=' .. reason)
+				if onError then onError(reason, response.StatusCode) end
+				return
+			end
 			if onSuccess then
 				onSuccess(data, response.StatusCode)
 			end
