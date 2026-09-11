@@ -90,6 +90,12 @@ function Komachi03_FireEffect(caster,target)
 		if modifier == nil then
 			ability:ApplyDataDrivenModifier(caster,target,"modifier_thdots_komachi_03_soul",{})
 			modifier = target:FindModifierByName("modifier_thdots_komachi_03_soul")
+			-- 目标未成功获得标记时停止本次登记，并回收尚未纳入清理表的粒子。
+			if modifier == nil then
+				ParticleManager:DestroyParticle(effectIndex, true)
+				ParticleManager:ReleaseParticleIndex(effectIndex)
+				return
+			end
 			modifier:IncrementStackCount()
 		else
 			if modifier:GetStackCount() < ability:GetSpecialValueFor("max_soul") then

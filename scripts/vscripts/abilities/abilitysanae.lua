@@ -1,3 +1,4 @@
+local CircleSource = require('util/skill_circle_source_debug')
 ----------------------------------------------------------------------------------------------
 -- Sanae01
 function OnSanae01SpellStart(keys)
@@ -12,6 +13,8 @@ function OnSanae01SpellStart(keys)
     local interval = keys.interval
 
     local time = 0
+    -- 标记只提供受视野限制的技能来源，不改变下面的伤害/减速逻辑。
+    local circleObservation = CircleSource.Begin(caster, ability, targetPosition, radius, duration, interval)
 
     caster:SetContextThink(DoUniqueString("sanae_01_particle"), function()
         if GameRules:IsGamePaused() then
@@ -19,9 +22,11 @@ function OnSanae01SpellStart(keys)
         end
 
         if time >= duration then
+            CircleSource.Finish(circleObservation)
             return nil
         end
 
+        CircleSource.Tick(circleObservation, time)
         local targets = FindUnitsInRadius(caster:GetTeamNumber(), targetPosition, nil, radius,
             ability:GetAbilityTargetTeam(), ability:GetAbilityTargetType(), ability:GetAbilityTargetFlags(),
             FIND_ANY_ORDER, false)

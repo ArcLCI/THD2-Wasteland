@@ -269,6 +269,14 @@ function modifier_thdots_reimu02_shot:OnIntervalThink()
         return
     end
 
+    -- 弹体/施法来源可能已被清理，停止thinker而不是继续调用失效实体。
+    if self.parent == nil or not IsValidEntity(self.parent)
+        or self.caster == nil or not IsValidEntity(self.caster)
+        or self.ability == nil or not IsValidEntity(self.ability) then
+        self:StartIntervalThink(-1)
+        self:Destroy()
+        return
+    end
     if self.damaged == true then
         return
     end
@@ -353,7 +361,11 @@ function modifier_thdots_reimu02_shot:OnDestroy()
         return
     end
 
-    self.parent:Destroy()
+    local parent = self.parent
+    self.parent = nil
+    if parent ~= nil and IsValidEntity(parent) then
+        parent:Destroy()
+    end
 end
 
 -- Reimu02 End

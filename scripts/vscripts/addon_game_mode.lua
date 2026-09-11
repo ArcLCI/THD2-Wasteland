@@ -2751,23 +2751,25 @@ G_Player_randomed = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}
 
 local HIGH_GROUND_TOWER_ABILITIES = {
 	"tower_ursa_fury_swipes",
-	"tower_troll_warlord_fervor",
 	"tower_shredder_reactive_armor",
 }
 
--- 地图实体加载完成后，为双方 T3/T4 动态添加高地塔被动。
+-- 双方 T3/T4 只保留三级叠伤与活性护甲；重复初始化也清除旧的热血战魂。
 function THDOTSGameMode:AddHighGroundTowerAbilities()
 	local towers = Entities:FindAllByClassname("npc_dota_tower") or {}
 	for _, tower in pairs(towers) do
 		local unitName = tower:GetUnitName()
 		if string.find(unitName, "tower3", 1, true) or string.find(unitName, "tower4", 1, true) then
+			if tower:FindAbilityByName("tower_troll_warlord_fervor") ~= nil then
+				tower:RemoveAbility("tower_troll_warlord_fervor")
+			end
 			for _, abilityName in ipairs(HIGH_GROUND_TOWER_ABILITIES) do
 				local ability = tower:FindAbilityByName(abilityName)
 				if ability == nil then
 					ability = tower:AddAbility(abilityName)
 				end
-				if ability ~= nil and ability:GetLevel() < 5 then
-					ability:SetLevel(5)
+				if ability ~= nil and ability:GetLevel() ~= 3 then
+					ability:SetLevel(3)
 				end
 			end
 		end

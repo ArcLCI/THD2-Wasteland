@@ -3,6 +3,15 @@
 	specialmode.lua 中原有加点表，但仍会获得地图选定的通用定位标记。
 ]]
 return {
+	["npc_dota_hero_queenofpain"] = {
+		defaultProfile = "damage",
+		rolePools = {"damage", "support"},
+		abilityPlans = {
+			-- 输出主法球副闪烁；辅助主沉默，两条路线都实际学习返回天赋。
+			damage = {3,2,3,1,3, 6,3,2,2,11, 2,6,1,1,13, 1,0,6,0,14, 0,0,0,0,17, 0,10,12,15,16},
+			support = {1,2,1,3,1, 6,1,2,2,10, 2,6,3,3,12, 3,0,6,0,14, 0,0,0,0,16, 0,11,13,15,17},
+		},
+	},
 	["npc_dota_hero_tidehunter"] = {
 		defaultProfile = "frontline",
 		rolePools = {"frontline", "damage"},

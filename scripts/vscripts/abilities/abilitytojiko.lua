@@ -1,3 +1,4 @@
+local CircleSource = require('util/skill_circle_source_debug')
 --------------------------------------------------------
 --雷矢「元兴寺的电磁炮」
 --------------------------------------------------------
@@ -735,6 +736,11 @@ function ability_thdots_tojiko04:OnSpellStart()
 	local delay  				= self:GetSpecialValueFor("delay")
 	local armor_damage_bonus  	= self:GetSpecialValueFor("armor_damage_bonus")
 	local regen_mana  			= self:GetSpecialValueFor("regen_mana")
+	-- 与现有固定地点预警同步；复用原结算计时器收尾，不新增定时器。
+	-- 当前施法与旧位置复制共享诊断pair；复制仍走相同伤害和预警入口。
+	if not is_ex_copy then self.thd_warning_sequence=(self.thd_warning_sequence or 0)+1 end
+	local warningSource=CircleSource.BeginDelayed(caster,self,point,radius,delay,{
+		role=is_ex_copy and 'echo' or 'primary',pair=tostring(caster:entindex())..':'..tostring(self.thd_warning_sequence or 0)})
 
 
 	if not is_ex_copy then
@@ -826,8 +832,10 @@ function ability_thdots_tojiko04:OnSpellStart()
 		end
 
 
+		CircleSource.DelayedImpact(warningSource)
 		local targets = FindUnitsInRadius(caster:GetTeam(), point,nil,radius,self:GetAbilityTargetTeam()
 			,self:GetAbilityTargetType(),0,0,false)
+		CircleSource.CaptureImpact(warningSource,targets)
 
 		for _,vic in ipairs(targets) do
 			if vic:IsHero() then
@@ -845,8 +853,13 @@ function ability_thdots_tojiko04:OnSpellStart()
 					attacker 		= caster,
 					ability 		= self
 				}
+			local healthBefore=CircleSource.OutcomeHealth(vic)
+			local factors=CircleSource.DamageFactors(caster,vic,self)
 			if not vic:HasModifier("modifier_fountain_aura_buff") then
-				UnitDamageTarget(damage_tabel)
+				local applied=UnitDamageTarget(damage_tabel)
+				CircleSource.RecordDamage(warningSource,vic,vic_damage,applied,healthBefore,false,factors)
+			else
+				CircleSource.RecordDamage(warningSource,vic,vic_damage,nil,healthBefore,true,factors)
 			end
 		end
 	end, delay)
