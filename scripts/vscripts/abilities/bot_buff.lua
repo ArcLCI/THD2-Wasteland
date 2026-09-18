@@ -321,6 +321,7 @@ function modifier_bot_buff:IsPurgable() return false end
 function modifier_bot_buff:RemoveOnDeath() return false end
 
 function modifier_bot_buff:DeclareFunctions()
+	-- 难度只调整数值增益，不再订阅攻击/移动事件施加自晕惩罚。
 	return {
 		MODIFIER_PROPERTY_MANA_REGEN_CONSTANT,
 		MODIFIER_PROPERTY_HEALTH_REGEN_CONSTANT,
@@ -334,9 +335,6 @@ function modifier_bot_buff:DeclareFunctions()
         MODIFIER_PROPERTY_SPELL_AMPLIFY_PERCENTAGE,
         MODIFIER_PROPERTY_MAGICAL_RESISTANCE_BONUS,
         MODIFIER_PROPERTY_TOOLTIP,
-
-		MODIFIER_EVENT_ON_ATTACK_START,
-		MODIFIER_EVENT_ON_UNIT_MOVED,
 	}
 end
 
@@ -469,13 +467,13 @@ function modifier_bot_buff:OnCreated(params)
     self.dynamicBonus = BOT_DYNAMIC_STAGE_BONUS[0]
     self:SetStackCount(self.dynamicStage)
     
-    self.selfStunChanceOnAttack = botDifficultyData.selfStunChanceOnAttack
-    self.selfStunDurationOnAttack = botDifficultyData.selfStunDurationOnAttack
-    self.selfStunChanceOnMove = botDifficultyData.selfStunChanceOnMove
-    self.selfStunDurationOnMove = botDifficultyData.selfStunDurationOnMove
     
     self.interval = self.ability:GetSpecialValueFor("interval")
     self:StartIntervalThink(self.interval)
+
+    -- 难度削弱不再通过攻击/移动自晕实现；仅保留诊断版本标识。
+    GameRules.THDMovementSubscriptionRun = "20260912-SELF-STUN-REMOVED-R1"
+    GameRules.THDBotSelfStunRemoved = true
 end
 
 function modifier_bot_buff:ConvertExcessGoldToAttributes()
@@ -561,6 +559,7 @@ end
 function modifier_bot_buff:OnIntervalThink()
     if not IsServer() then return end
 
+
     if self.caster:IsIllusion() then return end
 
     -- 游戏还未开始，不生效
@@ -616,34 +615,6 @@ function modifier_bot_buff:OnIntervalThink()
     self.caster:ModifyAgility(addAgility)
     self.caster:ModifyIntellect(addIntelligence)
 
-end
-
-function modifier_bot_buff:OnAttackStart(event)
-    if not IsServer() then return end
-
-    if event.attacker ~= self.caster then return end
-
-    local data = GetBotDifficultyData() or {}
-    self:SelfStun(data.selfStunChanceOnAttack, data.selfStunDurationOnAttack)
-end
-
-function modifier_bot_buff:OnUnitMoved(event)
-    if not IsServer() then return end
-
-    if event.unit ~= self.caster then return end
-
-    local data = GetBotDifficultyData() or {}
-    self:SelfStun(data.selfStunChanceOnMove, data.selfStunDurationOnMove)
-end
-
-function modifier_bot_buff:SelfStun(chance, duration)
-    chance = chance or 0
-    duration = duration or 0
-    if chance == 0 then return end
-
-    if RandomFloat(0.0,1.0) > chance then return end
-    
-    UtilStun:UnitStunTarget(self.caster, self.caster, duration * RandomFloat(0.1,1.0) )
 end
 
 -- 按队伍拆分 modifier 名称，bot 对 bot 测试时可分别观察双方 buff。

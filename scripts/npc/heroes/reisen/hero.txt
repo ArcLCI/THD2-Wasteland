@@ -4,25 +4,18 @@
 	{
 		"override_hero"	"npc_dota_hero_mirana"
 		"AbilityLayout"	"6"
-		// 临时启用不带 Old 的技能组，保留旧配置便于回切。
-		"Ability1"				"ability_thdots_reisen01"
-		"Ability2"				"ability_thdots_reisen02"
-		"Ability3"				"ability_thdots_reisen03"
-		"Ability4"				"ability_thdots_reisenEx"
+		// 恢复 Old 技能组，大招占用第六槽以覆盖原生技能。
+		"Ability1"				"ability_thdots_reisenOld01"
+		"Ability2"				"ability_thdots_reisenOld02"
+		"Ability3"				"ability_thdots_reisenOld03"
+		"Ability4"				"ability_thdots_reisenOldex"
 		"Ability5"				"generic_hidden"
-		"Ability6"				"ability_thdots_reisen04"
-		// "Ability1"	"ability_thdots_reisenOld01"
-		// "Ability2"	"ability_thdots_reisenOld02"
-		// "Ability3"	"ability_thdots_reisenOld03"
-		//"Ability3"	"sniper_assassinate"	
-		// "Ability4"		"ability_thdots_reisenOldex"
-		// "Ability5"		"generic_hidden"
-		// "Ability6"		"ability_thdots_reisenOld04"
+		"Ability6"				"ability_thdots_reisenOld04"
 		"Ability10"		"special_bonus_agility_10"
-		"Ability11"		"special_bonus_cooldown_reduction_15"
-		"Ability12"		"special_bonus_attack_speed_30"
-		"Ability13"		"special_bonus_spell_amplify_15"
-		"Ability14"		"special_bonus_attack_damage_50"
+		"Ability11"		"special_bonus_unique_reisen_3"
+		"Ability12"		"special_bonus_unique_reisen_5"
+		"Ability13"		"special_bonus_unique_reisen_4"
+		"Ability14"		"special_bonus_unique_reisen_6"
 		"Ability15"		"special_bonus_unique_reisen_1"
 		"Ability16"		"special_bonus_attack_range_125"
 		"Ability17"		"special_bonus_unique_reisen_2"
@@ -64,7 +57,7 @@
 		// 攻击前摇
 		"AttackRate"	"1.7"
 		// 攻击速度
-		"AttackRange"	"575"
+		"AttackRange"	"520"
 		// 攻击范围
 		"ArmorPhysical"	"0.5"
 		// 物理护甲

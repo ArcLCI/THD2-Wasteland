@@ -112,7 +112,6 @@
 			{
 				"item_ogre_seal_totem"				"1"		// 食人魔海豹图腾
 				"item_crippling_crossbow"			"1"		// 致残之弩
-				"item_magnifying_monocle"			"1"		// 放大单片
 				"item_ceremonial_robe"				"1"		// 祭礼长袍
 				"item_mind_breaker"					"1"		// 智灭
 				"item_pyrrhic_cloak"				"1"		// 皮洛士斗篷
@@ -163,7 +162,6 @@
 				"item_enhancement_fleetfooted"		"1"		// 捷足 移速
 				"item_enhancement_audacious"		"1"		// 进化 主属性
 				"item_enhancement_evolved"			"1"		// 进化 主属性
-				"item_enhancement_boundless"		"1"		// 无边 攻击距离施法距离
 				"item_enhancement_wise"				"1"		// 睿智 每分钟经验
 			}
 		}

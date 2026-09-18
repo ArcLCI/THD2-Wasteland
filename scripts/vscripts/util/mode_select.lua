@@ -22,10 +22,6 @@ botDifficultyDefaultData = {
 		hpRegen = 0, -- 生命回复
 		goldGainOnDeath = 0, -- 死亡时获取金币
 
-		selfStunChanceOnAttack = 0.33, -- 攻击时自我眩晕触发概率
-		selfStunDurationOnAttack = 0.3, -- 攻击时自我眩晕持续时间
-		selfStunChanceOnMove = 0.002, -- 移动时自我眩晕触发概率
-		selfStunDurationOnMove = 3, -- 移动时自我眩晕持续时间
 
 		-- 金币定时增加（每5分钟到下一等级）
 		giveGoldAmount = {
@@ -96,10 +92,6 @@ botDifficultyDefaultData = {
 		hpRegen = 0, -- 生命回复
 		goldGainOnDeath = 0, -- 死亡时获取金币
 
-		selfStunChanceOnAttack = 0.1, -- 攻击时自我眩晕触发概率
-		selfStunDurationOnAttack = 0.1, -- 攻击时自我眩晕持续时间
-		selfStunChanceOnMove = 0, -- 移动时自我眩晕触发概率
-		selfStunDurationOnMove = 0, -- 移动时自我眩晕持续时间
 
 		-- 金币定时增加（每5分钟到下一等级）
 		giveGoldAmount = {
@@ -170,10 +162,6 @@ botDifficultyDefaultData = {
 		hpRegen = 0, -- 生命回复
 		goldGainOnDeath = 300, -- 死亡时获取金币
 
-		selfStunChanceOnAttack = 0, -- 攻击时自我眩晕触发概率
-		selfStunDurationOnAttack = 0, -- 攻击时自我眩晕持续时间
-		selfStunChanceOnMove = 0, -- 移动时自我眩晕触发概率
-		selfStunDurationOnMove = 0, -- 移动时自我眩晕持续时间
 
 		-- 金币定时增加（每5分钟到下一等级）
 		giveGoldAmount = {
@@ -264,10 +252,6 @@ botDifficultyDefaultData = {
 		hpRegen = 0, -- 生命回复
 		goldGainOnDeath = 600, -- 死亡时获取金币
 
-		selfStunChanceOnAttack = 0, -- 攻击时自我眩晕触发概率
-		selfStunDurationOnAttack = 0, -- 攻击时自我眩晕持续时间
-		selfStunChanceOnMove = 0, -- 移动时自我眩晕触发概率
-		selfStunDurationOnMove = 0, -- 移动时自我眩晕持续时间
 
 		-- 金币定时增加（每5分钟到下一等级）
 		giveGoldAmount = {
@@ -482,10 +466,6 @@ function OpenBotDifficultyEditor(data)
 		manaRegen = diffData.manaRegen,
 		hpRegen = diffData.hpRegen,
 		goldGainOnDeath = diffData.goldGainOnDeath,
-		selfStunChanceOnAttack = diffData.selfStunChanceOnAttack,
-		selfStunDurationOnAttack = diffData.selfStunDurationOnAttack,
-		selfStunChanceOnMove = diffData.selfStunChanceOnMove,
-		selfStunDurationOnMove = diffData.selfStunDurationOnMove,
 		giveGoldAmount = diffData.giveGoldAmount,
 		giveExpAmount = diffData.giveExpAmount,
 		giveAttrBase = diffData.giveAttrBase,
@@ -521,10 +501,6 @@ function SaveBotDifficultyData(data)
 		hpRegen = tonumber(data.hpRegen) or 0,
 		goldGainOnDeath = tonumber(data.goldGainOnDeath) or 0,
 
-		selfStunChanceOnAttack = tonumber(data.selfStunChanceOnAttack) or 0,
-		selfStunDurationOnAttack = tonumber(data.selfStunDurationOnAttack) or 0,
-		selfStunChanceOnMove = tonumber(data.selfStunChanceOnMove) or 0,
-		selfStunDurationOnMove = tonumber(data.selfStunDurationOnMove) or 0,
 
 		giveGoldAmount = {},
 		giveExpAmount = {},
@@ -594,10 +570,6 @@ function ResetBotDifficulty(data)
 			manaRegen = diffData.manaRegen,
 			hpRegen = diffData.hpRegen,
 			goldGainOnDeath = diffData.goldGainOnDeath,
-			selfStunChanceOnAttack = diffData.selfStunChanceOnAttack,
-			selfStunDurationOnAttack = diffData.selfStunDurationOnAttack,
-			selfStunChanceOnMove = diffData.selfStunChanceOnMove,
-			selfStunDurationOnMove = diffData.selfStunDurationOnMove,
 			giveGoldAmount = diffData.giveGoldAmount,
 			giveExpAmount = diffData.giveExpAmount,
 			giveAttrBase = diffData.giveAttrBase,

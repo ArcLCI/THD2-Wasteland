@@ -2073,6 +2073,11 @@ function ItemAbility_InabaIllusionWeapon_Ranged_OnAttack(keys)
     local ItemAbility = keys.ability
     local Caster = keys.caster
     local Target = keys.target
+    -- 仅禁止铃仙本体槽位的幻象触发远程分裂，其他英雄的幻象沿用原逻辑。
+    if Caster:GetClassname() == "npc_dota_hero_mirana"
+        and (Caster:IsIllusion() or Caster:HasModifier("modifier_illusion")) then
+        return
+    end
     if Caster.inaba_illusion_weapon_ranged_attack_lock then
         return
     end

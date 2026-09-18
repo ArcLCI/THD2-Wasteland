@@ -79,6 +79,7 @@ require ( "util/pauseunit" )
 require ( "util/silence" )
 require ( "util/magic_immune" )
 local BotBackpackCastBridge = require ( "util/bot_backpack_cast_bridge" )
+local SetupSurrenderGuard = require ( "util/setup_surrender_guard" )
 require ( "util/timers" )
 require ( "util/util" )
 require ( "util/mode_select" )
@@ -788,6 +789,10 @@ end
 -- 这个函数是addon_game_mode里面所写的，会在vlua.cpp执行的时候所执行的内容
 function THDOTSGameMode:InitGameMode()
 	print('[THDOTS] Starting to load THDots gamemode...')
+	-- 在等待玩家之前保护未选队阶段，避免原生 60 秒全员断线判负。
+	SetupSurrenderGuard:OnStateChange(GameRules:State_Get())
+	-- 临时铃仙破坏实机模式，可用 thd_reisen_break_test 0 关闭。
+	require("util/reisen_break_test"):Start()
 
 	if PerfDiagnostics ~= nil then
 		local ok, err = pcall(function()
@@ -2433,8 +2438,8 @@ function THDOTSGameMode:PrecacheHeroResource(hero)
 	elseif(heroName == "npc_dota_hero_sniper")then
 		--hero:EnableMotion()
 	elseif(heroName == "npc_dota_hero_mirana")then
-		-- 当前临时技能组使用不带 Old 的天生技能。
-		abilityEx = hero:FindAbilityByName("ability_thdots_reisenEx")
+		-- 与恢复后的 Old 技能组保持一致，出生时点亮天生技能。
+		abilityEx = hero:FindAbilityByName("ability_thdots_reisenOldex")
 		abilityEx:SetLevel(1)
 		--hero:EnableMotion()
 	elseif(heroName == "npc_dota_hero_silencer")then
@@ -2778,6 +2783,7 @@ end
 
 function THDOTSGameMode:OnGameRulesStateChange(keys)
 	local newState = GameRules:State_Get()
+	SetupSurrenderGuard:OnStateChange(newState)
 	if newState == 2 then -- CUSTOM_GAME_SETUP / shuffle
 		-- WebApi:SetTesting(true)
 		WebApi:BeforeMatch(THD2_Rating_Catcher)

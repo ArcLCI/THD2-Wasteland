@@ -21,6 +21,16 @@ cur_jff = 1 -- ordinary
 fast_respawn_val = 25 -- fast respawn mode's default value
 G_Bot_Push_All_Time = {40,30,20,10}
 
+-- 单英雄性能局：改 hero 后开启；两队所有空位均使用此英雄，玩家选人保留。
+-- hero 支持下方 G_Bot_Hero_Folder 文件夹名或完整原版槽位名；空 profile 使用该英雄默认构筑。
+-- 仅用于普通玩法，人数仍由选人界面的两队容量决定；关闭后恢复原选人流程。
+THD2_SINGLE_HERO_PERF = {
+	enabled = false,
+	hero = "yumemi",
+	profile = "",
+	run = "single-hero-20260916",
+}
+
 -- 新Bot测试开关：启用后，普通随机模式会优先把列表内英雄放到天辉Bot槽位。
 -- 支持原版英雄名或自定义文件夹名，例如 {"npc_dota_hero_invoker", "flandre", "momiji"}。
 -- 支持定位覆盖，例如 {"momiji:damage", "flandre:frontline"}，会覆盖默认的定位池分配。
@@ -136,7 +146,7 @@ function THD2_SetDotaMixedMode(val) DotaMixed = val end
 function THD2_SetPlayerPerTeam(val)
 	if GetMapName()=="dota" and 
 		cur_bot_heros_size + GetValidConnectedCount() < val * 2 and
-		not G_IsCloneMode
+		not G_IsCloneMode and not THD2_SINGLE_HERO_PERF.enabled
 		then
 		val = math.floor((cur_bot_heros_size + GetValidConnectedCount())/2.0)
 	end
@@ -149,7 +159,8 @@ function THD2_SetPlayerPerTeam(val)
 	return val
 end
 function THD2_SetPlayerBadTeam(val)
-	if GetMapName()=="dota" and cur_bot_heros_size + GetValidConnectedCount() < val * 2 and not G_IsCloneMode then
+	if GetMapName()=="dota" and cur_bot_heros_size + GetValidConnectedCount() < val * 2
+	and not G_IsCloneMode and not THD2_SINGLE_HERO_PERF.enabled then
 		val = math.floor((cur_bot_heros_size + GetValidConnectedCount())/2.0)
 	end
 	if val > 12 then val=12 end
@@ -179,7 +190,7 @@ end
 --]]
 
 
-function THD2_GetBotMode() return Bot_Mode end
+function THD2_GetBotMode() return Bot_Mode or THD2_SINGLE_HERO_PERF.enabled == true end
 function THD2_GetFCDMode() return G_IsFastCDMode end
 function THD2_GetFRSMode() return G_IsFastRespawnMode end
 function THD2_GetFRSValue() return fast_respawn_val end					--原THD2_GetFRSTime
@@ -1126,6 +1137,32 @@ function get_usable_bot_hero()
 end
 			
 function THD2_AddBot()
+			local perfHeroID, perfProfile = nil, nil
+			if THD2_SINGLE_HERO_PERF.enabled then
+				-- 配置错误时停止填槽，不以随机英雄污染性能样本。
+				perfHeroID = THD2_FindBotHeroID(THD2_SINGLE_HERO_PERF.hero)
+				if perfHeroID == nil or cur_jff ~= 1 then
+					print("[PERF][SelectionError] reason=unknown_hero_or_nonordinary_mode")
+					return
+				end
+				local heroName = G_Bot_Random_Hero[perfHeroID]
+				local heroKV = LoadKeyValues("scripts/npc/heroes/" .. G_Bot_Hero_Folder[perfHeroID] .. "/hero.txt")
+				if THD2_FindHeroKVByOverride(heroKV, heroName) == nil then
+					print("[PERF][SelectionError] reason=hero_kv_mismatch")
+					return
+				end
+				local requested = THD2_SINGLE_HERO_PERF.profile
+				if requested ~= nil and requested ~= "" then
+					local valid, reason = THD2_BotProfile.ValidateProfile(heroName, requested)
+					if not valid then
+						print("[PERF][SelectionError] reason=" .. tostring(reason))
+						return
+					end
+				end
+				perfProfile = THD2_BotProfile.RecordProfile(heroName, requested)
+				require("util/single_hero_perf").Configure(THD2_SINGLE_HERO_PERF, heroName,
+					perfProfile, player_per_team, bot_enemy_team)
+			end
 
 			print("changing to bot mod...")
 			print(GameRules:IsCheatMode()) --debug
@@ -1180,7 +1217,7 @@ function THD2_AddBot()
 			local player_hero_table = {}
 			local playerPickedBotHeroIDs = {}
 			--清除玩家选择的英雄
-			if not G_IsCloneMode then
+			if not G_IsCloneMode and perfHeroID == nil then
 				for i=0,233 do
 					ply = PlayerResource:GetPlayer(i)
 					if ply ~= nil then
@@ -1204,19 +1241,25 @@ function THD2_AddBot()
 					ply = PlayerResource:GetPlayer(i)
 					if ply ~= nil then
 						local tHeroName = PlayerResource:GetSelectedHeroName(i)
+						-- 性能局也统一已有的英雄 Bot；真实玩家最终恢复自己的选择。
+						local team = PlayerResource:GetTeam(i)
+						if perfHeroID ~= nil and PlayerResource:IsFakeClient(i)
+						and (team == DOTA_TEAM_GOODGUYS or team == DOTA_TEAM_BADGUYS) then
+							tHeroName = G_Bot_Random_Hero[perfHeroID]
+						end
 						player_hero_table[i] = tHeroName
 						THD2_ForcePlayerRepick(i,'npc_dota_hero_monkey_king')
 					end
 				end
 			end
-			local radiantTestQueue = THD2_BuildRadiantBotTestQueue(
+			local radiantTestQueue = perfHeroID ~= nil and {} or THD2_BuildRadiantBotTestQueue(
 				math.max(0, player_per_team - goodcnt),
 				playerPickedBotHeroIDs
 			)
 			local radiantTestPickIndex = 1
 			-- 创建bot
 			-- 玩家英雄排除完成后、普通模式抽取 bot 前打印当前定位池，便于检查漏配。
-			if cur_jff == 1 then
+			if cur_jff == 1 and perfHeroID == nil then
 				THD2_PrintBotRolePools()
 			end
 			if cur_jff == 4 then--gaishi
@@ -1272,7 +1315,11 @@ function THD2_AddBot()
 					-- 	H_id = 40
 					-- 	H_name = "npc_dota_hero_chen"
 					-- elseif cur_jff == 1 then
-					if cur_jff == 1 then
+					if perfHeroID ~= nil then
+						-- 绕过全局去重；沿用下方临时换英雄/恢复流程支持跨队重复。
+						H_id = perfHeroID
+						H_name = G_Bot_Random_Hero[H_id]
+					elseif cur_jff == 1 then
 						--ordinary
 						if bot_team then
 							goodBotPickCount = goodBotPickCount + 1
@@ -1328,7 +1375,9 @@ function THD2_AddBot()
 					end
 
 					local selectedProfile = nil
-					if forcedTestPick then
+					if perfHeroID ~= nil then
+						selectedProfile = perfProfile
+					elseif forcedTestPick then
 						selectedProfile = forcedProfile or THD2_GetRandomProfileFromRolePools(H_id)
 					elseif poolProfile ~= nil then
 						selectedProfile = poolProfile
@@ -1358,7 +1407,7 @@ function THD2_AddBot()
 							THD2_ForcePlayerRepick(i,'npc_dota_hero_monkey_king')
 						end
 					end
-					if not G_IsCloneMode and H_id ~= nil then G_BOT_USED[H_id]=true end
+					if not G_IsCloneMode and perfHeroID == nil and H_id ~= nil then G_BOT_USED[H_id]=true end
 					
 				end
 			end

@@ -4,7 +4,7 @@ end
 
 -- 铃仙幻象调试总开关；关闭时仅跳过幻象创建，技能的位移、耗蓝和冷却等流程照常执行。
 if THD2_REISEN_ILLUSIONS_ENABLED == nil then
-    THD2_REISEN_ILLUSIONS_ENABLED = false
+    THD2_REISEN_ILLUSIONS_ENABLED = true
 end
 
 local function CreateReisenOld02Illusions(caster, hero, keys, count)
@@ -19,9 +19,13 @@ local function CreateReisenOld02Illusions(caster, hero, keys, count)
         return
     end
 
+    -- 主动一次生成两个幻象时，也不能超过剩余数量上限。
+    count = math.min(count, keys.Max_illusions - hero.ability_reisen02_illusion_max)
     hero.ability_reisen02_illusion_max = hero.ability_reisen02_illusion_max + count
+    -- 从本体技能读取天赋后的继承攻击，分身产生的后续分身也使用相同数值。
+    local illusionAbility = hero:FindAbilityByName("ability_thdots_reisenOld02") or keys.ability
     local illusions = CreateIllusions(caster, caster, {
-        outgoing_damage = keys.Illusion_damage_out_pct,
+        outgoing_damage = illusionAbility:GetSpecialValueFor("illusion_damage_out_pct"),
         incoming_damage = keys.Illusion_damage_in_pct,
         bounty_base = 5,
         bounty_growth = 0,
@@ -402,8 +406,8 @@ function OnReisenOldExSpellSuccess(keys)
     if target:IsBuilding() then
         deal_damage = deal_damage * 0.3
     end
-    local extrachance = caster:FindAbilityByName("ability_thdots_reisenOld04"):GetLevel() * 8
-    local deal_chance = extrachance + keys.Chance
+    -- 天生使用自身触发概率，大招等级不再提供被动概率加成。
+    local deal_chance = keys.Chance
     local damage_table = {
         ability = keys.ability,
         victim = keys.target,
@@ -493,7 +497,8 @@ end
 
 function OnReisen03ChannellStart(keys)
     local caster = keys.caster
-    local reduce_time = keys.ability:GetSpecialValueFor("reduce_time")
+    -- 记录本次天赋修正后的蓄力时长，缩短蓄力不降低满蓄力伤害。
+    caster.ability_reisen_03_channel_duration = keys.ability:GetChannelTime()
     caster.ability_reisen_03_time_count = 0.05
     caster.ability_reisen_03_damage_count = 0.05
 
@@ -511,7 +516,8 @@ end
 
 function OnReisenOld03SpellHit(keys)
     local caster = keys.caster
-    local damage_rate = math.floor(10 * caster.ability_reisen_03_damage_count / 1.0) / 10
+    local channel_duration = caster.ability_reisen_03_channel_duration or keys.ability:GetChannelTime()
+    local damage_rate = math.min(1, math.floor(10 * caster.ability_reisen_03_damage_count / math.max(0.05, channel_duration)) / 10)
     local damagetype = keys.ability:GetAbilityDamageType()
     local damage_bonus = keys.ability:GetSpecialValueFor("damage_bonus") / 100
     --[[if caster:HasModifier("modifier_item_wanbaochui") then

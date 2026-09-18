@@ -1318,9 +1318,8 @@
 		"DOTA_Tooltip_ability_ability_thdots_reisenOld03_max_lenth"	"最远距离："
 		"DOTA_Tooltip_ability_ability_thdots_reisenOld03_total_damage"	"伤害："
 		"DOTA_Tooltip_ability_ability_thdots_reisenOld04"	"「幻胧月睨」"
-		"DOTA_Tooltip_ability_ability_thdots_reisenOld04_Description"	"主动：铃仙迅速进入隐身，获得相位移动状态，并在一定时间内本体增加攻速，拥有100%%概率制造分身和触发「丧心丧意」。\n被动：增加「丧心丧意」触发几率。"
+		"DOTA_Tooltip_ability_ability_thdots_reisenOld04_Description"	"主动：铃仙迅速进入隐身，获得相位移动状态，并在一定时间内本体增加攻速，拥有100%%概率制造分身和触发「丧心丧意」。"
 		"DOTA_Tooltip_ability_ability_thdots_reisenOld04_duration"	"持续时间："
-		"DOTA_Tooltip_ability_ability_thdots_reisenOld04_chance"	"%增加几率："
 		"DOTA_Tooltip_ability_ability_thdots_reisenOld04_attack_speed"	"增加攻速："
 		"DOTA_Tooltip_ability_ability_thdots_reisenOld04_Lore"	"铃仙广范围释放令敌人陷入疯狂的波长漩涡,威力极其优秀。"
 		// --------------------
@@ -6221,6 +6220,10 @@
 
 		"DOTA_Tooltip_ability_special_bonus_unique_reisen_1" 	"「胧月花栞」1.5倍伤害"	
 		"DOTA_Tooltip_ability_special_bonus_unique_reisen_2" 	"+{s:value}秒 幻胧月睨持续时间"
+		"DOTA_Tooltip_ability_special_bonus_unique_reisen_3"	"-{s:value}秒「并行交叉」冷却时间"
+		"DOTA_Tooltip_ability_special_bonus_unique_reisen_4"	"-{s:value}秒「胧月花栞」蓄力时间"
+		"DOTA_Tooltip_ability_special_bonus_unique_reisen_5"	"+{s:value}「幻胧月睨」攻击速度加成"
+		"DOTA_Tooltip_ability_special_bonus_unique_reisen_6"	"+{s:value}%%「并行交叉」分身继承攻击力"
 		"DOTA_Tooltip_ability_special_bonus_unique_yuyuko_1" 	"-{s:value}秒「反魂蝶」冷却"
 		"DOTA_Tooltip_ability_special_bonus_unique_yuyuko_2" 	"+{s:value}% 「生者必灭の理」生命流失"
 		"DOTA_Tooltip_ability_special_bonus_unique_yuyuko_3" 	"-{s:value}秒「全然墨染之樱」冷却时间"

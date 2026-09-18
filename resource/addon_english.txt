@@ -1592,13 +1592,16 @@
 		"DOTA_Tooltip_ability_ability_thdots_reisenOld03_total_damage"	"damage: "
 
 		"DOTA_Tooltip_ability_ability_thdots_reisenOld04"	"「Lunatic Red Eyes」"
-		"DOTA_Tooltip_ability_ability_thdots_reisenOld04_Description"	"<h1>Passive: </h1>Increase chance for「Demotivation」.\n<h1>Active: </h1>Reisen turns invisible, gaining unit phasing and increasing her attack speed. Reisen and her illusions 100%% creates new illusions and triggers「Demotivation」with their attacks. "
+		"DOTA_Tooltip_ability_ability_thdots_reisenOld04_Description"	"<h1>Active: </h1>Reisen turns invisible, gaining unit phasing and increasing her attack speed. Reisen and her illusions 100%% creates new illusions and triggers「Demotivation」with their attacks. "
 		"DOTA_Tooltip_ability_ability_thdots_reisenOld04_duration"	"Duration: "
-		"DOTA_Tooltip_ability_ability_thdots_reisenOld04_chance"	"%increase chance: "
 		"DOTA_Tooltip_ability_ability_thdots_reisenOld04_attack_speed"	"bonus attack speed: "
 
 		"DOTA_Tooltip_ability_special_bonus_unique_reisen_1" 	"+50%「Rocket in Mist」damage"
 		"DOTA_Tooltip_ability_special_bonus_unique_reisen_2" 	"+{s:value}s「Lunatic Red Eyes」duration"
+		"DOTA_Tooltip_ability_special_bonus_unique_reisen_3"	"-{s:value}s「Parallel Cross」Cooldown"
+		"DOTA_Tooltip_ability_special_bonus_unique_reisen_4"	"-{s:value}s「Rocket in Mist」Channel Time"
+		"DOTA_Tooltip_ability_special_bonus_unique_reisen_5"	"+{s:value}「Lunatic Red Eyes」Attack Speed Bonus"
+		"DOTA_Tooltip_ability_special_bonus_unique_reisen_6"	"+{s:value}%%「Parallel Cross」Illusion Attack Damage"
 
 		//--------------------
 		//Inubashiri Momiji

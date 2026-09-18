@@ -1167,10 +1167,6 @@
 			"give_gold_amount"	"0 0 30 50"
 			"give_exp_amount"	"0 0 15 20"
 			"special_bonus_mul"	"0 0 0.3 1.0"
-			"SelfStunchanceATK"	"0.33 0.1 0 0"
-			"self_stun_duration_atk"	"0.3 0.1 0 0"
-			"SelfStunchanceMOV"	"0.002 0 0 0"
-			"self_stun_duration_mov"	"3 0 0 0"
 			"increaseallstat"	"0 0 0.1 0.2"
 			"ex_death_gold"	"0 0 300 600"
 		}
