@@ -1,5 +1,6 @@
 local THD2_BotProfile = require("util/bot_profile")
 THD2_BotProfile.RegisterHeroes(require("util/bot_profile_config"))
+require("util/player_loadout_test").Register()
 
 G_IsAIMode = false
 G_IsFastCDMode = false
@@ -37,7 +38,7 @@ THD2_SINGLE_HERO_PERF = {
 THD2_RADIANT_BOT_TEST = THD2_RADIANT_BOT_TEST or {
 	enabled = false,
 	heroes = {
-		"yumemi",
+		"kasen:frontline", -- 茨木华扇：单一前排构筑
 	},
 }
 
@@ -207,8 +208,8 @@ function THD2_GetJFFMode() return cur_jff end
 
 
 --to ban some girls(which is not work done XD)
-cur_bot_heros_size = 50
-tot_bot_heros_size = 70
+cur_bot_heros_size = 52
+tot_bot_heros_size = 72
 G_BOT_USED = 
 {
 	false ,			--红白
@@ -294,6 +295,8 @@ G_BOT_USED =
 	false ,			--patchouli
 	false ,			--nitori
 	false ,			--橙
+	false ,			--因幡帝：物理核心，开放普通随机池
+	false ,			--华扇：前排构筑，开放普通随机池
 }
 
 G_Bot_Random_Hero = 
@@ -382,6 +385,8 @@ G_Bot_Random_Hero =
 	"npc_dota_hero_spectre",				--荷取
 
 	"npc_dota_hero_terrorblade",			--橙
+	"npc_dota_hero_gyrocopter",			--因幡帝
+	"npc_dota_hero_bristleback",			--茨木华扇
 }
 
 G_Bot_Hero_Folder = {
@@ -468,6 +473,8 @@ G_Bot_Hero_Folder = {
 	"patchouli",
 	"nitori",
 	"chen",
+	"tei",
+	"kasen",
 }
 
 local function THD2_FindBotHeroID(testName)
@@ -881,6 +888,10 @@ G_Bots_Ability_Add = {
 	{3,2,3,1,3,  6,3,1,1,10,  1,6,2,2,12,  2,0,6,0,15,  0,0,0,0,16,  0,11,13,14,17  }, --nitori: innate slot 4 is initialized separately
 	-- 橙的大招与Ex技能出生时已初始化，常规点数只补一至三技能和大招余下三级。
 	{3,1,3,2,3,  6,3,1,1,10,  1,6,2,2,12,  2,0,6,0,14,  0,0,0,0,17,  0,11,13,15,16  }, --chen
+	-- 因幡帝主枪斗术副月饼，二级保留后跳，EX由出生初始化。
+	{3,2,3,1,3,  6,3,1,1,11,  1,6,2,2,12,  2,0,6,0,14,  0,0,0,0,17,  0,10,13,15,16  }, --tei
+	-- 华扇主三副一，四级补投石；Ex自动升级，双大招由游戏侧同步。
+	{3,1,3,2,3,  6,3,1,1,10,  1,6,2,2,12, 2,0,6,0,14,  0,0,0,0,16,  0,11,13,15,17  }, --kasen
 }
 
 -- 帕秋莉在3的倍数等级会获得额外技能点，27-30级还要补学另一侧天赋。

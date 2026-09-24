@@ -459,25 +459,14 @@
 
 	"ability_thdots_reisenOld01"
 	{
-		"BaseClass"	"ability_datadriven"
+		"BaseClass"	"ability_lua"
+		"ScriptFile"	"abilities/abilityreisen"
 		"AbilityTextureName"	"custom/ability_thdots_reisenOld01"
 		"AbilityBehavior"	"DOTA_ABILITY_BEHAVIOR_PASSIVE"
 		"IsBreakable"	"1"
 		"MaxLevel"	"4"
 		"precache"
 		{}
-		"Modifiers"
-		{
-			"ability_reisenold01_modifier"
-			{
-				"Passive"	"1"
-				"IsHidden"	"1"
-				"Properties"
-				{
-					"MODIFIER_PROPERTY_ATTACK_RANGE_BONUS"	"%bonus_attack_range"
-				}
-			}			
-		}
 		"AbilityValues"
 		{
 			"bonus_attack_range"	"40 80 120 160"

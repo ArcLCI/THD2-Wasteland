@@ -791,8 +791,6 @@ function THDOTSGameMode:InitGameMode()
 	print('[THDOTS] Starting to load THDots gamemode...')
 	-- 在等待玩家之前保护未选队阶段，避免原生 60 秒全员断线判负。
 	SetupSurrenderGuard:OnStateChange(GameRules:State_Get())
-	-- 临时铃仙破坏实机模式，可用 thd_reisen_break_test 0 关闭。
-	require("util/reisen_break_test"):Start()
 
 	if PerfDiagnostics ~= nil then
 		local ok, err = pcall(function()

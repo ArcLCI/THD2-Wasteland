@@ -1307,7 +1307,7 @@
 		"DOTA_Tooltip_ability_ability_thdots_reisenOld01"	"狂符「幻视调律」"
 		"DOTA_Tooltip_ability_ability_thdots_reisenOld01_Description"	"被动增加铃仙的攻击距离。"
 		"DOTA_Tooltip_ability_ability_thdots_reisenOld01_bonus_attack_range"	"攻击距离增加："
-		"DOTA_Tooltip_ability_ability_thdots_reisenOld01_note0"	"无法被破坏。（暂时）"
+		"DOTA_Tooltip_ability_ability_thdots_reisenOld01_note0"	"「幻视调律」提供的攻击距离加成在受到破坏时失效。"
 		"DOTA_Tooltip_ability_ability_thdots_reisenOld02"	"幻兔「并行交叉」"
 		"DOTA_Tooltip_ability_ability_thdots_reisenOld02_Description"	"铃仙的攻击中有%ability_chance_base%%%概率制造分身。分身也有%ability_chance_illusion%%%概率制造分身。分身受到%illusion_damage_in_pct%%%伤害，持续%illusion_duration%秒。主动使用立即制造两个分身。最多同时存在%max_illusions%个分身。"
 		"DOTA_Tooltip_ability_ability_thdots_reisenOld02_tooltip_illusion_damage"	"%分身继承攻击："

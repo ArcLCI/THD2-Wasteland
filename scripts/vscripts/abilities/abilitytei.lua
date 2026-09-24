@@ -387,9 +387,9 @@ function Tei04OnAttackLanded( keys )
 				ParticleManager:ReleaseParticleIndex(money_particle)
 				target:SetModifierStackCount("modifier_ability_thdots_tei04_debuff", caster, 0)
 				target:RemoveModifierByName("modifier_ability_thdots_tei04_debuff")
-				if ulti_gold_to_steal >= target_money then
-					local damage = math.abs(ulti_gold_to_steal -target_money) * FindValueTHD("damage_rate",keys.ability)
-					damage = 0
+				-- 按扣款前金币计算缺额伤害；金币足够或恰好足够时不追加伤害。
+				if ulti_gold_to_steal > target_money then
+					local damage = (ulti_gold_to_steal - target_money) * FindValueTHD("damage_rate",keys.ability)
 					local damage_table = {
 					ability = keys.ability,
 					victim = target,

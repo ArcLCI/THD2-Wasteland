@@ -3,9 +3,26 @@
 	specialmode.lua 中原有加点表，但仍会获得地图选定的通用定位标记。
 ]]
 return {
+	["npc_dota_hero_bristleback"] = {
+		-- 华扇开放普通随机池，固定前排；25级进入完全态。
+		defaultProfile = "frontline",
+		rolePools = {"frontline"},
+		abilityPlans = {
+			frontline = {3,1,3,2,3, 6,3,1,1,10, 1,6,2,2,12, 2,0,6,0,14, 0,0,0,0,16, 0,11,13,15,17},
+		},
+	},
+	["npc_dota_hero_gyrocopter"] = {
+		-- 因幡帝固定物理核心，已开放普通随机池。
+		defaultProfile = "damage",
+		rolePools = {"damage"},
+		abilityPlans = {
+			damage = {3,2,3,1,3, 6,3,1,1,11, 1,6,2,2,12, 2,0,6,0,14, 0,0,0,0,17, 0,10,13,15,16},
+		},
+	},
 	["npc_dota_hero_queenofpain"] = {
 		defaultProfile = "damage",
-		rolePools = {"damage", "support"},
+		-- 暂时仅输出定位参与随机选人，辅助加点保留以便恢复。
+		rolePools = {"damage"},
 		abilityPlans = {
 			-- 输出主法球副闪烁；辅助主沉默，两条路线都实际学习返回天赋。
 			damage = {3,2,3,1,3, 6,3,2,2,11, 2,6,1,1,13, 1,0,6,0,14, 0,0,0,0,17, 0,10,12,15,16},
@@ -59,13 +76,13 @@ return {
 	},
 	["npc_dota_hero_spectre"] = {
 		defaultProfile = "damage",
-		rolePools = {"damage", "damage_spell"},
+		rolePools = {"damage", "support"},
 		abilityPlans = {
 			-- 天生技能会自动升至1级；输出主近身反应、副推进器，2级补一级炮击用于对线消耗。
 			damage =
 				{3,2,3,1,3, 6,3,1,1,10, 1,6,2,2,12, 2,0,6,0,15, 0,0,0,0,16, 0,11,13,14,17},
-			-- 第二输出定位主阳电子炮、副近身反应；25级取得额外浮游炮。
-			damage_spell =
+			-- 法系辅助定位主阳电子炮、副近身反应；25级取得额外浮游炮。
+			support =
 				{2,3,2,1,2, 6,2,3,3,11, 3,6,1,1,13, 1,0,6,0,14, 0,0,0,0,17, 0,10,12,15,16},
 		},
 	},

@@ -43,7 +43,6 @@ local Tier3NeutralItems = {
 
 local Tier4NeutralItems = {
     "item_ogre_seal_totem",
-    "item_magnifying_monocle",
     "item_crippling_crossbow",
     "item_ceremonial_robe",
     "item_mind_breaker",
@@ -113,7 +112,6 @@ local enhancements = {
     { name = "item_enhancement_fleetfooted", tier = 5, realName = "Fleetfooted Enhancement" , level = 1},
     { name = "item_enhancement_audacious", tier = 5, realName = "Audacious Enhancement" , level = 1},
     { name = "item_enhancement_evolved",   tier = 5, realName = "Evolved Enhancement" , level = 1},
-    { name = "item_enhancement_boundless", tier = 5, realName = "Boundless Enhancement" , level = 1},
     { name = "item_enhancement_wise",      tier = 5, realName = "Wise Enhancement" , level = 1},
 }
 

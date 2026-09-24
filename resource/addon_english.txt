@@ -1577,7 +1577,7 @@
 		"DOTA_Tooltip_ability_ability_thdots_reisenOldex_miss_change"	"Attack miss: "
 
 		"DOTA_Tooltip_ability_ability_thdots_reisenOld01"                            	"Lunatic Sign「Visionary Tuning」"
-		"DOTA_Tooltip_ability_ability_thdots_reisenOld01_Note0"                         "Cannot be broken. (Temporary)"
+		"DOTA_Tooltip_ability_ability_thdots_reisenOld01_Note0"                         "The attack range bonus from「Visionary Tuning」is disabled by Break."
 		"DOTA_Tooltip_ability_ability_thdots_reisenOld01_Description"					"Reisen's attack range increases."
                		"DOTA_Tooltip_ability_ability_thdots_reisenOld01_bonus_attack_range"	"bonus attack range: "
 
@@ -1592,7 +1592,7 @@
 		"DOTA_Tooltip_ability_ability_thdots_reisenOld03_total_damage"	"damage: "
 
 		"DOTA_Tooltip_ability_ability_thdots_reisenOld04"	"「Lunatic Red Eyes」"
-		"DOTA_Tooltip_ability_ability_thdots_reisenOld04_Description"	"<h1>Active: </h1>Reisen turns invisible, gaining unit phasing and increasing her attack speed. Reisen and her illusions 100%% creates new illusions and triggers「Demotivation」with their attacks. "
+		"DOTA_Tooltip_ability_ability_thdots_reisenOld04_Description"	"<h1>Active: </h1>Reisen turns invisible, gaining unit phasing and increasing her attack speed. Reisen has a 100%% chance to create new illusions and trigger「Demotivation」with her attacks."
 		"DOTA_Tooltip_ability_ability_thdots_reisenOld04_duration"	"Duration: "
 		"DOTA_Tooltip_ability_ability_thdots_reisenOld04_attack_speed"	"bonus attack speed: "
 

@@ -2,6 +2,32 @@ if AbilityReisen == nil then
     AbilityReisen = class({})
 end
 
+LinkLuaModifier("ability_reisenold01_modifier", "abilities/abilityreisen", LUA_MODIFIER_MOTION_NONE)
+
+ability_thdots_reisenOld01 = class({})
+
+function ability_thdots_reisenOld01:GetIntrinsicModifierName()
+    return "ability_reisenold01_modifier"
+end
+
+ability_reisenold01_modifier = class({})
+
+function ability_reisenold01_modifier:IsHidden() return true end
+function ability_reisenold01_modifier:IsPurgable() return false end
+function ability_reisenold01_modifier:AllowIllusionDuplicate() return true end
+
+function ability_reisenold01_modifier:DeclareFunctions()
+    return {MODIFIER_PROPERTY_ATTACK_RANGE_BONUS}
+end
+
+function ability_reisenold01_modifier:GetModifierAttackRangeBonus()
+    -- 本体和幻象分别检查自身破坏状态，只暂停本技能的射程加成。
+    if self:GetParent():PassivesDisabled() then return 0 end
+    local ability = self:GetAbility()
+    if not ability or ability:IsNull() or ability:GetLevel() <= 0 then return 0 end
+    return ability:GetSpecialValueFor("bonus_attack_range")
+end
+
 -- 铃仙幻象调试总开关；关闭时仅跳过幻象创建，技能的位移、耗蓝和冷却等流程照常执行。
 if THD2_REISEN_ILLUSIONS_ENABLED == nil then
     THD2_REISEN_ILLUSIONS_ENABLED = true
@@ -463,9 +489,7 @@ function OnReisenOld02SpellSuccess(keys)
         if not hero or hero:IsNull() then
             return
         end
-        if (hero:FindModifierByName("ability_reisenold04_modifier") ~= nil) then
-            chance = 0
-        end
+        -- 分身制造分身始终使用自身概率，不受本体「幻胧月睨」影响。
         if (chance > keys.illusionChance) then
             return
         end
