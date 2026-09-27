@@ -81,14 +81,23 @@ function modifier_item_mushroom_kebab_immediate:GetAttributes() return MODIFIER_
 
 function modifier_item_mushroom_kebab_immediate:OnCreated()
     if not IsServer() then return end
+	if self.applied then return end
 
 	local caster = self:GetCaster()
 	local ability = self:GetAbility()
+	if caster == nil or caster:IsNull() or ability == nil or ability:IsNull() then return end
 
+	-- 只对当前实例加一次属性；保留 MULTIPLE，让同时到货的多件道具分别生效。
+	self.applied = true
 	caster:ModifyStrength(ability:GetSpecialValueFor("increase_strength"))
 
 	if (ability:IsItem()) then
-		UTIL_Remove(ability)
+		-- 创建回调返回后，引擎才登记固有 modifier 引用；留到后续调度再删除宿主。
+		Timers:CreateTimer(0.03, function()
+			if ability ~= nil and not ability:IsNull() then
+				UTIL_Remove(ability)
+			end
+		end)
 	end
 end
 
@@ -175,14 +184,23 @@ function modifier_item_mushroom_pie_immediate:GetAttributes() return MODIFIER_AT
 
 function modifier_item_mushroom_pie_immediate:OnCreated()
     if not IsServer() then return end
+	if self.applied then return end
 
 	local caster = self:GetCaster()
 	local ability = self:GetAbility()
+	if caster == nil or caster:IsNull() or ability == nil or ability:IsNull() then return end
 
+	-- 只对当前实例加一次属性；保留 MULTIPLE，让同时到货的多件道具分别生效。
+	self.applied = true
 	caster:ModifyAgility(ability:GetSpecialValueFor("increase_agility"))
 
 	if (ability:IsItem()) then
-		UTIL_Remove(ability)
+		-- 创建回调返回后，引擎才登记固有 modifier 引用；留到后续调度再删除宿主。
+		Timers:CreateTimer(0.03, function()
+			if ability ~= nil and not ability:IsNull() then
+				UTIL_Remove(ability)
+			end
+		end)
 	end
 end
 
@@ -269,13 +287,22 @@ function modifier_item_mushroom_soup_immediate:GetAttributes() return MODIFIER_A
 
 function modifier_item_mushroom_soup_immediate:OnCreated()
     if not IsServer() then return end
+	if self.applied then return end
 
 	local caster = self:GetCaster()
 	local ability = self:GetAbility()
+	if caster == nil or caster:IsNull() or ability == nil or ability:IsNull() then return end
 
+	-- 只对当前实例加一次属性；保留 MULTIPLE，让同时到货的多件道具分别生效。
+	self.applied = true
 	caster:ModifyIntellect(ability:GetSpecialValueFor("increase_intellect"))
 
 	if (ability:IsItem()) then
-		UTIL_Remove(ability)
+		-- 创建回调返回后，引擎才登记固有 modifier 引用；留到后续调度再删除宿主。
+		Timers:CreateTimer(0.03, function()
+			if ability ~= nil and not ability:IsNull() then
+				UTIL_Remove(ability)
+			end
+		end)
 	end
 end

@@ -37,8 +37,23 @@ function modifier_item_trinity_passive:GetModifierBonusStats_Strength() return s
 function modifier_item_trinity_passive:GetModifierBonusStats_Agility() return self:GetAbility():GetSpecialValueFor("bonus_agility") end
 function modifier_item_trinity_passive:GetModifierBonusStats_Intellect() return self:GetAbility():GetSpecialValueFor("bonus_intellect") end
 function modifier_item_trinity_passive:GetModifierAttackRangeBonus() 
-    local caster = self:GetCaster()
     local ability = self:GetAbility()
+    if ability == nil or ability:IsNull() then
+        return 0
+    end
+
+    -- 按来源物品实体判定首件，避免将查询返回的 modifier 句柄与 Lua self 直接比较。
+    -- 多件仍只提供一次射程；首件移除后，由查询返回的剩余被动接替。
+    local firstModifier = self:GetParent():FindModifierByName("modifier_item_trinity_passive")
+    if firstModifier == nil or firstModifier:IsNull() then
+        return 0
+    end
+    local firstAbility = firstModifier:GetAbility()
+    if firstAbility == nil or firstAbility:IsNull() or firstAbility:entindex() ~= ability:entindex() then
+        return 0
+    end
+
+    local caster = self:GetCaster()
     local bonus_range = ability:GetSpecialValueFor("bonus_attack_range")
     
     -- 检查道具互斥
@@ -50,6 +65,7 @@ function modifier_item_trinity_passive:GetModifierAttackRangeBonus()
     if not (hasModifier1 or hasModifier2 or hasModifier3) then
         return bonus_range
     end
+    return 0
 end
 function modifier_item_trinity_passive:GetModifierHPRegenAmplify_Percentage() return self:GetAbility():GetSpecialValueFor("bonus_hp_regen_amplify_percentage") end
 function modifier_item_trinity_passive:GetModifierAttackSpeedBonus_Constant() return self:GetAbility():GetSpecialValueFor("bonus_attack_speed") end

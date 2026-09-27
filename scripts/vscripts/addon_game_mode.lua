@@ -3615,7 +3615,7 @@ function THDOTSGameMode:On_dota_inventory_item_added(keys)
 
 		if heroEntity:IsRealHero()
 			and _G.THD2_IsBotHero(heroEntity)
-			and itemEntity:GetAbilityName() == "item_kusanagi"
+			and (itemEntity:GetAbilityName() == "item_kusanagi" or itemEntity:GetAbilityName() == "item_gem")
 		then
 			-- 拾取事件下一帧立即复用 Bot Buff 兑换，缩短临时腾格物品的落地时间。
 			local modifierName = "modifier_bot_buff"
@@ -3632,6 +3632,10 @@ function THDOTSGameMode:On_dota_inventory_item_added(keys)
 					local botBuff = heroEntity:FindModifierByName(modifierName)
 					if botBuff ~= nil and botBuff.SellKusanagiItems ~= nil then
 						botBuff:SellKusanagiItems()
+					end
+					-- 鸦天狗同样立即兑换，让满背包 Bot 尽快回收临时放下的装备。
+					if botBuff ~= nil and botBuff.SellGemItems ~= nil then
+						botBuff:SellGemItems()
 					end
 					return nil
 				end,
