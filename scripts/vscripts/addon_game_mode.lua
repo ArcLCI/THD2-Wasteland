@@ -79,6 +79,7 @@ require ( "util/pauseunit" )
 require ( "util/silence" )
 require ( "util/magic_immune" )
 local BotBackpackCastBridge = require ( "util/bot_backpack_cast_bridge" )
+local BotMapResources = require ( "util/bot_map_resources" )
 local SetupSurrenderGuard = require ( "util/setup_surrender_guard" )
 require ( "util/timers" )
 require ( "util/util" )
@@ -789,6 +790,7 @@ end
 -- 这个函数是addon_game_mode里面所写的，会在vlua.cpp执行的时候所执行的内容
 function THDOTSGameMode:InitGameMode()
 	print('[THDOTS] Starting to load THDots gamemode...')
+	BotMapResources.Start()
 	-- 在等待玩家之前保护未选队阶段，避免原生 60 秒全员断线判负。
 	SetupSurrenderGuard:OnStateChange(GameRules:State_Get())
 

@@ -925,7 +925,9 @@ function modifier_item_ghost_balloon_active:GetModifierTotal_ConstantBlock(kv)
         local ItemAbility = self:GetAbility()
         local Caster = self:GetCaster()
         local Attacker = kv.attacker
-        if (Attacker:IsBuilding() == false) then
+        -- 护盾施加后物品可能已被移除；只跳过失效来源的反制，护盾吸收仍正常结算。
+        if ItemAbility and not ItemAbility:IsNull() and Caster and not Caster:IsNull()
+            and Attacker and not Attacker:IsNull() and not Attacker:IsBuilding() then
             ItemAbility:ApplyDataDrivenModifier(Caster, Attacker, "modifier_item_ghost_balloon_shield_debuff", {})
         end
         if kv.damage < self.shield_remaining then
@@ -1377,7 +1379,19 @@ function ItemAbility_DummyDoll_OnSpellStart(keys)
     end)
 end
 
+-- 物品移除/升级后仍可能收到旧modifier的施法事件；缺失来源时不补找另一件物品充能。
+local function IsValidLunchboxChargeEvent(keys)
+    if not keys then return false end
+    for _, name in ipairs({"ability", "caster", "unit", "event_ability"}) do
+        local handle = keys[name]
+        if handle == nil or not IsValidEntity(handle) or handle:IsNull() then return false end
+    end
+    return keys.ability:IsItem() and not keys.event_ability:IsItem()
+        and tonumber(keys.MaxCharges) ~= nil
+end
+
 function ItemAbility_Good_Lunchbox_Charge(keys)
+    if not IsValidLunchboxChargeEvent(keys) then return end
     local ItemAbility = keys.ability
     local Caster = keys.caster
     local Target = keys.unit
@@ -1401,6 +1415,7 @@ function ItemAbility_Good_Lunchbox_Charge(keys)
 end
 
 function ItemAbility_Better_Lunchbox_Charge(keys)
+    if not IsValidLunchboxChargeEvent(keys) then return end
     local ItemAbility = keys.ability
     local Caster = keys.caster
     local Target = keys.unit
@@ -1435,6 +1450,7 @@ function ItemAbility_Better_Lunchbox_Charge(keys)
 end
 
 function ItemAbility_Best_Lunchbox_Charge(keys)
+    if not IsValidLunchboxChargeEvent(keys) then return end
     local ItemAbility = keys.ability
     local Caster = keys.caster
     local Target = keys.unit
@@ -1468,6 +1484,7 @@ function ItemAbility_Best_Lunchbox_Charge(keys)
 end
 
 function ItemAbility_God_Lunchbox_Charge(keys)
+    if not IsValidLunchboxChargeEvent(keys) then return end
     local ItemAbility = keys.ability
     local Caster = keys.caster
     local Target = keys.unit -- Target是施法的人 . Caster是接受能量点的人

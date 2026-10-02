@@ -298,6 +298,7 @@ function Hatate03ResetContext(keys)
 end
 
 function Hatate04OnSpellStart(keys)
+    if not IsServer() then return end
     local caster = keys.caster
     local ability = keys.ability
     -- local duration = keys.duration
@@ -318,24 +319,30 @@ function Hatate04OnSpellStart(keys)
                 dummy = CreateUnitByName("npc_vision_hatate_dummy_unit", v:GetAbsOrigin(), false, caster, caster,
                     caster:GetTeam())
             end
+            -- modifier可能立即进入回调，先绑定跟随目标再应用，避免读取未初始化target。
+            if dummy == nil or dummy:IsNull() then return end
+            dummy.target = v
             dummy:SetNightTimeVisionRange(keys.radius)
             dummy:SetDayTimeVisionRange(keys.radius)
+            -- 在可能销毁dummy的modifier回调之前完成基础技能初始化。
+            local ability_dummy_unit = dummy:FindAbilityByName("ability_dummy_unit")
+            if ability_dummy_unit ~= nil and not ability_dummy_unit:IsNull() then
+                ability_dummy_unit:SetLevel(1)
+            end
+            if dummy:IsNull() or dummy.hatateRemoving then return end
             ability:ApplyDataDrivenModifier(caster, dummy, "modifier_ability_thdots_hatate04_dummy", {
                 Duration = keys.duration
             })
             ability:ApplyDataDrivenModifier(caster, v, "modifier_ability_thdots_hatate04", {
                 Duration = keys.duration
             })
-            dummy.target = v
-            if ability:GetLevel() == 3 then
+            if ability:GetLevel() == 3 and not dummy:IsNull() and not dummy.hatateRemoving then
                 local abilityGEM = dummy:FindAbilityByName("ability_thdots_hatate04_unit")
-                if abilityGEM ~= nil then
+                if abilityGEM ~= nil and not abilityGEM:IsNull() then
                     abilityGEM:SetLevel(1)
                     dummy:CastAbilityImmediately(abilityGEM, 0)
                 end
             end
-            local ability_dummy_unit = dummy:FindAbilityByName("ability_dummy_unit")
-            ability_dummy_unit:SetLevel(1)
         end
     end
 end
@@ -371,21 +378,29 @@ function Hatate04OnAttackLanded(keys)
 end
 
 function Hatate04DummyIntervalThink(keys)
+    if not IsServer() then return end
     local dummy = keys.target
+    if dummy == nil or dummy:IsNull() or dummy.hatateRemoving then return end
     local target = dummy.target
-    keys.caster:SetContextNum("stack_bonus", keys.stack_bonus, 0)
-    if target:IsAlive() then
-        dummy:SetOrigin(dummy.target:GetOrigin())
-    else
-        dummy:ForceKill(false)
-        -- dummy:RemoveSelf()
+    -- 目标/施法者失效立即结束本dummy；不能让0.03秒回调持续报错。
+    local caster = keys.caster
+    if target == nil or target:IsNull() or not target:IsAlive() or caster == nil or caster:IsNull() then
+        Hatate04DummyDestroy(keys)
+        return
     end
+    caster:SetContextNum("stack_bonus", keys.stack_bonus or 0, 0)
+    dummy:SetOrigin(target:GetOrigin())
 end
 
 function Hatate04DummyDestroy(keys)
-    keys.caster:SetContextNum("stack_bonus", 0, 0)
-    keys.target:ForceKill(false)
-    keys.target:RemoveSelf()
+    if not IsServer() then return end
+    local dummy = keys.target
+    if dummy == nil or dummy:IsNull() or dummy.hatateRemoving then return end
+    -- 先置幂等标记，避免ForceKill触发OnDestroy后再次删除同一实体。
+    dummy.hatateRemoving = true
+    if keys.caster ~= nil and not keys.caster:IsNull() then keys.caster:SetContextNum("stack_bonus", 0, 0) end
+    dummy:ForceKill(false)
+    if not dummy:IsNull() then dummy:RemoveSelf() end
 end
 
 function HatateExOnSpellStart(keys)

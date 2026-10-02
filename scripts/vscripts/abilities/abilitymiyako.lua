@@ -556,9 +556,15 @@ end
 
 function modifier_ability_thdots_miyako03_debuff:OnDestroy()
 	if not IsServer() then return end
-	--删除特效
-	ParticleManager:DestroyParticle(self.particle_debuff_fx, false)
-	ParticleManager:ReleaseParticleIndex(self.particle_debuff_fx)
+	-- 分身/召唤物来源先被删除时仍清理特效，但不再用失效来源结算伤害。
+	if self.particle_debuff_fx ~= nil then
+		ParticleManager:DestroyParticle(self.particle_debuff_fx, false)
+		ParticleManager:ReleaseParticleIndex(self.particle_debuff_fx)
+		self.particle_debuff_fx = nil
+	end
+	local parent = self:GetParent()
+	if not self.caster or self.caster:IsNull() or not self.ability or self.ability:IsNull()
+	or not parent or parent:IsNull() then return end
 	if not self.is_death then 
 		local damage = self.damage
 		local target = self:GetParent()
@@ -594,8 +600,15 @@ end
 function modifier_ability_thdots_miyako03_debuff:OnDeath(keys)
 	if not IsServer() then return end
 	local target = keys.unit
+	-- 仅处理本宿主死亡；来源和攻击者可能已随临时单位删除。
+	if not target or target:IsNull() or target ~= self:GetParent() then return end
+	if not self.caster or self.caster:IsNull() or not self.ability or self.ability:IsNull() then
+		self.is_death = true
+		return
+	end
 	--被敌方反补不爆炸
-	if target:GetTeamNumber() == keys.attacker:GetTeamNumber() and keys.attacker:GetTeamNumber() ~= self.caster:GetTeamNumber() then return end
+	if keys.attacker and not keys.attacker:IsNull()
+	and target:GetTeamNumber() == keys.attacker:GetTeamNumber() and keys.attacker:GetTeamNumber() ~= self.caster:GetTeamNumber() then return end
 	if target == self:GetParent() then
 		self.is_death = true
 		local damage = self.damage
