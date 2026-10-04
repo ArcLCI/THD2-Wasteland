@@ -789,6 +789,9 @@ end
 
 -- 这个函数是addon_game_mode里面所写的，会在vlua.cpp执行的时候所执行的内容
 function THDOTSGameMode:InitGameMode()
+	-- 默认选队容量与人数配置一致，天辉额外一位供玩家观测。
+	GameRules:SetCustomGameTeamMaxPlayers(DOTA_TEAM_GOODGUYS, THD2_GetPlayerPerTeam())
+	GameRules:SetCustomGameTeamMaxPlayers(DOTA_TEAM_BADGUYS, bot_enemy_team)
 	print('[THDOTS] Starting to load THDots gamemode...')
 	BotMapResources.Start()
 	-- 在等待玩家之前保护未选队阶段，避免原生 60 秒全员断线判负。

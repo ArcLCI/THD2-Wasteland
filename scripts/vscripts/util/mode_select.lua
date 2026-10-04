@@ -6,7 +6,7 @@ botModeSelect = {
 	dota_inter = false,
 	is_bot_enabled = true,
 	Difficulty = 4,
-	MaxPlayer = 5,
+	MaxPlayer = 6, -- 默认天辉六位，夜魇保持五位
 	max_bot = 5,
 }
 

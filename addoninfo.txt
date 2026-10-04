@@ -6,10 +6,10 @@
 	EnablePickRules = false
 	"dota"
 	{
-					"MaxPlayers"                    "10"
+					"MaxPlayers"                    "11"
 	}
 	"1_thdots_map"
 	{
-					"MaxPlayers"                    "10"
+					"MaxPlayers"                    "11"
 	}
 }

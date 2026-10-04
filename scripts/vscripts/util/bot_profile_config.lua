@@ -3,6 +3,14 @@
 	specialmode.lua 中原有加点表，但仍会获得地图选定的通用定位标记。
 ]]
 return {
+	["npc_dota_hero_chaos_knight"] = {
+		-- 妹红主被动副位移：4级保留恢复，11级满Q用于追击，16级补满E。
+		defaultProfile = "damage",
+		rolePools = {"damage"},
+		abilityPlans = {
+			damage = {2,1,2,3,2, 6,2,1,1,11, 1,6,3,3,13, 3,0,6,0,14, 0,0,0,0,17, 0,10,12,15,16},
+		},
+	},
 	["npc_dota_hero_bristleback"] = {
 		-- 华扇开放普通随机池，固定前排；25级进入完全态。
 		defaultProfile = "frontline",

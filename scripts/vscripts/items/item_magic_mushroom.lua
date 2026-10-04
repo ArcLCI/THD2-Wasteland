@@ -52,6 +52,12 @@ function item_magic_mushroom:OnSpellStart()
 	SendOverheadEventMessage(nil,OVERHEAD_ALERT_MANA_ADD,target,regen_mana,nil)
 
 	local Charge = self:GetCurrentCharges()
+	-- 只记录真实施放，便于与Bot发单/库存确认区分；不把发单当消耗。
+	local playerID=caster:GetPlayerOwnerID()
+	if playerID>=0 and PlayerResource.IsFakeClient and PlayerResource:IsFakeClient(playerID) then
+		print(string.format('[GAME][ResourceUse] run=EXECUTION-CONTRACT-20261003-R33 time=%.3f pid=%d event=cast_applied item=item_magic_mushroom charges_before=%d charges_after=%d target_pid=%d',
+			GameRules:GetDOTATime(false,false),playerID,Charge,math.max(0,Charge-1),target:GetPlayerOwnerID()))
+	end
 	if (Charge > 1) then
 		self:SetCurrentCharges(Charge - 1)
 	else

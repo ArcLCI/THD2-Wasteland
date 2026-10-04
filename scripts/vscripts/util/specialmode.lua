@@ -15,7 +15,7 @@ Naotan = false
 DotaMixed = false
 -- look at precache, if map == "dota" then enable for default
 
-player_per_team = 5 --default
+player_per_team = 6 -- 默认天辉六位：一位玩家观测，其余由原有流程补齐
 bot_enemy_team = 5
 cur_bot_dif = 1 -- easy
 cur_jff = 1 -- ordinary
