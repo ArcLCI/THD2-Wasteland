@@ -94,9 +94,12 @@ function Shikieiki01_OnSpellStart(keys)
 end
 function Shikieiki01_Modifier_Accusation_OnKill(keys)
 	local Ability=keys.ability
+	-- 死亡回调可晚于技能清理；不能从失效技能恢复施法者再追加伤害。
+	if not Ability or Ability:IsNull() then return end
 	local Caster=Ability:GetCaster()
 	local Attacker=keys.attacker
 	local Target=keys.unit
+	if not Caster or Caster:IsNull() or not Attacker or Attacker:IsNull() or not Target or Target:IsNull() then return end
 	local DamageHPPct = 0
 	local DamageHPPctelse = 0
 	if (Attacker:GetClassname()=="npc_dota_roshan" ) then return end

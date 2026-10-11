@@ -1,0 +1,735 @@
+// THD 原生 Bot 静态基线 R2（Dota 2 7.38）。只维护进攻系数和角色，不接管 Lua 分路、加点或购买。
+// 必须以原版槽位为键；自定义英雄的 override_hero 不会转写非空 Bot 子树。
+// AggressionFactor 使用 0.95/1.0/1.05 三档；多定位与强状态依赖保持 1.0，专属 getter 仍可能加乘。
+// HeroType 按当前技能与 Bot 路线核定；Wiki 只作参考，不把全部标签或多个 profile 取并集。
+// 静态共同基线不能表达构筑和技能阶段切换；动态适配是后续必做项，见 tools/bot_native/README.txt。
+// 仅有配置文件不等于引擎已加载或行为已验收；禁用英雄仍保持禁用。
+"DOTAHeroes"
+{
+	// 博丽灵梦 (reimu)：结界保护友军、阴阳玉与大结界控制，按现有辅助路线。
+	"npc_dota_hero_lina"
+	{
+		"Bot"
+		{
+			// 系数 R2：单一辅助：结界保护与控制收益优先，略降无条件接战偏置。
+			"AggressionFactor"	"0.95"
+			"HeroType"	"DOTA_BOT_PURE_SUPPORT | DOTA_BOT_STUN_SUPPORT"
+		}
+	}
+
+	// 魂魄妖梦 (youmu)：突进斩击与爆发收割；选人前排标签不等同承伤坦克。
+	"npc_dota_hero_juggernaut"
+	{
+		"Bot"
+		{
+			"AggressionFactor"	"1.0"
+			"HeroType"	"DOTA_BOT_SEMI_CARRY | DOTA_BOT_GANKER"
+		}
+	}
+
+	// 射命丸文 (aya)：普攻成长、标记追击和连续位移，按物理核心路线。
+	"npc_dota_hero_slark"
+	{
+		"Bot"
+		{
+			"AggressionFactor"	"1.0"
+			"HeroType"	"DOTA_BOT_HARD_CARRY | DOTA_BOT_GANKER"
+		}
+	}
+
+	// 比那名居天子 (tensi)：受击回复与沟壑控制是两种定位共有的能力。
+	"npc_dota_hero_earthshaker"
+	{
+		"Bot"
+		{
+			"AggressionFactor"	"1.0"
+			"HeroType"	"DOTA_BOT_TANK | DOTA_BOT_STUN_SUPPORT"
+		}
+	}
+
+	// 露米娅 (rumia)：正面持续普攻、恢复与吞噬成长兼具，按共同战斗机制。
+	"npc_dota_hero_life_stealer"
+	{
+		"Bot"
+		{
+			"AggressionFactor"	"1.0"
+			"HeroType"	"DOTA_BOT_TANK | DOTA_BOT_HARD_CARRY"
+		}
+	}
+
+	// 雾雨魔理沙 (marisa)：位移切入与法术爆发，不沿用冰女的纯辅助职责；普通池仍禁用。
+	"npc_dota_hero_crystal_maiden"
+	{
+		"Bot"
+		{
+			"AggressionFactor"	"1.0"
+			"HeroType"	"DOTA_BOT_SEMI_CARRY | DOTA_BOT_GANKER"
+		}
+	}
+
+	// 古明地恋 (koishi)：攻击增益、暴击与持续输出，保留单一物理核心基线。
+	"npc_dota_hero_drow_ranger"
+	{
+		"Bot"
+		{
+			"AggressionFactor"	"1.0"
+			"HeroType"	"DOTA_BOT_HARD_CARRY"
+		}
+	}
+
+	// 铃仙·优昙华院·因幡 (reisen)：射程、分身和攻速成长为核心；旧版普通池仍禁用。
+	"npc_dota_hero_mirana"
+	{
+		"Bot"
+		{
+			"AggressionFactor"	"1.0"
+			"HeroType"	"DOTA_BOT_HARD_CARRY"
+		}
+	}
+
+	// 藤原妹红 (mokou)：固定输出构筑，以被动叠速和持续普攻为主；大招状态留待动态适配。
+	"npc_dota_hero_chaos_knight"
+	{
+		"Bot"
+		{
+			"AggressionFactor"	"1.0"
+			"HeroType"	"DOTA_BOT_HARD_CARRY"
+		}
+	}
+
+	// 星熊勇仪 (yugi)：力量前排、范围踩晕与三步必杀控制，不因爆发技能自动标硬核。
+	"npc_dota_hero_centaur"
+	{
+		"Bot"
+		{
+			"AggressionFactor"	"1.0"
+			"HeroType"	"DOTA_BOT_TANK | DOTA_BOT_STUN_SUPPORT"
+		}
+	}
+
+	// 伊吹萃香 (suika)：默认前排兼有普攻范围输出；雾化和大招免伤不永久折算进攻倍率。
+	"npc_dota_hero_tidehunter"
+	{
+		"Bot"
+		{
+			"AggressionFactor"	"1.0"
+			"HeroType"	"DOTA_BOT_TANK | DOTA_BOT_SEMI_CARRY"
+		}
+	}
+
+	// 莉格露·奈特巴格 (wriggle)：当前Bot走额外普攻与虫群输出路线，不照搬Wiki辅助或Clinkz硬核标签。
+	"npc_dota_hero_clinkz"
+	{
+		"Bot"
+		{
+			"AggressionFactor"	"1.0"
+			"HeroType"	"DOTA_BOT_SEMI_CARRY"
+		}
+	}
+
+	// 琪露诺 (cirno)：近身持续范围作战与冻结控制；Axe技能相关原生特化另行核对。
+	"npc_dota_hero_axe"
+	{
+		"Bot"
+		{
+			"AggressionFactor"	"1.0"
+			"HeroType"	"DOTA_BOT_TANK | DOTA_BOT_STUN_SUPPORT"
+		}
+	}
+
+	// 芙兰朵露·斯卡雷特 (flandre)：分身、吸血和大招暴击围绕物理输出，保留专属动作控制。
+	"npc_dota_hero_naga_siren"
+	{
+		"Bot"
+		{
+			"AggressionFactor"	"1.0"
+			"HeroType"	"DOTA_BOT_HARD_CARRY"
+		}
+	}
+
+	// 四季映姬·亚玛萨那度 (shikieiki)：当前固定输出但仍有延迟眩晕和禁用能力，保留混合伤害与控制职责。
+	"npc_dota_hero_storm_spirit"
+	{
+		"Bot"
+		{
+			"AggressionFactor"	"1.0"
+			"HeroType"	"DOTA_BOT_SEMI_CARRY | DOTA_BOT_STUN_SUPPORT"
+		}
+	}
+
+	// 永江衣玖 (iku)：普攻触发闪电、主动攻速和钻头切入；短时防护不等同固定坦克。
+	"npc_dota_hero_razor"
+	{
+		"Bot"
+		{
+			"AggressionFactor"	"1.0"
+			"HeroType"	"DOTA_BOT_HARD_CARRY | DOTA_BOT_GANKER"
+		}
+	}
+
+	// 圣白莲 (byakuren)：三池共用的现行法术出装与控制；不把三池标签全量并入原生类型。
+	"npc_dota_hero_dark_seer"
+	{
+		"Bot"
+		{
+			"AggressionFactor"	"1.0"
+			"HeroType"	"DOTA_BOT_SEMI_CARRY | DOTA_BOT_STUN_SUPPORT"
+		}
+	}
+
+	// 蓬莱山辉夜 (kaguya)：持续弹幕与宝具推进是静态主轴；普通池仍禁用，未视为已有完整Bot。
+	"npc_dota_hero_furion"
+	{
+		"Bot"
+		{
+			"AggressionFactor"	"1.0"
+			"HeroType"	"DOTA_BOT_SEMI_CARRY | DOTA_BOT_PUSH_SUPPORT"
+		}
+	}
+
+	// 村纱水蜜 (minamitsu)：钩人、漩涡和船体机动配合强化攻击；普通池仍禁用。
+	"npc_dota_hero_kunkka"
+	{
+		"Bot"
+		{
+			"AggressionFactor"	"1.0"
+			"HeroType"	"DOTA_BOT_SEMI_CARRY | DOTA_BOT_GANKER"
+		}
+	}
+
+	// 东风谷早苗 (sanae)：法力支援、团队无敌与范围控制，不因先手标签赋予TANK。
+	"npc_dota_hero_lion"
+	{
+		"Bot"
+		{
+			"AggressionFactor"	"1.0"
+			"HeroType"	"DOTA_BOT_PURE_SUPPORT | DOTA_BOT_STUN_SUPPORT"
+		}
+	}
+
+	// 西行寺幽幽子 (yuyuko)：持续范围消耗和缺血斩杀偏法术输出；普通池仍禁用。
+	"npc_dota_hero_necrolyte"
+	{
+		"Bot"
+		{
+			"AggressionFactor"	"1.0"
+			"HeroType"	"DOTA_BOT_SEMI_CARRY"
+		}
+	}
+
+	// 八云蓝 (ran)：符旗阵地与防御恢复大招提供站场、推进能力；普通池仍禁用。
+	"npc_dota_hero_puck"
+	{
+		"Bot"
+		{
+			"AggressionFactor"	"1.0"
+			"HeroType"	"DOTA_BOT_TANK | DOTA_BOT_PUSH_SUPPORT"
+		}
+	}
+
+	// 灵乌路空 (utsuho)：现有技能为辐射和持续法术爆发，不仅凭旧辅助池赋纯辅助；普通池仍禁用。
+	"npc_dota_hero_sniper"
+	{
+		"Bot"
+		{
+			"AggressionFactor"	"1.0"
+			"HeroType"	"DOTA_BOT_SEMI_CARRY"
+		}
+	}
+
+	// 冈崎梦美 (yumemi)：法术输出、飞船机动和核弹爆发，不能使用无效NUKER标签。
+	"npc_dota_hero_tinker"
+	{
+		"Bot"
+		{
+			"AggressionFactor"	"1.0"
+			"HeroType"	"DOTA_BOT_SEMI_CARRY | DOTA_BOT_GANKER"
+		}
+	}
+
+	// 风见幽香 (yuuka)：以默认前排出装和花田、召唤物阵地为基线；输出构筑差异留作动态任务。
+	"npc_dota_hero_venomancer"
+	{
+		"Bot"
+		{
+			"AggressionFactor"	"1.0"
+			"HeroType"	"DOTA_BOT_TANK | DOTA_BOT_PUSH_SUPPORT"
+		}
+	}
+
+	// 八坂神奈子 (yasaka)：御柱、结界与攻击范围强化形成阵地输出和推进；普通池仍禁用。
+	"npc_dota_hero_zuus"
+	{
+		"Bot"
+		{
+			"AggressionFactor"	"1.0"
+			"HeroType"	"DOTA_BOT_SEMI_CARRY | DOTA_BOT_PUSH_SUPPORT"
+		}
+	}
+
+	// 蕾米利亚·斯卡雷特 (remilia)：抓取位移、范围爆发和吸血持续作战；普通池仍禁用。
+	"npc_dota_hero_warlock"
+	{
+		"Bot"
+		{
+			"AggressionFactor"	"1.0"
+			"HeroType"	"DOTA_BOT_SEMI_CARRY | DOTA_BOT_GANKER"
+		}
+	}
+
+	// 犬走椛 (momiji)：默认前排的盾击、正面格挡与团队增益；物理核心profile不能靠静态表切换。
+	"npc_dota_hero_bounty_hunter"
+	{
+		"Bot"
+		{
+			"AggressionFactor"	"1.0"
+			"HeroType"	"DOTA_BOT_TANK | DOTA_BOT_STUN_SUPPORT"
+		}
+	}
+
+	// 八意永琳 (eirin)：治疗、友军隐身保护与复活药剂为主；普通池仍禁用。
+	"npc_dota_hero_silencer"
+	{
+		"Bot"
+		{
+			"AggressionFactor"	"1.0"
+			"HeroType"	"DOTA_BOT_PURE_SUPPORT"
+		}
+	}
+
+	// 八云紫 (yukari)：救援隔离、范围控制与全图传送；普通池仍禁用。
+	"npc_dota_hero_obsidian_destroyer"
+	{
+		"Bot"
+		{
+			"AggressionFactor"	"1.0"
+			"HeroType"	"DOTA_BOT_PURE_SUPPORT | DOTA_BOT_STUN_SUPPORT | DOTA_BOT_GANKER"
+		}
+	}
+
+	// 十六夜咲夜 (sakuya)：位移、飞刀和时间领域连施，前排池标签不当作坦克证据。
+	"npc_dota_hero_templar_assassin"
+	{
+		"Bot"
+		{
+			"AggressionFactor"	"1.0"
+			"HeroType"	"DOTA_BOT_SEMI_CARRY | DOTA_BOT_GANKER"
+		}
+	}
+
+	// 爱丽丝·玛格特罗依德 (margatroid)：人偶推进、击飞与范围爆发；普通池仍禁用。
+	"npc_dota_hero_visage"
+	{
+		"Bot"
+		{
+			"AggressionFactor"	"1.0"
+			"HeroType"	"DOTA_BOT_PUSH_SUPPORT | DOTA_BOT_STUN_SUPPORT"
+		}
+	}
+
+	// 梅蒂欣·梅兰可莉 (medicine)：毒场减速、反伤和狂乱提供功能性干扰，不沿用Viper核心基线。
+	"npc_dota_hero_viper"
+	{
+		"Bot"
+		{
+			// 系数 R2：单一辅助：毒场、减速与狂乱干扰为主，略降追击普攻偏置。
+			"AggressionFactor"	"0.95"
+			"HeroType"	"DOTA_BOT_PURE_SUPPORT"
+		}
+	}
+
+	// 鬼人正邪 (seija)：当前法术装备与伤害技能为基线；普通池仍禁用，不宣称已完成重做。
+	"npc_dota_hero_batrider"
+	{
+		"Bot"
+		{
+			"AggressionFactor"	"1.0"
+			"HeroType"	"DOTA_BOT_SEMI_CARRY"
+		}
+	}
+
+	// 键山雏 (hina)：护盾、伤害吸收与减益支持形成站场辅助，不沿用原版后排标签。
+	"npc_dota_hero_witch_doctor"
+	{
+		"Bot"
+		{
+			"AggressionFactor"	"1.0"
+			"HeroType"	"DOTA_BOT_TANK | DOTA_BOT_PURE_SUPPORT"
+		}
+	}
+
+	// 寅丸星 (shou)：护甲魔抗强化与近身、突进控制，对齐现行前排路线。
+	"npc_dota_hero_mars"
+	{
+		"Bot"
+		{
+			"AggressionFactor"	"1.0"
+			"HeroType"	"DOTA_BOT_TANK | DOTA_BOT_STUN_SUPPORT"
+		}
+	}
+
+	// 克劳恩皮丝 (clown)：区域限制和多种控制是主要职责；仅有前排选人标签不添加TANK。
+	"npc_dota_hero_doom_bringer"
+	{
+		"Bot"
+		{
+			"AggressionFactor"	"1.0"
+			"HeroType"	"DOTA_BOT_STUN_SUPPORT"
+		}
+	}
+
+	// 桑尼·米尔克 (sunny)：默认前排以生命量和大招站场配合近身眩晕；辅助路线的差异单独保留。
+	"npc_dota_hero_rattletrap"
+	{
+		"Bot"
+		{
+			"AggressionFactor"	"1.0"
+			"HeroType"	"DOTA_BOT_TANK | DOTA_BOT_STUN_SUPPORT"
+		}
+	}
+
+	// 露娜·切露德 (child)：露娜按攻击成长与输出装备建立物理核心基线，不为减少被集火改掉真实职责。
+	"npc_dota_hero_luna"
+	{
+		"Bot"
+		{
+			"AggressionFactor"	"1.0"
+			"HeroType"	"DOTA_BOT_HARD_CARRY"
+		}
+	}
+
+	// 斯塔·塞菲尔 (star)：当前功能装备、范围限制及控制为基线；不因输出候选池直接加入硬核标签。
+	"npc_dota_hero_chen"
+	{
+		"Bot"
+		{
+			"AggressionFactor"	"1.0"
+			"HeroType"	"DOTA_BOT_PURE_SUPPORT | DOTA_BOT_STUN_SUPPORT"
+		}
+	}
+
+	// 米斯蒂娅·萝蕾拉 (mystia)：当前持续输出、团队攻速移速与对建筑作用，保留战斗及推进共性。
+	"npc_dota_hero_night_stalker"
+	{
+		"Bot"
+		{
+			"AggressionFactor"	"1.0"
+			"HeroType"	"DOTA_BOT_SEMI_CARRY | DOTA_BOT_PUSH_SUPPORT"
+		}
+	}
+
+	// 大妖精 (daiyousei)：攻击加成斩击、位移和收割为当前物理路线主轴，不沿用无效NUKER。
+	"npc_dota_hero_nyx_assassin"
+	{
+		"Bot"
+		{
+			"AggressionFactor"	"1.0"
+			"HeroType"	"DOTA_BOT_SEMI_CARRY | DOTA_BOT_GANKER"
+		}
+	}
+
+	// 露娜萨·普莉兹姆利巴 (lunasa)：普攻叠加与智力法术爆发构成输出职责，不沿用Dazzle纯辅助。
+	"npc_dota_hero_dazzle"
+	{
+		"Bot"
+		{
+			"AggressionFactor"	"1.0"
+			"HeroType"	"DOTA_BOT_SEMI_CARRY"
+		}
+	}
+
+	// 梅露兰·普莉兹姆利巴 (merlin)：强制攻击控制及生命、护甲、魔抗光环适合站场控制。
+	"npc_dota_hero_earth_spirit"
+	{
+		"Bot"
+		{
+			"AggressionFactor"	"1.0"
+			"HeroType"	"DOTA_BOT_TANK | DOTA_BOT_STUN_SUPPORT"
+		}
+	}
+
+	// 莉莉卡·普莉兹姆利巴 (lyrica)：治疗、友方增益和伤害免疫为当前路线主轴，不沿用Weaver核心。
+	"npc_dota_hero_weaver"
+	{
+		"Bot"
+		{
+			// 系数 R2：单一辅助：治疗、友方增益与伤害免疫为主，保留安全施法位置。
+			"AggressionFactor"	"0.95"
+			"HeroType"	"DOTA_BOT_PURE_SUPPORT"
+		}
+	}
+
+	// 秦心 (kokoro)：移动连段与伤害恢复为基线；普通池仍禁用。
+	"npc_dota_hero_legion_commander"
+	{
+		"Bot"
+		{
+			"AggressionFactor"	"1.0"
+			"HeroType"	"DOTA_BOT_SEMI_CARRY | DOTA_BOT_GANKER"
+		}
+	}
+
+	// 苏我屠自古 (tojiko)：技能命中获得物理减伤、持续区域控制，对齐现行前排装备路线。
+	"npc_dota_hero_disruptor"
+	{
+		"Bot"
+		{
+			"AggressionFactor"	"1.0"
+			"HeroType"	"DOTA_BOT_TANK | DOTA_BOT_STUN_SUPPORT"
+		}
+	}
+
+	// 小野塚小町 (komachi)：连续位移、普攻触发与索命追击，对齐物理输出路线。
+	"npc_dota_hero_elder_titan"
+	{
+		"Bot"
+		{
+			"AggressionFactor"	"1.0"
+			"HeroType"	"DOTA_BOT_HARD_CARRY | DOTA_BOT_GANKER"
+		}
+	}
+
+	// 红美铃 (meirin)：格挡反击、减伤驱散与近身连击，两种候选定位共有站场战士机制。
+	"npc_dota_hero_dragon_knight"
+	{
+		"Bot"
+		{
+			"AggressionFactor"	"1.0"
+			"HeroType"	"DOTA_BOT_TANK | DOTA_BOT_SEMI_CARRY"
+		}
+	}
+
+	// 小恶魔 (koakuma)：现行法术核心装备和高频弹射伤害，不因角色名称或Lich槽位定义为纯辅助。
+	"npc_dota_hero_lich"
+	{
+		"Bot"
+		{
+			"AggressionFactor"	"1.0"
+			"HeroType"	"DOTA_BOT_SEMI_CARRY"
+		}
+	}
+
+	// 爱莲 (ellen)：致盲、击退和沉默提供控制功能；普通池仍禁用。
+	"npc_dota_hero_arc_warden"
+	{
+		"Bot"
+		{
+			"AggressionFactor"	"1.0"
+			"HeroType"	"DOTA_BOT_STUN_SUPPORT"
+		}
+	}
+
+	// 姬海棠果 (hatate)：攻击标记、攻速和攻击触发技能为主要成长来源。
+	"npc_dota_hero_vengefulspirit"
+	{
+		"Bot"
+		{
+			"AggressionFactor"	"1.0"
+			"HeroType"	"DOTA_BOT_HARD_CARRY"
+		}
+	}
+
+	// 丰聪耳神子 (miko)：位移眩晕、连击与持续输出，保留当前输出构筑而非默认辅助。
+	"npc_dota_hero_dawnbreaker"
+	{
+		"Bot"
+		{
+			"AggressionFactor"	"1.0"
+			"HeroType"	"DOTA_BOT_SEMI_CARRY | DOTA_BOT_GANKER"
+		}
+	}
+
+	// 宫古芳香 (miyako)：生命恢复和伤害延迟提供承伤能力，对齐当前前排。
+	"npc_dota_hero_undying"
+	{
+		"Bot"
+		{
+			// 系数 R2：单一前排：恢复与常驻伤害延迟支持持续站场，仅小幅提高接战偏置。
+			"AggressionFactor"	"1.05"
+			"HeroType"	"DOTA_BOT_TANK"
+		}
+	}
+
+	// 霍青娥 (seiga)：队友额外伤害、攻速和位移增益及召回是主要团队职责。
+	"npc_dota_hero_grimstroke"
+	{
+		"Bot"
+		{
+			// 系数 R2：单一辅助：友军攻击增益与召回为主，略降主动接触风险。
+			"AggressionFactor"	"0.95"
+			"HeroType"	"DOTA_BOT_PURE_SUPPORT"
+		}
+	}
+
+	// 稀神探女 (sagume)：当前只开放输出，以法球普攻、弹射和输出路线为基线；保留辅助实现不并入当前类型。
+	"npc_dota_hero_queenofpain"
+	{
+		"Bot"
+		{
+			"AggressionFactor"	"1.0"
+			"HeroType"	"DOTA_BOT_HARD_CARRY"
+		}
+	}
+
+	// 琪斯美 (kisume)：被动桶身减伤、坠落切入和鬼火眩晕形成前排控制。
+	"npc_dota_hero_omniknight"
+	{
+		"Bot"
+		{
+			"AggressionFactor"	"1.0"
+			"HeroType"	"DOTA_BOT_TANK | DOTA_BOT_STUN_SUPPORT"
+		}
+	}
+
+	// 纳兹琳 (nazrin)：当前Bot物理爆发与机动追击路线；不把旧前排/辅助池机械转为坦克/纯辅。
+	"npc_dota_hero_ursa"
+	{
+		"Bot"
+		{
+			"AggressionFactor"	"1.0"
+			"HeroType"	"DOTA_BOT_SEMI_CARRY | DOTA_BOT_GANKER"
+		}
+	}
+
+	// 洩矢诹访子 (suwako)：近身限制、范围控制与当前前排装备形成共同基线。
+	"npc_dota_hero_ogre_magi"
+	{
+		"Bot"
+		{
+			"AggressionFactor"	"1.0"
+			"HeroType"	"DOTA_BOT_TANK | DOTA_BOT_STUN_SUPPORT"
+		}
+	}
+
+	// 铃仙 (reisen02)：近战普攻成长、恢复和伤害转移；二号与旧版铃仙分别配置。
+	"npc_dota_hero_phantom_lancer"
+	{
+		"Bot"
+		{
+			"AggressionFactor"	"1.0"
+			"HeroType"	"DOTA_BOT_TANK | DOTA_BOT_HARD_CARRY"
+		}
+	}
+
+	// 爱塔妮缇·拉尔瓦 (larva)：当前保护、持续减益及梦境限制为主；补齐缺失Bot块但不开放普通池。
+	"npc_dota_hero_dark_willow"
+	{
+		"Bot"
+		{
+			"AggressionFactor"	"1.0"
+			"HeroType"	"DOTA_BOT_PURE_SUPPORT"
+		}
+	}
+
+	// 秋穰子 (minoriko)：苹果控制、治疗和番薯车团队恢复为主。
+	"npc_dota_hero_huskar"
+	{
+		"Bot"
+		{
+			// 系数 R2：单一辅助：治疗、番薯车和团队属性支持优先于持续追击。
+			"AggressionFactor"	"0.95"
+			"HeroType"	"DOTA_BOT_PURE_SUPPORT | DOTA_BOT_STUN_SUPPORT"
+		}
+	}
+
+	// 秋静叶 (shizuha)：攻击增益与触发攻击效果的大招，对齐物理输出装备。
+	"npc_dota_hero_lone_druid"
+	{
+		"Bot"
+		{
+			"AggressionFactor"	"1.0"
+			"HeroType"	"DOTA_BOT_HARD_CARRY"
+		}
+	}
+
+	// 魂魄妖梦 (youmu2)：连击、位移和附带攻击效果的斩击；不套用普通妖梦Wiki页面，普通池仍禁用。
+	"npc_dota_hero_enchantress"
+	{
+		"Bot"
+		{
+			"AggressionFactor"	"1.0"
+			"HeroType"	"DOTA_BOT_HARD_CARRY | DOTA_BOT_GANKER"
+		}
+	}
+
+	// 依神紫苑 (shion)：持续近身减益、恢复与当前前排构筑；普通池仍禁用。
+	"npc_dota_hero_death_prophet"
+	{
+		"Bot"
+		{
+			"AggressionFactor"	"1.0"
+			"HeroType"	"DOTA_BOT_TANK | DOTA_BOT_PURE_SUPPORT"
+		}
+	}
+
+	// 依神女苑 (jyoon)：暴击抢夺、追击与连击爆发，按当前输出路线。
+	"npc_dota_hero_meepo"
+	{
+		"Bot"
+		{
+			"AggressionFactor"	"1.0"
+			"HeroType"	"DOTA_BOT_SEMI_CARRY | DOTA_BOT_GANKER"
+		}
+	}
+
+	// 莉莉白 (lilywhite)：治疗、团队增益、范围法阵支持推进与持续作战。
+	"npc_dota_hero_leshrac"
+	{
+		"Bot"
+		{
+			"AggressionFactor"	"1.0"
+			"HeroType"	"DOTA_BOT_PURE_SUPPORT | DOTA_BOT_PUSH_SUPPORT"
+		}
+	}
+
+	// 帕秋莉·诺雷姬 (patchouli)：三池共用的一套法术核心装备及元素控制，不能把辅助候选等同低经济纯辅助。
+	"npc_dota_hero_invoker"
+	{
+		"Bot"
+		{
+			"AggressionFactor"	"1.0"
+			"HeroType"	"DOTA_BOT_SEMI_CARRY | DOTA_BOT_STUN_SUPPORT"
+		}
+	}
+
+	// 河城荷取 (nitori)：采用已登记默认damage的近身物理路线；support的原生角色切换为后续动态必做项。
+	"npc_dota_hero_spectre"
+	{
+		"Bot"
+		{
+			"AggressionFactor"	"1.0"
+			"HeroType"	"DOTA_BOT_HARD_CARRY"
+		}
+	}
+
+	// 橙 (chen)：固定物理核心，攻速与连续普攻叠加伤害为主。
+	"npc_dota_hero_terrorblade"
+	{
+		"Bot"
+		{
+			"AggressionFactor"	"1.0"
+			"HeroType"	"DOTA_BOT_HARD_CARRY"
+		}
+	}
+
+	// 因幡帝 (tei)：固定物理核心，反击、连射和普攻收益为主。
+	"npc_dota_hero_gyrocopter"
+	{
+		"Bot"
+		{
+			"AggressionFactor"	"1.0"
+			"HeroType"	"DOTA_BOT_HARD_CARRY"
+		}
+	}
+
+	// 茨木华扇 (kasen)：固定前排，牵引、控制与生存能力共同支撑；完全态另作动态状态。
+	"npc_dota_hero_bristleback"
+	{
+		"Bot"
+		{
+			"AggressionFactor"	"1.0"
+			"HeroType"	"DOTA_BOT_TANK | DOTA_BOT_STUN_SUPPORT"
+		}
+	}
+
+}

@@ -1,4 +1,5 @@
 require("util/mode_select")
+local GrowthBudget = require("util/bot_growth_budget")
 
 local BOT_DYNAMIC_STAGE_MAX = 5
 local BOT_OBJECTIVE_CACHE_INTERVAL = 5.0
@@ -12,9 +13,9 @@ local BOT_DYNAMIC_STAGE_BONUS = {
     [0] = { attr = {0, 0, 0}, hpRegen = 0, gold = 0, exp = 0, moveSpeed = 0, castRange = 0, meleeAttackRange = 0, rangedAttackRange = 0, cooldown = 0, spellAmp = 0, magicResist = 0 },
     [1] = { attr = {2, 2, 2}, hpRegen = 1, gold = 5, exp = 5, moveSpeed = 0, castRange = 0, meleeAttackRange = 0, rangedAttackRange = 0, cooldown = 0, spellAmp = 0, magicResist = 0 },
     [2] = { attr = {5, 5, 5}, hpRegen = 3, gold = 12, exp = 10, moveSpeed = 0, castRange = 0, meleeAttackRange = 0, rangedAttackRange = 0, cooldown = 0, spellAmp = 0, magicResist = 0 },
-    [3] = { attr = {8, 8, 8}, hpRegen = 6, gold = 22, exp = 18, moveSpeed = 40, castRange = 150, meleeAttackRange = 50, rangedAttackRange = 75, cooldown = 10, spellAmp = 15, magicResist = 10 },
-    [4] = { attr = {10, 10, 10}, hpRegen = 8, gold = 28, exp = 22, moveSpeed = 40, castRange = 150, meleeAttackRange = 50, rangedAttackRange = 75, cooldown = 10, spellAmp = 15, magicResist = 10 },
-    [5] = { attr = {12, 12, 12}, hpRegen = 10, gold = 35, exp = 28, moveSpeed = 60, castRange = 250, meleeAttackRange = 75, rangedAttackRange = 150, cooldown = 20, spellAmp = 30, magicResist = 20 },
+    [3] = { attr = {8, 8, 8}, hpRegen = 6, gold = 22, exp = 18, moveSpeed = 20, castRange = 150, meleeAttackRange = 30, rangedAttackRange = 50, cooldown = 10, spellAmp = 7.5, magicResist = 10 },
+    [4] = { attr = {10, 10, 10}, hpRegen = 8, gold = 28, exp = 22, moveSpeed = 20, castRange = 150, meleeAttackRange = 30, rangedAttackRange = 50, cooldown = 10, spellAmp = 7.5, magicResist = 10 },
+    [5] = { attr = {12, 12, 12}, hpRegen = 10, gold = 35, exp = 28, moveSpeed = 30, castRange = 250, meleeAttackRange = 50, rangedAttackRange = 75, cooldown = 20, spellAmp = 15, magicResist = 20 },
 }
 
 -- 统计 bot 方自己损失的塔，作为建筑损失阶段来源。
@@ -485,37 +486,7 @@ function modifier_bot_buff:ConvertExcessGoldToAttributes()
     end
     if playerID == nil or playerID < 0 then return end
 
-    local reliableGold = PlayerResource:GetReliableGold(playerID)
-    local unreliableGold = PlayerResource:GetUnreliableGold(playerID)
-    local totalGold = reliableGold + unreliableGold
-    if totalGold <= 9000 then return end
-
-    local convertCount = math.floor((totalGold - 9000) / 800)
-    if convertCount <= 0 then return end
-
-    local convertGold = convertCount * 800
-    local addAllAttr = convertCount
-    local addPrimaryAttr = convertCount * 2
-
-    -- 总金币超过9000时，每800金币转换为1点全属性和2点主属性，优先消耗不可靠金币。
-    local reduceUnreliableGold = math.min(unreliableGold, convertGold)
-    local reduceReliableGold = convertGold - reduceUnreliableGold
-    PlayerResource:SetGold(playerID, unreliableGold - reduceUnreliableGold, false)
-    if reduceReliableGold > 0 then
-        PlayerResource:SetGold(playerID, reliableGold - reduceReliableGold, true)
-    end
-
-    self.caster:ModifyStrength(addAllAttr)
-    self.caster:ModifyAgility(addAllAttr)
-    self.caster:ModifyIntellect(addAllAttr)
-
-    if self.caster:GetPrimaryAttribute() == DOTA_ATTRIBUTE_STRENGTH then
-        self.caster:ModifyStrength(addPrimaryAttr)
-    elseif self.caster:GetPrimaryAttribute() == DOTA_ATTRIBUTE_AGILITY then
-        self.caster:ModifyAgility(addPrimaryAttr)
-    elseif self.caster:GetPrimaryAttribute() == DOTA_ATTRIBUTE_INTELLECT then
-        self.caster:ModifyIntellect(addPrimaryAttr)
-    end
+    GrowthBudget.SpendExcess(self.caster,playerID)
 end
 
 function modifier_bot_buff:SellGemItems()
@@ -581,7 +552,6 @@ function modifier_bot_buff:OnIntervalThink()
     -- 时间成长保留，动态阶段额外补经济，避免前期直接压线过强。
     local addGold = (giveGoldAmount[math.min(timeIndex5, #giveGoldAmount)] or 0) + (dynamicBonus.gold or 0)
     self.caster:ModifyGold(addGold, false, DOTA_ModifyGold_AbilityGold)
-    self:ConvertExcessGoldToAttributes()
 
     -- 经验补偿同样绑定动态阶段，用于惩罚长期不推进或追赶建筑劣势。
     local addExp = (giveExpAmount[math.min(timeIndex5, #giveExpAmount)] or 0) + (dynamicBonus.exp or 0)
@@ -611,9 +581,8 @@ function modifier_bot_buff:OnIntervalThink()
         addAgility = (attrBonusTable[2] or 0) * attrGrowthMultiplier
         addIntelligence = (attrBonusTable[3] or 0) * attrGrowthMultiplier
     end
-    self.caster:ModifyStrength(addStrength)
-    self.caster:ModifyAgility(addAgility)
-    self.caster:ModifyIntellect(addIntelligence)
+    GrowthBudget.AddTime(self.caster,{addStrength,addAgility,addIntelligence})
+    self:ConvertExcessGoldToAttributes()
 
 end
 

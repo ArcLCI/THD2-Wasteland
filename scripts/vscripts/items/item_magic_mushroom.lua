@@ -48,19 +48,25 @@ function item_magic_mushroom:OnSpellStart()
 	target:EmitSound("DOTA_Item.Mango.Activate")
 	local particle_name = "particles/items3_fx/mango_active.vpcf"
 	local particle = ParticleManager:CreateParticle(particle_name,PATTACH_CUSTOMORIGIN,target)
+	local acceptanceManaBefore=target:GetMana()
+	local acceptanceItemIndex=self:entindex()
 	target:GiveMana(regen_mana)
+	local acceptanceManaAfter=target:GetMana()
 	SendOverheadEventMessage(nil,OVERHEAD_ALERT_MANA_ADD,target,regen_mana,nil)
 
 	local Charge = self:GetCurrentCharges()
 	-- 只记录真实施放，便于与Bot发单/库存确认区分；不把发单当消耗。
 	local playerID=caster:GetPlayerOwnerID()
 	if playerID>=0 and PlayerResource.IsFakeClient and PlayerResource:IsFakeClient(playerID) then
-		print(string.format('[GAME][ResourceUse] run=EXECUTION-CONTRACT-20261003-R33 time=%.3f pid=%d event=cast_applied item=item_magic_mushroom charges_before=%d charges_after=%d target_pid=%d',
-			GameRules:GetDOTATime(false,false),playerID,Charge,math.max(0,Charge-1),target:GetPlayerOwnerID()))
+		print(string.format('[GAME][ResourceUse] run=%s time=%.3f pid=%d event=cast_applied item=item_magic_mushroom charges_before=%d charges_after=%d charges_after_kind=predicted_not_reread target_pid=%d',
+			require("util/acceptance_build").BUILD_ID,GameRules:GetDOTATime(false,false),playerID,Charge,math.max(0,Charge-1),target:GetPlayerOwnerID()))
 	end
 	if (Charge > 1) then
 		self:SetCurrentCharges(Charge - 1)
 	else
 		self:RemoveSelf()
 	end
+	-- 消耗后重读剩余层数；最后一层记录实体移除，不伪造移除后的读数。
+	local remaining=Charge>1 and self:GetCurrentCharges() or "removed"
+	require("util/acceptance_observer").ResourceUse(caster,target,"item_magic_mushroom",acceptanceItemIndex,Charge,remaining,Charge<=1,acceptanceManaBefore,acceptanceManaAfter)
 end

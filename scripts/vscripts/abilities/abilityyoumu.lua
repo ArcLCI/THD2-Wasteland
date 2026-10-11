@@ -230,13 +230,19 @@ end
 function modifier_thdots_youmu01_think_interval:OnIntervalThink()
 	if not IsServer() then return end
 	local caster = self:GetCaster()
-	local vecCaster = caster:GetOrigin()
 	local ability = self:GetAbility()
+	-- 技能被移除或复制技能失效后停止定时器，不能继续读取空句柄和位移上下文。
+	if not caster or caster:IsNull() or not ability or ability:IsNull() then self:Destroy();return end
+	local count = tonumber(ability:GetContext("ability_Youmu01_Count"))
+	local Youmu01rad = tonumber(ability:GetContext("ability_Youmu01_Rad"))
+	local Youmu01MoveSpeed = tonumber(ability:GetContext("ability_Youmu01_Move_Speed"))
+	if type(count)~="number" or type(Youmu01rad)~="number" or type(Youmu01MoveSpeed)~="number" then self:Destroy();return end
+	local vecCaster = caster:GetOrigin()
 	--绿字伤害
 	local item
     local attack = 0
     local bonusAttack = 0 
-	local damage_radius = self:GetAbility():GetSpecialValueFor("damage_radius")
+	local damage_radius = ability:GetSpecialValueFor("damage_radius")
 
 	caster:EmitSound("Hero_Antimage.Blink_in")
 
@@ -255,7 +261,6 @@ function modifier_thdots_youmu01_think_interval:OnIntervalThink()
 	local targets = FindUnitsInRadius(caster:GetTeam(), caster:GetAbsOrigin(), nil, damage_radius, ability:GetAbilityTargetTeam(),
 	ability:GetAbilityTargetType(), ability:GetAbilityTargetFlags(), 0, false)
 
-	local count = ability:GetContext("ability_Youmu01_Count")
 	count = count + 0.2
 	if(count == 0.2)then
 	    -- Ñ­»µ¸÷¸öÄ¿±êµ¥Î»
@@ -279,8 +284,6 @@ function modifier_thdots_youmu01_think_interval:OnIntervalThink()
 
 		ParticleManager:DestroyParticleSystem(effectIndex,false)
 	end
-	local Youmu01rad = ability:GetContext("ability_Youmu01_Rad")
-	local Youmu01MoveSpeed = ability:GetContext("ability_Youmu01_Move_Speed")
 	local vec = Vector(vecCaster.x+math.cos(Youmu01rad)*Youmu01MoveSpeed,vecCaster.y+math.sin(Youmu01rad)*Youmu01MoveSpeed,vecCaster.z)
 	local unit = caster.Youmu03_Effect_Unit
 	if unit ~= nil and unit:IsNull()==false then

@@ -793,6 +793,7 @@ function THDOTSGameMode:InitGameMode()
 	GameRules:SetCustomGameTeamMaxPlayers(DOTA_TEAM_GOODGUYS, THD2_GetPlayerPerTeam())
 	GameRules:SetCustomGameTeamMaxPlayers(DOTA_TEAM_BADGUYS, bot_enemy_team)
 	print('[THDOTS] Starting to load THDots gamemode...')
+	require("util/acceptance_observer").Start() -- 先记录对局身份，再启动资源观察。
 	BotMapResources.Start()
 	-- 在等待玩家之前保护未选队阶段，避免原生 60 秒全员断线判负。
 	SetupSurrenderGuard:OnStateChange(GameRules:State_Get())
@@ -972,6 +973,24 @@ function THDOTSGameMode:OnPlayerSay( keys )
 	local command = ss[1]
 	if command ~= nil then
 		command = string.lower(command)
+	end
+
+	-- 专服模式下客户端没有script入口；房主通过聊天请求只读KV快照，不开放任意Lua执行。
+	if command == "-botkv" then
+		if not is_host then
+			print("[THDNativeKV] snapshot_rejected reason=host_only")
+			return
+		end
+		local ok, err = pcall(function()
+			require("util/thd_bot_native_snapshot").Dump(ss[2] or "chat")
+		end)
+		if ok then
+			GameRules:SendCustomMessage("[THDNativeKV] 配置快照已写入服务端日志。", 0, 0)
+		else
+			print("[THDNativeKV] snapshot_error " .. tostring(err))
+			GameRules:SendCustomMessage("[THDNativeKV] 快照失败，请查看服务端日志。", 0, 0)
+		end
+		return
 	end
 
 	if command == "-botthinkoff" or command == "-botthinkon" or command == "-botthink" then
@@ -2251,6 +2270,8 @@ function THDOTSGameMode:OnHeroSpawned( keys )
 	THD2_RegisterLaneCreepMarchProtection(hero)
 	-- 信使生成或重生时，为 Bot 控制的信使补充永久护盾。
 	THD2_ScheduleBotCourierShield(hero)
+	-- 动态系数发布英雄与通用装备的自身状态；原生Mode默认关闭，不下达动作。
+	require("util/bot_native_policy").Attach(hero)
 
 	--[[if hero:GetUnitName() =="npc_dota_roshan" then
 		print("roshan")

@@ -36,9 +36,10 @@ THD2_SINGLE_HERO_PERF = {
 -- 支持原版英雄名或自定义文件夹名，例如 {"npc_dota_hero_invoker", "flandre", "momiji"}。
 -- 支持定位覆盖，例如 {"momiji:damage", "flandre:frontline"}，会覆盖默认的定位池分配。
 THD2_RADIANT_BOT_TEST = THD2_RADIANT_BOT_TEST or {
-	enabled = false,
+	enabled = true,
 	heroes = {
-		"kasen:frontline", -- 茨木华扇：单一前排构筑
+		"mokou:damage", -- 动态系数R1：优先保证妹红入场。
+		"tei:damage", -- 动态系数R2：三技能＋大招＋乳牙组合试点。
 	},
 }
 

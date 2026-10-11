@@ -1,0 +1,5 @@
+"Metamod Plugin"
+{
+    "alias" "thd_bot_native_observer"
+    "file" "addons/thd_bot_native_observer/bin/win64/thd_bot_native_observer"
+}

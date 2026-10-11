@@ -757,6 +757,8 @@ end
 
 function OnSatori04SpellStart(keys)	
   	local caster = keys.caster
+	local ability = keys.ability
+	if not caster or caster:IsNull() or not ability or ability:IsNull() then return end
 	local target = keys.target
   	local targets = FindUnitsInRadius(
 		  caster:GetTeam(),		--caster team
@@ -805,7 +807,12 @@ function OnSatori04SpellStart(keys)
 				end
 			end
 		end
-		v:SetModifierStackCount("modifier_thdots_satori04_bonus_damage", keys.ability, keys.ability:ApplyDataDrivenModifier(caster, v , "modifier_thdots_satori04_bonus_damage", {Duration = keys.ability:GetSpecialValueFor("bonus_damage_Duration")}):GetStackCount() + 1)
+		-- 上面的抽血可击杀目标，免疫也可使施加失败；只给实际存在的本施法者modifier加层。
+		if v and not v:IsNull() and v:IsAlive() and not ability:IsNull() then
+			ability:ApplyDataDrivenModifier(caster,v,"modifier_thdots_satori04_bonus_damage",{Duration=ability:GetSpecialValueFor("bonus_damage_Duration")})
+			local modifier=v:FindModifierByNameAndCaster("modifier_thdots_satori04_bonus_damage",caster)
+			if modifier and not modifier:IsNull() then modifier:SetStackCount(modifier:GetStackCount()+1) end
+		end
 	end
   end
   

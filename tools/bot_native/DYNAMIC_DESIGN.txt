@@ -1,0 +1,140 @@
+2026-10-10 R2实现更新（以observer/POLICY_README.txt为当前实现说明）：
+第二英雄试点因幡帝已加入强制队列；三技能+大招+乳牙总倍率1.50。
+乳牙作为独立通用装备来源计一次，单独1.30；妹红大招+乳牙递减合并为1.40。
+登记Bot使用同一状态协议；原版增益与自定义候选取较大值，原版削弱保留。
+冷启动候选仍为影子Mode=1，未部署；下文R1段落保留历史方案与后续方向。
+
+2026-10-10实现进度：已完成妹红单状态试点源码和编译，尚未部署或实机验收。
+入口：observer/POLICY_README.txt；不是本文后续全英雄/profile/专属getter路线的全部实现。
+本轮选择通用getter槽位，借助自身数字context与推进中的心跳传递状态；不拦截公共函数体，
+仅在已验证的Attack/Retreat虚函数入口替换妹红返回值。其他英雄和专属getter保持原样。
+
+THD 原生进攻系数动态适配：只读研究与候选实现方案
+日期：2026-10-10；状态：方案，不是已实现桥接；未部署。
+
+一、与静态R2的关系
+
+静态基础值为0.95/1.0/1.05。多定位、强技能状态依赖者保持1.0。
+2026-10-10调参约定：静态定位仍采用0.95/1.0/1.05，短时强力爆发采用
+1.20～1.40作为候选状态倍率范围，按具体英雄机制、持续时间和安全条件选择。
+妹红首个试点使用基础系数乘1.20，参考固定7.38龙骑士真龙形态；原有血量、
+施法保护和失效回退条件不变。当前实现仍仅支持基础值1.0的妹红通用getter。
+1.40不是所有强势状态的默认值，也不保证越高越合理；需同步观察Attack与Retreat。
+原版特化若已计入同类状态收益，必须核对组合方式，不能再无条件重复相乘。
+
+动态机制的目标是让实际profile和自身技能状态进入原生评分，而不是
+重写整套Attack/Retreat或绕过已有施法/逃生动作所有权。
+LaningInfo不在范围内；14维评分继续用于Lua分路。
+
+二、本轮追加的固定7.38证据
+
+server.dll SHA-256：
+254bee29e9d60998c66cc6700dcaff0f0d4be692f092c20b59a2ae19fa227058
+
+1. 公共getter 0x1e01710读取Bot+0xac并返回float。
+   本轮RTTI找到51个CDOTA_Bot_Hero_*主虚表：40个slot4直接指向该getter，
+   11个特化getter也显式调用它，然后组合自身状态因子。
+   这支持把公共getter列为动态基础值候选接入点；不等于已证明整个引擎
+   的所有间接调用、其他类或所有数据读取都已覆盖。
+
+2. 11个特化类：Axe、Bloodseeker、Bristleback、DeathProphet、DragonKnight、
+   Earthshaker、Luna、Pudge、Riki、SkeletonKing、Tidehunter。
+   已有例子：Luna的modifier_luna_eclipse乘1.4；DeathProphet的
+   modifier_death_prophet_exorcism乘1.3；DragonKnight的
+   modifier_dragon_knight_dragon_form乘1.2。
+   Bristleback getter另读取关联对象的一个整数，形成1+0.05*N。
+   N的具体业务及各特化的THD可达性未全部完成核对，不把基础值当最终值。
+
+3. 没有在2019 Bot API主参考或本轮已检查的脚本注册名称中确认
+   SetAggressionFactor/SetHeroType等通用setter。负面检索并非全引擎
+   不存在接口的数学证明；但现阶段不能据此编写假设存在的Lua调用。
+   SetBotDifficulty的0x1fc4800仅写Bot+0xb4，不是+0xac。
+   0x1f9e200读取的是Creature子树中的Aggression/Avoidance等，排除为英雄系数接口。
+
+4. 游戏侧SetContextNum/GetContext存在明确脚本注册和当前项目调用。
+   它们可以承载自定义状态，但设置context本身不会让原生Bot读取。
+   Bot侧2019参考未提供这些接口，不能把游戏侧能力直接当Bot API。
+
+5. GetUnitKeyValuesByName注册于0x15cb3b3，对应实现0x15f8440；
+   它创建脚本表并通过0x15f4640复制KeyValues内容。
+   修改返回的Lua表不等于修改原生KV，更不会自动更新已初始化的Bot字段。
+   它可作为后续加载调查的辅助读数，仍不能代替Bot对象字段/实际getter读数。
+
+6. MODIFIER_PROPERTY_BOT_ATTACK_SCORE_BONUS是目标评分方向的另一入口。
+   当前证据不足以把它当自身AggressionFactor或Retreat系数替代。
+
+三、推荐路线：小范围原生桥接，保留原生决策与动作主体
+
+候选链路：
+现有profile标记和自身技能状态
+  -> Lua侧产生有时效的状态快照
+  -> 类型化桥接缓存（只接受对应Bot自身的状态）
+  -> 公共进攻系数getter读取动态基础值
+  -> 原生英雄特化getter
+  -> 原生Attack目标评分 / Retreat战力差分项
+
+Lua负责识别profile、技能阶段和状态窗口；native桥接只转换经过验证的
+本英雄参数，不选目标、不发移动/攻击/施法命令，不增加第二个动作所有者。
+优先复用Bot侧BotProfile和英雄状态模块，便于覆盖排队施法与动作保护。
+若某项自身状态只在游戏侧可靠可见，可由游戏侧发布自身状态上下文；
+不得借此传递隐藏敌人的技能、位置、modifier等全局信息。
+
+候选接口（尚未注册或实现）：
+PublishSelfPolicy(entity_handle_with_serial, generation, profile_code,
+                  state_code, desired_base, expires_at)
+
+字段原则：
+- entity使用完整句柄/序列号，不能只用可复用的实体索引或长期保存裸指针；
+- generation在重生、重建、profile重新确认和脚本环境重建时失效旧记录；
+- desired_base是绝对基础值，不是每帧乘当前值，避免反复累乘；
+- profile基线取代静态值，状态倍率只作用一次；
+- native验证调用上下文/所属Bot、有限数、范围、TTL和当前实体身份；
+- 生产者与消费者使用统一时间域，不能混用DotaTime和墙钟，暂停/重开需明确处理；
+- 更新周期和TTL先做观测校准，可从约0.2秒更新、0.6秒TTL的候选方案开始；
+- 无快照、过期、异常或版本不匹配时，退回原始getter及静态R2基础值。
+
+上述周期和TTL只是设计候选，不是已验证时序或施法保护时长。
+短暂前摇/排队的保护以既有动作生命周期为准，不靠低系数或高系数锁动作。
+
+四、如何处理原版getter倍率
+
+第一阶段保持原版特化，只观测，不消除、不重复补偿：
+  effective = desired_base * 原版getter状态因子
+记录static_base、profile_base、state_code、desired_base、native_result。
+不要通过除法猜一个未验证倍率，也不要再次加入原版已计入的状态收益。
+对THD不存在或语义错配的原版特化，后续逐槽位审查，另列修复范围。
+
+公共getter拦截的优点是不用持续改写Bot私有字段，状态过期即可回退；
+但需要固定二进制/原始字节校验、线程与重入控制以及函数生命周期管理。
+备选方案是主线程写Bot+0xac，但有初始化覆盖、恢复、对象复用和多写者风险，
+本轮不优先选择，也没有执行任何此类写入。
+
+五、HeroType动态范围要更窄
+
+HeroType位于Bot+0xa8，已见多处直接读取，并无与进攻系数相同的单一getter。
+它还影响敌方对目标的价值判断与团队策略。
+因此先按已确认profile在安全初始化/构筑确认时固定一次，暂不随每次短时
+buff频繁改变角色位。它需要独立的受控字段更新或其他已验证接口，不能
+宣称公共进攻系数getter拦截也顺带实现了HeroType切换。
+marker缺失保持静态；禁止依据瞬时装备/技能等级猜profile。
+
+六、纯Lua备选的边界
+
+可以让Lua自定义模式根据状态决定desire和动作，但那是在替换决策，
+不等于动态修改原生系数。本项目目前保留原生Attack/Retreat主体，
+不建议为了乘一个因子就重写它们。
+GetActiveModeDesire只提供当前模式值，不能用它当作可调用的原生Attack
+或Retreat评分接口；覆盖GetDesire后也不能假设有接口返回未覆盖原生值。
+
+七、建议下一阶段的可验收顺序
+
+1. 只读确认静态R2已经进入最终槽位配置与Bot初始化字段。
+2. 对一个通用getter槽位与一个特化槽位采集基础值/实际getter结果；
+   不发动作，不改变数值。主线程与实体句柄身份需要同时确认。
+3. 仅接入profile常量，不加入技能状态，验证过期和失效回退。
+4. 再选一个已具备可靠自身状态模块的英雄，加入单一强势/恢复窗口。
+5. 同时观察候选目标、Attack/Retreat原始desire、当前模式、命令、位置
+   和实际结果；不能用参数写成功或desired变化冒充行为改善。
+
+本轮仅完成静态源码微调与上述只读研究。未编译桥接、修改/注入DLL、
+启动游戏或同步生产环境；也没有创建/运行自动化、单元、mock或回归测试。

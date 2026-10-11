@@ -16,7 +16,7 @@ function modifier_item_esdw_passive:DeclareFunctions() return
     {
         MODIFIER_PROPERTY_STATS_STRENGTH_BONUS,
         MODIFIER_PROPERTY_STATS_INTELLECT_BONUS,
-        MODIFIER_PROPERTY_ATTACK_RANGE_BONUS,
+        MODIFIER_PROPERTY_ATTACK_RANGE_BONUS_UNIQUE,
         MODIFIER_PROPERTY_HP_REGEN_AMPLIFY_PERCENTAGE,
         MODIFIER_PROPERTY_SPELL_AMPLIFY_PERCENTAGE,
         MODIFIER_PROPERTY_MP_REGEN_AMPLIFY_PERCENTAGE,
@@ -26,27 +26,11 @@ end
 
 function modifier_item_esdw_passive:GetModifierBonusStats_Strength() return self:GetAbility():GetSpecialValueFor("bonus_strength") end
 function modifier_item_esdw_passive:GetModifierBonusStats_Intellect() return self:GetAbility():GetSpecialValueFor("bonus_intellect") end
-function modifier_item_esdw_passive:GetModifierAttackRangeBonus() 
-    local caster = self:GetCaster()
+function modifier_item_esdw_passive:GetModifierAttackRangeBonusUnique()
     local ability = self:GetAbility()
-    local bonus_range = ability:GetSpecialValueFor("bonus_attack_range")
-    
-    -- 近战单位：始终生效
-    if not caster:IsRangedAttacker() then
-        return bonus_range
-    end
-    
-    -- 远程单位：检查道具互斥
-    local hasModifier1 = caster:HasModifier("modifier_item_yuemianjidongzhuangzhi_range")
-    local hasModifier2 = caster:HasModifier("modifier_item_yuemianzhinu_range")
-    
-    -- 无冲突道具时生效
-    if not (hasModifier1 or hasModifier2) then
-        return bonus_range
-    end
-    
-    -- 默认不生效
-    return 0
+    if ability == nil or ability:IsNull() then return 0 end
+    -- 近战、远程均可获得加成，与其他装备统一取最大值。
+    return ability:GetSpecialValueFor("bonus_attack_range")
 end
 
 function modifier_item_esdw_passive:GetAttributes()

@@ -1,0 +1,260 @@
+{
+  "engine_sha256": "254bee29e9d60998c66cc6700dcaff0f0d4be692f092c20b59a2ae19fa227058",
+  "classes": [
+    {
+      "class": ".?AVCDOTA_Bot_Hero_Unknown@@",
+      "vtable": "0x37363d0",
+      "slot4": "0x1e01710"
+    },
+    {
+      "class": ".?AVCDOTA_Bot_Hero_Alchemist@@",
+      "vtable": "0x3752198",
+      "slot4": "0x1e01710"
+    },
+    {
+      "class": ".?AVCDOTA_Bot_Hero_AncientApparition@@",
+      "vtable": "0x3752390",
+      "slot4": "0x1e01710"
+    },
+    {
+      "class": ".?AVCDOTA_Bot_Hero_Antimage@@",
+      "vtable": "0x37525c8",
+      "slot4": "0x1e01710"
+    },
+    {
+      "class": ".?AVCDOTA_Bot_Hero_Axe@@",
+      "vtable": "0x3752740",
+      "slot4": "0x1edd430"
+    },
+    {
+      "class": ".?AVCDOTA_Bot_Hero_Bane@@",
+      "vtable": "0x3752b20",
+      "slot4": "0x1e01710"
+    },
+    {
+      "class": ".?AVCDOTA_Bot_Hero_Batrider@@",
+      "vtable": "0x3752da8",
+      "slot4": "0x1e01710"
+    },
+    {
+      "class": ".?AVCDOTA_Bot_Hero_Beastmaster@@",
+      "vtable": "0x3752fa0",
+      "slot4": "0x1e01710"
+    },
+    {
+      "class": ".?AVCDOTA_Bot_Hero_Bloodseeker@@",
+      "vtable": "0x3753158",
+      "slot4": "0x1edd540"
+    },
+    {
+      "class": ".?AVCDOTA_Bot_Hero_BountyHunter@@",
+      "vtable": "0x3753438",
+      "slot4": "0x1e01710"
+    },
+    {
+      "class": ".?AVCDOTA_Bot_Hero_Brewmaster@@",
+      "vtable": "0x3753718",
+      "slot4": "0x1e01710"
+    },
+    {
+      "class": ".?AVCDOTA_Bot_Hero_Bristleback@@",
+      "vtable": "0x37538d0",
+      "slot4": "0x1edd670"
+    },
+    {
+      "class": ".?AVCDOTA_Bot_Hero_Broodmother@@",
+      "vtable": "0x3753a48",
+      "slot4": "0x1e01710"
+    },
+    {
+      "class": ".?AVCDOTA_Bot_Hero_ChaosKnight@@",
+      "vtable": "0x3753c00",
+      "slot4": "0x1e01710"
+    },
+    {
+      "class": ".?AVCDOTA_Bot_Hero_Chen@@",
+      "vtable": "0x3753db8",
+      "slot4": "0x1e01710"
+    },
+    {
+      "class": ".?AVCDOTA_Bot_Hero_Clinkz@@",
+      "vtable": "0x3753fb0",
+      "slot4": "0x1e01710"
+    },
+    {
+      "class": ".?AVCDOTA_Bot_Hero_CrystalMaiden@@",
+      "vtable": "0x37541a8",
+      "slot4": "0x1e01710"
+    },
+    {
+      "class": ".?AVCDOTA_Bot_Hero_Dazzle@@",
+      "vtable": "0x37543f0",
+      "slot4": "0x1e01710"
+    },
+    {
+      "class": ".?AVCDOTA_Bot_Hero_DeathProphet@@",
+      "vtable": "0x3754640",
+      "slot4": "0x1ef1410"
+    },
+    {
+      "class": ".?AVCDOTA_Bot_Hero_DragonKnight@@",
+      "vtable": "0x3754838",
+      "slot4": "0x1ef14c0"
+    },
+    {
+      "class": ".?AVCDOTA_Bot_Hero_Drow@@",
+      "vtable": "0x3754b28",
+      "slot4": "0x1e01710"
+    },
+    {
+      "class": ".?AVCDOTA_Bot_Hero_Earthshaker@@",
+      "vtable": "0x3754ca0",
+      "slot4": "0x1ef1570"
+    },
+    {
+      "class": ".?AVCDOTA_Bot_Hero_Jakiro@@",
+      "vtable": "0x3754ee8",
+      "slot4": "0x1e01710"
+    },
+    {
+      "class": ".?AVCDOTA_Bot_Hero_Juggernaut@@",
+      "vtable": "0x3755120",
+      "slot4": "0x1e01710"
+    },
+    {
+      "class": ".?AVCDOTA_Bot_Hero_Keeper_Of_The_Light@@",
+      "vtable": "0x37554b0",
+      "slot4": "0x1e01710"
+    },
+    {
+      "class": ".?AVCDOTA_Bot_Hero_Kunkka@@",
+      "vtable": "0x37556e0",
+      "slot4": "0x1e01710"
+    },
+    {
+      "class": ".?AVCDOTA_Bot_Hero_Lich@@",
+      "vtable": "0x37559b0",
+      "slot4": "0x1e01710"
+    },
+    {
+      "class": ".?AVCDOTA_Bot_Hero_Lina@@",
+      "vtable": "0x3755be8",
+      "slot4": "0x1e01710"
+    },
+    {
+      "class": ".?AVCDOTA_Bot_Hero_Lion@@",
+      "vtable": "0x3755e30",
+      "slot4": "0x1e01710"
+    },
+    {
+      "class": ".?AVCDOTA_Bot_Hero_Luna@@",
+      "vtable": "0x3756028",
+      "slot4": "0x1ef1610"
+    },
+    {
+      "class": ".?AVCDOTA_Bot_Hero_Necrolyte@@",
+      "vtable": "0x37561c8",
+      "slot4": "0x1e01710"
+    },
+    {
+      "class": ".?AVCDOTA_Bot_Hero_Nevermore@@",
+      "vtable": "0x37563a0",
+      "slot4": "0x1e01710"
+    },
+    {
+      "class": ".?AVCDOTA_Bot_Hero_Omniknight@@",
+      "vtable": "0x37565a8",
+      "slot4": "0x1e01710"
+    },
+    {
+      "class": ".?AVCDOTA_Bot_Hero_Oracle@@",
+      "vtable": "0x3756760",
+      "slot4": "0x1e01710"
+    },
+    {
+      "class": ".?AVCDOTA_Bot_Hero_PhantomAssassin@@",
+      "vtable": "0x37569e8",
+      "slot4": "0x1e01710"
+    },
+    {
+      "class": ".?AVCDOTA_Bot_Hero_Pudge@@",
+      "vtable": "0x3756bf0",
+      "slot4": "0x1f13170"
+    },
+    {
+      "class": ".?AVCDOTA_Bot_Hero_Razor@@",
+      "vtable": "0x3756ec0",
+      "slot4": "0x1e01710"
+    },
+    {
+      "class": ".?AVCDOTA_Bot_Hero_Riki@@",
+      "vtable": "0x3757170",
+      "slot4": "0x1f13350"
+    },
+    {
+      "class": ".?AVCDOTA_Bot_Hero_SandKing@@",
+      "vtable": "0x3757450",
+      "slot4": "0x1e01710"
+    },
+    {
+      "class": ".?AVCDOTA_Bot_Hero_SkeletonKing@@",
+      "vtable": "0x3757608",
+      "slot4": "0x1f133a0"
+    },
+    {
+      "class": ".?AVCDOTA_Bot_Hero_SkywrathMage@@",
+      "vtable": "0x3757838",
+      "slot4": "0x1e01710"
+    },
+    {
+      "class": ".?AVCDOTA_Bot_Hero_Sniper@@",
+      "vtable": "0x3757a30",
+      "slot4": "0x1e01710"
+    },
+    {
+      "class": ".?AVCDOTA_Bot_Hero_Sven@@",
+      "vtable": "0x3757be8",
+      "slot4": "0x1e01710"
+    },
+    {
+      "class": ".?AVCDOTA_Bot_Hero_Tidehunter@@",
+      "vtable": "0x3757e30",
+      "slot4": "0x1f13440"
+    },
+    {
+      "class": ".?AVCDOTA_Bot_Hero_Tiny@@",
+      "vtable": "0x3758170",
+      "slot4": "0x1e01710"
+    },
+    {
+      "class": ".?AVCDOTA_Bot_Hero_VengefulSpirit@@",
+      "vtable": "0x3758598",
+      "slot4": "0x1e01710"
+    },
+    {
+      "class": ".?AVCDOTA_Bot_Hero_Viper@@",
+      "vtable": "0x3758848",
+      "slot4": "0x1e01710"
+    },
+    {
+      "class": ".?AVCDOTA_Bot_Hero_Warlock@@",
+      "vtable": "0x37589c0",
+      "slot4": "0x1e01710"
+    },
+    {
+      "class": ".?AVCDOTA_Bot_Hero_Windrunner@@",
+      "vtable": "0x3758d40",
+      "slot4": "0x1e01710"
+    },
+    {
+      "class": ".?AVCDOTA_Bot_Hero_WitchDoctor@@",
+      "vtable": "0x3758fc8",
+      "slot4": "0x1e01710"
+    },
+    {
+      "class": ".?AVCDOTA_Bot_Hero_Zuus@@",
+      "vtable": "0x37594e0",
+      "slot4": "0x1e01710"
+    }
+  ]
+}

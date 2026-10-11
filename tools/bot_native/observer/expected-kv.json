@@ -1,0 +1,438 @@
+{
+  "source_sha256": "765ca832be3e1e535a8f680e328621815e44f185f61e6347b427631ac1967feb",
+  "engine_sha256": "254bee29e9d60998c66cc6700dcaff0f0d4be692f092c20b59a2ae19fa227058",
+  "heroes": [
+    {
+      "slot": "npc_dota_hero_lina",
+      "base": 0.95,
+      "mask": 6,
+      "hero_type": "DOTA_BOT_PURE_SUPPORT | DOTA_BOT_STUN_SUPPORT"
+    },
+    {
+      "slot": "npc_dota_hero_juggernaut",
+      "base": 1.0,
+      "mask": 96,
+      "hero_type": "DOTA_BOT_SEMI_CARRY | DOTA_BOT_GANKER"
+    },
+    {
+      "slot": "npc_dota_hero_slark",
+      "base": 1.0,
+      "mask": 80,
+      "hero_type": "DOTA_BOT_HARD_CARRY | DOTA_BOT_GANKER"
+    },
+    {
+      "slot": "npc_dota_hero_earthshaker",
+      "base": 1.0,
+      "mask": 3,
+      "hero_type": "DOTA_BOT_TANK | DOTA_BOT_STUN_SUPPORT"
+    },
+    {
+      "slot": "npc_dota_hero_life_stealer",
+      "base": 1.0,
+      "mask": 17,
+      "hero_type": "DOTA_BOT_TANK | DOTA_BOT_HARD_CARRY"
+    },
+    {
+      "slot": "npc_dota_hero_crystal_maiden",
+      "base": 1.0,
+      "mask": 96,
+      "hero_type": "DOTA_BOT_SEMI_CARRY | DOTA_BOT_GANKER"
+    },
+    {
+      "slot": "npc_dota_hero_drow_ranger",
+      "base": 1.0,
+      "mask": 16,
+      "hero_type": "DOTA_BOT_HARD_CARRY"
+    },
+    {
+      "slot": "npc_dota_hero_mirana",
+      "base": 1.0,
+      "mask": 16,
+      "hero_type": "DOTA_BOT_HARD_CARRY"
+    },
+    {
+      "slot": "npc_dota_hero_chaos_knight",
+      "base": 1.0,
+      "mask": 16,
+      "hero_type": "DOTA_BOT_HARD_CARRY"
+    },
+    {
+      "slot": "npc_dota_hero_centaur",
+      "base": 1.0,
+      "mask": 3,
+      "hero_type": "DOTA_BOT_TANK | DOTA_BOT_STUN_SUPPORT"
+    },
+    {
+      "slot": "npc_dota_hero_tidehunter",
+      "base": 1.0,
+      "mask": 33,
+      "hero_type": "DOTA_BOT_TANK | DOTA_BOT_SEMI_CARRY"
+    },
+    {
+      "slot": "npc_dota_hero_clinkz",
+      "base": 1.0,
+      "mask": 32,
+      "hero_type": "DOTA_BOT_SEMI_CARRY"
+    },
+    {
+      "slot": "npc_dota_hero_axe",
+      "base": 1.0,
+      "mask": 3,
+      "hero_type": "DOTA_BOT_TANK | DOTA_BOT_STUN_SUPPORT"
+    },
+    {
+      "slot": "npc_dota_hero_naga_siren",
+      "base": 1.0,
+      "mask": 16,
+      "hero_type": "DOTA_BOT_HARD_CARRY"
+    },
+    {
+      "slot": "npc_dota_hero_storm_spirit",
+      "base": 1.0,
+      "mask": 34,
+      "hero_type": "DOTA_BOT_SEMI_CARRY | DOTA_BOT_STUN_SUPPORT"
+    },
+    {
+      "slot": "npc_dota_hero_razor",
+      "base": 1.0,
+      "mask": 80,
+      "hero_type": "DOTA_BOT_HARD_CARRY | DOTA_BOT_GANKER"
+    },
+    {
+      "slot": "npc_dota_hero_dark_seer",
+      "base": 1.0,
+      "mask": 34,
+      "hero_type": "DOTA_BOT_SEMI_CARRY | DOTA_BOT_STUN_SUPPORT"
+    },
+    {
+      "slot": "npc_dota_hero_furion",
+      "base": 1.0,
+      "mask": 40,
+      "hero_type": "DOTA_BOT_SEMI_CARRY | DOTA_BOT_PUSH_SUPPORT"
+    },
+    {
+      "slot": "npc_dota_hero_kunkka",
+      "base": 1.0,
+      "mask": 96,
+      "hero_type": "DOTA_BOT_SEMI_CARRY | DOTA_BOT_GANKER"
+    },
+    {
+      "slot": "npc_dota_hero_lion",
+      "base": 1.0,
+      "mask": 6,
+      "hero_type": "DOTA_BOT_PURE_SUPPORT | DOTA_BOT_STUN_SUPPORT"
+    },
+    {
+      "slot": "npc_dota_hero_necrolyte",
+      "base": 1.0,
+      "mask": 32,
+      "hero_type": "DOTA_BOT_SEMI_CARRY"
+    },
+    {
+      "slot": "npc_dota_hero_puck",
+      "base": 1.0,
+      "mask": 9,
+      "hero_type": "DOTA_BOT_TANK | DOTA_BOT_PUSH_SUPPORT"
+    },
+    {
+      "slot": "npc_dota_hero_sniper",
+      "base": 1.0,
+      "mask": 32,
+      "hero_type": "DOTA_BOT_SEMI_CARRY"
+    },
+    {
+      "slot": "npc_dota_hero_tinker",
+      "base": 1.0,
+      "mask": 96,
+      "hero_type": "DOTA_BOT_SEMI_CARRY | DOTA_BOT_GANKER"
+    },
+    {
+      "slot": "npc_dota_hero_venomancer",
+      "base": 1.0,
+      "mask": 9,
+      "hero_type": "DOTA_BOT_TANK | DOTA_BOT_PUSH_SUPPORT"
+    },
+    {
+      "slot": "npc_dota_hero_zuus",
+      "base": 1.0,
+      "mask": 40,
+      "hero_type": "DOTA_BOT_SEMI_CARRY | DOTA_BOT_PUSH_SUPPORT"
+    },
+    {
+      "slot": "npc_dota_hero_warlock",
+      "base": 1.0,
+      "mask": 96,
+      "hero_type": "DOTA_BOT_SEMI_CARRY | DOTA_BOT_GANKER"
+    },
+    {
+      "slot": "npc_dota_hero_bounty_hunter",
+      "base": 1.0,
+      "mask": 3,
+      "hero_type": "DOTA_BOT_TANK | DOTA_BOT_STUN_SUPPORT"
+    },
+    {
+      "slot": "npc_dota_hero_silencer",
+      "base": 1.0,
+      "mask": 4,
+      "hero_type": "DOTA_BOT_PURE_SUPPORT"
+    },
+    {
+      "slot": "npc_dota_hero_obsidian_destroyer",
+      "base": 1.0,
+      "mask": 70,
+      "hero_type": "DOTA_BOT_PURE_SUPPORT | DOTA_BOT_STUN_SUPPORT | DOTA_BOT_GANKER"
+    },
+    {
+      "slot": "npc_dota_hero_templar_assassin",
+      "base": 1.0,
+      "mask": 96,
+      "hero_type": "DOTA_BOT_SEMI_CARRY | DOTA_BOT_GANKER"
+    },
+    {
+      "slot": "npc_dota_hero_visage",
+      "base": 1.0,
+      "mask": 10,
+      "hero_type": "DOTA_BOT_PUSH_SUPPORT | DOTA_BOT_STUN_SUPPORT"
+    },
+    {
+      "slot": "npc_dota_hero_viper",
+      "base": 0.95,
+      "mask": 4,
+      "hero_type": "DOTA_BOT_PURE_SUPPORT"
+    },
+    {
+      "slot": "npc_dota_hero_batrider",
+      "base": 1.0,
+      "mask": 32,
+      "hero_type": "DOTA_BOT_SEMI_CARRY"
+    },
+    {
+      "slot": "npc_dota_hero_witch_doctor",
+      "base": 1.0,
+      "mask": 5,
+      "hero_type": "DOTA_BOT_TANK | DOTA_BOT_PURE_SUPPORT"
+    },
+    {
+      "slot": "npc_dota_hero_mars",
+      "base": 1.0,
+      "mask": 3,
+      "hero_type": "DOTA_BOT_TANK | DOTA_BOT_STUN_SUPPORT"
+    },
+    {
+      "slot": "npc_dota_hero_doom_bringer",
+      "base": 1.0,
+      "mask": 2,
+      "hero_type": "DOTA_BOT_STUN_SUPPORT"
+    },
+    {
+      "slot": "npc_dota_hero_rattletrap",
+      "base": 1.0,
+      "mask": 3,
+      "hero_type": "DOTA_BOT_TANK | DOTA_BOT_STUN_SUPPORT"
+    },
+    {
+      "slot": "npc_dota_hero_luna",
+      "base": 1.0,
+      "mask": 16,
+      "hero_type": "DOTA_BOT_HARD_CARRY"
+    },
+    {
+      "slot": "npc_dota_hero_chen",
+      "base": 1.0,
+      "mask": 6,
+      "hero_type": "DOTA_BOT_PURE_SUPPORT | DOTA_BOT_STUN_SUPPORT"
+    },
+    {
+      "slot": "npc_dota_hero_night_stalker",
+      "base": 1.0,
+      "mask": 40,
+      "hero_type": "DOTA_BOT_SEMI_CARRY | DOTA_BOT_PUSH_SUPPORT"
+    },
+    {
+      "slot": "npc_dota_hero_nyx_assassin",
+      "base": 1.0,
+      "mask": 96,
+      "hero_type": "DOTA_BOT_SEMI_CARRY | DOTA_BOT_GANKER"
+    },
+    {
+      "slot": "npc_dota_hero_dazzle",
+      "base": 1.0,
+      "mask": 32,
+      "hero_type": "DOTA_BOT_SEMI_CARRY"
+    },
+    {
+      "slot": "npc_dota_hero_earth_spirit",
+      "base": 1.0,
+      "mask": 3,
+      "hero_type": "DOTA_BOT_TANK | DOTA_BOT_STUN_SUPPORT"
+    },
+    {
+      "slot": "npc_dota_hero_weaver",
+      "base": 0.95,
+      "mask": 4,
+      "hero_type": "DOTA_BOT_PURE_SUPPORT"
+    },
+    {
+      "slot": "npc_dota_hero_legion_commander",
+      "base": 1.0,
+      "mask": 96,
+      "hero_type": "DOTA_BOT_SEMI_CARRY | DOTA_BOT_GANKER"
+    },
+    {
+      "slot": "npc_dota_hero_disruptor",
+      "base": 1.0,
+      "mask": 3,
+      "hero_type": "DOTA_BOT_TANK | DOTA_BOT_STUN_SUPPORT"
+    },
+    {
+      "slot": "npc_dota_hero_elder_titan",
+      "base": 1.0,
+      "mask": 80,
+      "hero_type": "DOTA_BOT_HARD_CARRY | DOTA_BOT_GANKER"
+    },
+    {
+      "slot": "npc_dota_hero_dragon_knight",
+      "base": 1.0,
+      "mask": 33,
+      "hero_type": "DOTA_BOT_TANK | DOTA_BOT_SEMI_CARRY"
+    },
+    {
+      "slot": "npc_dota_hero_lich",
+      "base": 1.0,
+      "mask": 32,
+      "hero_type": "DOTA_BOT_SEMI_CARRY"
+    },
+    {
+      "slot": "npc_dota_hero_arc_warden",
+      "base": 1.0,
+      "mask": 2,
+      "hero_type": "DOTA_BOT_STUN_SUPPORT"
+    },
+    {
+      "slot": "npc_dota_hero_vengefulspirit",
+      "base": 1.0,
+      "mask": 16,
+      "hero_type": "DOTA_BOT_HARD_CARRY"
+    },
+    {
+      "slot": "npc_dota_hero_dawnbreaker",
+      "base": 1.0,
+      "mask": 96,
+      "hero_type": "DOTA_BOT_SEMI_CARRY | DOTA_BOT_GANKER"
+    },
+    {
+      "slot": "npc_dota_hero_undying",
+      "base": 1.05,
+      "mask": 1,
+      "hero_type": "DOTA_BOT_TANK"
+    },
+    {
+      "slot": "npc_dota_hero_grimstroke",
+      "base": 0.95,
+      "mask": 4,
+      "hero_type": "DOTA_BOT_PURE_SUPPORT"
+    },
+    {
+      "slot": "npc_dota_hero_queenofpain",
+      "base": 1.0,
+      "mask": 16,
+      "hero_type": "DOTA_BOT_HARD_CARRY"
+    },
+    {
+      "slot": "npc_dota_hero_omniknight",
+      "base": 1.0,
+      "mask": 3,
+      "hero_type": "DOTA_BOT_TANK | DOTA_BOT_STUN_SUPPORT"
+    },
+    {
+      "slot": "npc_dota_hero_ursa",
+      "base": 1.0,
+      "mask": 96,
+      "hero_type": "DOTA_BOT_SEMI_CARRY | DOTA_BOT_GANKER"
+    },
+    {
+      "slot": "npc_dota_hero_ogre_magi",
+      "base": 1.0,
+      "mask": 3,
+      "hero_type": "DOTA_BOT_TANK | DOTA_BOT_STUN_SUPPORT"
+    },
+    {
+      "slot": "npc_dota_hero_phantom_lancer",
+      "base": 1.0,
+      "mask": 17,
+      "hero_type": "DOTA_BOT_TANK | DOTA_BOT_HARD_CARRY"
+    },
+    {
+      "slot": "npc_dota_hero_dark_willow",
+      "base": 1.0,
+      "mask": 4,
+      "hero_type": "DOTA_BOT_PURE_SUPPORT"
+    },
+    {
+      "slot": "npc_dota_hero_huskar",
+      "base": 0.95,
+      "mask": 6,
+      "hero_type": "DOTA_BOT_PURE_SUPPORT | DOTA_BOT_STUN_SUPPORT"
+    },
+    {
+      "slot": "npc_dota_hero_lone_druid",
+      "base": 1.0,
+      "mask": 16,
+      "hero_type": "DOTA_BOT_HARD_CARRY"
+    },
+    {
+      "slot": "npc_dota_hero_enchantress",
+      "base": 1.0,
+      "mask": 80,
+      "hero_type": "DOTA_BOT_HARD_CARRY | DOTA_BOT_GANKER"
+    },
+    {
+      "slot": "npc_dota_hero_death_prophet",
+      "base": 1.0,
+      "mask": 5,
+      "hero_type": "DOTA_BOT_TANK | DOTA_BOT_PURE_SUPPORT"
+    },
+    {
+      "slot": "npc_dota_hero_meepo",
+      "base": 1.0,
+      "mask": 96,
+      "hero_type": "DOTA_BOT_SEMI_CARRY | DOTA_BOT_GANKER"
+    },
+    {
+      "slot": "npc_dota_hero_leshrac",
+      "base": 1.0,
+      "mask": 12,
+      "hero_type": "DOTA_BOT_PURE_SUPPORT | DOTA_BOT_PUSH_SUPPORT"
+    },
+    {
+      "slot": "npc_dota_hero_invoker",
+      "base": 1.0,
+      "mask": 34,
+      "hero_type": "DOTA_BOT_SEMI_CARRY | DOTA_BOT_STUN_SUPPORT"
+    },
+    {
+      "slot": "npc_dota_hero_spectre",
+      "base": 1.0,
+      "mask": 16,
+      "hero_type": "DOTA_BOT_HARD_CARRY"
+    },
+    {
+      "slot": "npc_dota_hero_terrorblade",
+      "base": 1.0,
+      "mask": 16,
+      "hero_type": "DOTA_BOT_HARD_CARRY"
+    },
+    {
+      "slot": "npc_dota_hero_gyrocopter",
+      "base": 1.0,
+      "mask": 16,
+      "hero_type": "DOTA_BOT_HARD_CARRY"
+    },
+    {
+      "slot": "npc_dota_hero_bristleback",
+      "base": 1.0,
+      "mask": 3,
+      "hero_type": "DOTA_BOT_TANK | DOTA_BOT_STUN_SUPPORT"
+    }
+  ]
+}

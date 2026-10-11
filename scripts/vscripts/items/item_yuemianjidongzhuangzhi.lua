@@ -223,15 +223,14 @@ function modifier_item_yuemianjidongzhuangzhi_basic:OnCreated()
 	local parent = self:GetParent()
 	local ability = self:GetAbility()
 
-	parent:AddNewModifier(parent, ability, "modifier_item_yuemianjidongzhuangzhi_range", {duration = -1})
+	-- 每件物品保留自己的射程句柄，多件之间仅数值取最大，不共享来源生命周期。
+	self.rangeModifier = parent:AddNewModifier(parent, ability, "modifier_item_yuemianjidongzhuangzhi_range", {duration = -1})
 end
 
 function modifier_item_yuemianjidongzhuangzhi_basic:OnDestroy()
 	if not IsServer() then return end
-	local parent = self:GetParent()
-
-	if parent:HasModifier("modifier_item_yuemianjidongzhuangzhi_basic") then return end
-	parent:RemoveModifierByNameAndCaster("modifier_item_yuemianjidongzhuangzhi_range", parent)
+	if self.rangeModifier ~= nil and not self.rangeModifier:IsNull() then self.rangeModifier:Destroy() end
+	self.rangeModifier = nil
 end
 
 modifier_item_yuemianjidongzhuangzhi_range = class({})
@@ -241,13 +240,17 @@ function modifier_item_yuemianjidongzhuangzhi_range:IsHidden() return true end
 function modifier_item_yuemianjidongzhuangzhi_range:IsPurgable() return false end
 function modifier_item_yuemianjidongzhuangzhi_range:IsDebuff() return false end
 function modifier_item_yuemianjidongzhuangzhi_range:RemoveOnDeath() return false end
+function modifier_item_yuemianjidongzhuangzhi_range:GetAttributes() return MODIFIER_ATTRIBUTE_MULTIPLE end
 
 function modifier_item_yuemianjidongzhuangzhi_range:DeclareFunctions()
 	return {
-		MODIFIER_PROPERTY_ATTACK_RANGE_BONUS,
+		MODIFIER_PROPERTY_ATTACK_RANGE_BONUS_UNIQUE,
 	}
 end
 
-function modifier_item_yuemianjidongzhuangzhi_range:GetModifierAttackRangeBonus()
-	return self:GetParent():IsRangedAttacker() and self:GetAbility():GetSpecialValueFor("attack_range_bonus") or 0
+function modifier_item_yuemianjidongzhuangzhi_range:GetModifierAttackRangeBonusUnique()
+	local ability = self:GetAbility()
+	if ability == nil or ability:IsNull() or not self:GetParent():IsRangedAttacker() then return 0 end
+	-- 仅被动射程参与装备最大值；主动对指定目标的临时射程仍走独立回调。
+	return ability:GetSpecialValueFor("attack_range_bonus")
 end

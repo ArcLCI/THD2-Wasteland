@@ -133,7 +133,8 @@ function Yukari_StoreCreepInGap(caster, creep)
 
     -- 隐藏单位（直接实现，不通过修饰器）
     creep:AddNoDraw()
-    creep:AddNewModifier(caster, nil, "modifier_out_of_world", {}) -- 防止碰撞
+    -- 离场和无碰撞由下方 modifier_thdots_yukari02_hidden 的 KV 状态提供。
+    -- modifier_out_of_world 并非本项目或当前引擎已注册的 modifier。
 
     -- 移动到地图外安全位置（新增关键行）
     creep:SetAbsOrigin(Vector(-7907, 7624, 1024)) -- 与原技能相同的位置

@@ -73,16 +73,7 @@
 					"MODIFIER_PROPERTY_HEALTH_BONUS"    "%bonus_health"
 				}
 			}
-			"modifier_item_yuemianzhinu_range"
-			{
-				"IsHidden"		"1"
-				"RemoveOnDeath"	"0"
-				"Passive"		"1"
-				"Properties"
-				{
-					"MODIFIER_PROPERTY_ATTACK_RANGE_BONUS_UNIQUE"		"%bonus_attack_range"
-				}
-			}
+			// 射程由上方 OnCreated 创建的 Lua modifier 提供，避免同名 KV 被动绕过远程限制。
 		}
 		// Special
 		// -------------------------------------------------------------------------------------------------------------

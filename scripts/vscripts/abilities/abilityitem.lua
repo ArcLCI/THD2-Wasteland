@@ -1175,8 +1175,10 @@ end
 
 function ItemAbility_kafziel_attack_range_bonus_destroy(keys)
     local caster = keys.caster
-    if caster ~= nil and not caster:IsNull() and not caster:HasModifier("modifier_item_kafziel") then
-        caster:RemoveModifierByName("modifier_item_kafziel_attack_range_bonus")
+    if caster == nil or caster:IsNull() then return end
+    -- 每件物品只移除自己的射程来源，避免同装多件时留下失效的共享来源。
+    for _, modifier in ipairs(caster:FindAllModifiersByName("modifier_item_kafziel_attack_range_bonus")) do
+        if modifier:GetAbility() == keys.ability then modifier:Destroy() end
     end
 end
 
@@ -1196,6 +1198,9 @@ end
 function modifier_item_kafziel_attack_range_bonus:RemoveOnDeath()
     return false
 end
+function modifier_item_kafziel_attack_range_bonus:GetAttributes()
+    return MODIFIER_ATTRIBUTE_MULTIPLE
+end
 
 function modifier_item_kafziel_attack_range_bonus:OnCreated(params)
     if not IsServer() then
@@ -1204,13 +1209,14 @@ function modifier_item_kafziel_attack_range_bonus:OnCreated(params)
 end
 
 function modifier_item_kafziel_attack_range_bonus:DeclareFunctions()
-    return {MODIFIER_PROPERTY_ATTACK_RANGE_BONUS}
+    return {MODIFIER_PROPERTY_ATTACK_RANGE_BONUS_UNIQUE}
 end
 
-function modifier_item_kafziel_attack_range_bonus:GetModifierAttackRangeBonus()
-    if not self:GetCaster():IsRangedAttacker() and not self:GetCaster():HasModifier("modifier_item_esdw_passive") then
-        return self:GetAbility():GetSpecialValueFor("bonus_attack_range")
-    end
+function modifier_item_kafziel_attack_range_bonus:GetModifierAttackRangeBonusUnique()
+    local ability = self:GetAbility()
+    if ability == nil or ability:IsNull() or self:GetParent():IsRangedAttacker() then return 0 end
+    -- 保留近战限制，与其他装备射程统一取最大值。
+    return ability:GetSpecialValueFor("bonus_attack_range")
 end
 
 function ItemAbility_Frock_Poison(keys)
@@ -1362,7 +1368,8 @@ function ItemAbility_DummyDoll_OnSpellStart(keys)
         Caster:RemoveModifierByName("modifier_invulnerable")
 
         -- Step 4: 创建两个幻象
-        local illusions = CreateIllusions(Caster, Caster, {
+        -- 原生幻象已携带身份和持续时间；不再创建未定义的 modifier_illusion_dummydoll。
+        CreateIllusions(Caster, Caster, {
             outgoing_damage = keys.illusion_outgoing_damage - 100,
             incoming_damage = keys.illusion_incoming_damage,
             bounty_base = 0,
@@ -1370,12 +1377,6 @@ function ItemAbility_DummyDoll_OnSpellStart(keys)
             duration = keys.illusions_duration
         }, 1, -- 幻象数量
         108, true, true)
-        for _, illusion in ipairs(illusions) do
-            illusion:AddNewModifier(Caster, ItemAbility, "modifier_illusion_dummydoll", -- 自定义修饰符名称
-            {
-                duration = keys.illusions_duration
-            })
-        end
     end)
 end
 

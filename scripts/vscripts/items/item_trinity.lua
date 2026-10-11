@@ -17,7 +17,7 @@ function modifier_item_trinity_passive:DeclareFunctions() return
         MODIFIER_PROPERTY_STATS_STRENGTH_BONUS,
         MODIFIER_PROPERTY_STATS_AGILITY_BONUS,
         MODIFIER_PROPERTY_STATS_INTELLECT_BONUS,
-        MODIFIER_PROPERTY_ATTACK_RANGE_BONUS,
+        MODIFIER_PROPERTY_ATTACK_RANGE_BONUS_UNIQUE,
         MODIFIER_PROPERTY_HP_REGEN_AMPLIFY_PERCENTAGE,
         MODIFIER_PROPERTY_ATTACKSPEED_BONUS_CONSTANT,
         MODIFIER_PROPERTY_MOVESPEED_BONUS_PERCENTAGE,
@@ -36,36 +36,14 @@ end
 function modifier_item_trinity_passive:GetModifierBonusStats_Strength() return self:GetAbility():GetSpecialValueFor("bonus_strength") end
 function modifier_item_trinity_passive:GetModifierBonusStats_Agility() return self:GetAbility():GetSpecialValueFor("bonus_agility") end
 function modifier_item_trinity_passive:GetModifierBonusStats_Intellect() return self:GetAbility():GetSpecialValueFor("bonus_intellect") end
-function modifier_item_trinity_passive:GetModifierAttackRangeBonus() 
+function modifier_item_trinity_passive:GetModifierAttackRangeBonusUnique()
     local ability = self:GetAbility()
     if ability == nil or ability:IsNull() then
         return 0
     end
 
-    -- 按来源物品实体判定首件，避免将查询返回的 modifier 句柄与 Lua self 直接比较。
-    -- 多件仍只提供一次射程；首件移除后，由查询返回的剩余被动接替。
-    local firstModifier = self:GetParent():FindModifierByName("modifier_item_trinity_passive")
-    if firstModifier == nil or firstModifier:IsNull() then
-        return 0
-    end
-    local firstAbility = firstModifier:GetAbility()
-    if firstAbility == nil or firstAbility:IsNull() or firstAbility:entindex() ~= ability:entindex() then
-        return 0
-    end
-
-    local caster = self:GetCaster()
-    local bonus_range = ability:GetSpecialValueFor("bonus_attack_range")
-    
-    -- 检查道具互斥
-    local hasModifier1 = caster:HasModifier("modifier_item_yuemianjidongzhuangzhi_range")
-    local hasModifier2 = caster:HasModifier("modifier_item_yuemianzhinu_range")
-    local hasModifier3 = caster:HasModifier("modifier_item_kafziel_attack_range_bonus")
-    
-    -- 无冲突道具时生效
-    if not (hasModifier1 or hasModifier2 or hasModifier3) then
-        return bonus_range
-    end
-    return 0
+    -- 所有装备被动射程统一走 UNIQUE，由引擎取最大值，不按装备名称互相屏蔽。
+    return ability:GetSpecialValueFor("bonus_attack_range")
 end
 function modifier_item_trinity_passive:GetModifierHPRegenAmplify_Percentage() return self:GetAbility():GetSpecialValueFor("bonus_hp_regen_amplify_percentage") end
 function modifier_item_trinity_passive:GetModifierAttackSpeedBonus_Constant() return self:GetAbility():GetSpecialValueFor("bonus_attack_speed") end

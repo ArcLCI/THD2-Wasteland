@@ -16,7 +16,7 @@ function modifier_item_glutton_spork_passive:DeclareFunctions() return
     {
         MODIFIER_PROPERTY_STATS_STRENGTH_BONUS,
         MODIFIER_PROPERTY_STATS_AGILITY_BONUS,
-        MODIFIER_PROPERTY_ATTACK_RANGE_BONUS,
+        MODIFIER_PROPERTY_ATTACK_RANGE_BONUS_UNIQUE,
         MODIFIER_PROPERTY_HP_REGEN_AMPLIFY_PERCENTAGE,
         MODIFIER_PROPERTY_ATTACKSPEED_BONUS_CONSTANT,
         MODIFIER_PROPERTY_MOVESPEED_BONUS_PERCENTAGE,
@@ -30,21 +30,11 @@ end
 
 function modifier_item_glutton_spork_passive:GetModifierBonusStats_Strength() return self:GetAbility():GetSpecialValueFor("bonus_strength") end
 function modifier_item_glutton_spork_passive:GetModifierBonusStats_Agility() return self:GetAbility():GetSpecialValueFor("bonus_agility") end
-function modifier_item_glutton_spork_passive:GetModifierAttackRangeBonus() 
-    local caster = self:GetCaster()
+function modifier_item_glutton_spork_passive:GetModifierAttackRangeBonusUnique()
     local ability = self:GetAbility()
-    local bonus_range = ability:GetSpecialValueFor("bonus_attack_range")
-    
-    -- 检查道具互斥
-    local hasModifier1 = caster:HasModifier("modifier_item_yuemianjidongzhuangzhi_range")
-    local hasModifier2 = caster:HasModifier("modifier_item_yuemianzhinu_range")
-    local hasModifier3 = caster:HasModifier("modifier_item_esdw_passive")
-    local hasModifier4 = caster:HasModifier("modifier_item_kafziel_attack_range_bonus")
-    
-    -- 无冲突道具时生效
-    if not (hasModifier1 or hasModifier2 or hasModifier3 or hasModifier4) then
-        return bonus_range
-    end
+    if ability == nil or ability:IsNull() then return 0 end
+    -- 装备被动射程只取最大值；不再用其他物品的存在与否决定优先级。
+    return ability:GetSpecialValueFor("bonus_attack_range")
 end
 function modifier_item_glutton_spork_passive:GetModifierHPRegenAmplify_Percentage() return self:GetAbility():GetSpecialValueFor("bonus_hp_regen_amplify_percentage") end
 function modifier_item_glutton_spork_passive:GetModifierAttackSpeedBonus_Constant() return self:GetAbility():GetSpecialValueFor("bonus_attack_speed") end

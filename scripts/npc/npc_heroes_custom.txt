@@ -3,6 +3,8 @@
 
 // 应用Imba的方法，新建的英雄采用#base的引用来维护
 // 字母顺序排序
+// 原版槽位的原生 Bot 静态字段集中维护；不经 override_hero 转写子树。
+#base bot_heroes_custom.txt
 #base heroes/aya/hero.txt
 #base heroes/byakuren/hero.txt
 #base heroes/chen/hero.txt
