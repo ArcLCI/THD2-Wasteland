@@ -77,7 +77,7 @@ function ability_thdots_remilia01:OnProjectileHitHandle(hTarget, vLocation, iPro
         damage = dealdamage,
         damage_type = self:GetAbilityDamageType()
     }
-    UtilStun:UnitStunTarget(caster, target, StunDuration)
+    UtilStun:UnitStunTarget(caster, target, StunDuration, (UtilStun.TraceSource and UtilStun:TraceSource(function() return self end) or nil), "script:scripts/vscripts/abilities/abilityremilia.lua:OnProjectileHitHandle:80")
 
     local effectIndex = ParticleManager:CreateParticle("particles/heroes/remilia/ability_remilia_01_explosion.vpcf",
         PATTACH_CUSTOMORIGIN, target)
@@ -281,7 +281,7 @@ function OnRemilia02SpellRemoveStage2(keys, moveDistance)
 
     if (target ~= nil) then
         local stuntime = moveDistance / keys.MoveSpeed
-        UtilStun:UnitStunTarget(caster, target, stuntime)
+        UtilStun:UnitStunTarget(caster, target, stuntime, (UtilStun.TraceSource and UtilStun:TraceSource(function() return keys.ability end) or nil), "script:scripts/vscripts/abilities/abilityremilia.lua:OnRemilia02SpellRemoveStage2:284")
         if caster:HasModifier("modifier_item_wanbaochui") then
             local damage_table = {
                 ability = keys.ability,

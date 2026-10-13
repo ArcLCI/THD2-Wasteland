@@ -1549,7 +1549,7 @@ function OnPatchouliEarthEarth(keys)
                 damage_type = keys.ability:GetAbilityDamageType(),
                 damage_flags = 0
             }
-            UtilStun:UnitStunTarget(caster, v, deal_duration)
+            UtilStun:UnitStunTarget(caster, v, deal_duration, (UtilStun.TraceSource and UtilStun:TraceSource(function() return keys.ability end) or nil), "script:scripts/vscripts/abilities/abilitypatchouli.lua:OnPatchouliEarthEarth:1552")
             UnitDamageTarget(damage_table)
         end
 
@@ -1754,7 +1754,7 @@ function OnPatchouliRoyalFlame(keys)
         }
 
         if stunDuration ~= nil and stunDuration > 0 then
-            UtilStun:UnitStunTarget(caster, v, stunDuration)
+            UtilStun:UnitStunTarget(caster, v, stunDuration, (UtilStun.TraceSource and UtilStun:TraceSource(function() return keys.ability end) or nil), "script:scripts/vscripts/abilities/abilitypatchouli.lua:OnPatchouliRoyalFlame:1757")
         end
 
         local effectIndex = ParticleManager:CreateParticle(

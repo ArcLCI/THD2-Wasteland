@@ -74,7 +74,7 @@ function modifier_ability_thdots_nitori01:OnDestroy()
 			caster:SetOriginalModel("models/nitori/nitori.vmdl")
 		end
 		if caster.wbc_poweron == 1 then 
-			if caster:IsAlive() then UtilStun:UnitStunTarget(caster,caster,duration) end
+			if caster:IsAlive() then UtilStun:UnitStunTarget(caster,caster,duration, (UtilStun.TraceSource and UtilStun:TraceSource(function() return self:GetAbility() end) or nil), "script:scripts/vscripts/abilities/abilitynitori.lua:OnDestroy:77") end
 			caster.wbc_poweron = 0
 		end
 		StartSoundEvent("Hero_Phoenix.SunRay.Stop",caster)
@@ -190,22 +190,39 @@ end
 -- 	return ACT_DOTA_CAST_ABILITY_2
 -- end
 
-function ability_thdots_nitori02:OnSpellStart()
-	if IsServer() then
-		local caster = self:GetCaster()
-		local ability = self
-		local width = self:GetSpecialValueFor("width")
-		local length = self:GetSpecialValueFor("length")
-		self.point = self:GetCursorPosition()
-		self.num = 1.1
-		caster:EmitSound("Ability.MKG_AssassinateLoad")
-		caster:AddNewModifier(caster, self, "modifier_ability_thdots_nitori02", {duration = 1.0})
-		-- caster:StartGesture(ACT_DOTA_CAST_ABILITY_2)
-		caster:StartGestureWithPlaybackRate(ACT_DOTA_CAST_ABILITY_2,0.65)
-		self.weapon_particle = ParticleManager:CreateParticle("particles/heroes/nitori/nitori1_1.vpcf", PATTACH_POINT_FOLLOW, caster)
-		ParticleManager:SetParticleControlEnt(self.weapon_particle, 0, caster, PATTACH_POINT_FOLLOW, "attach_weapon", caster:GetAbsOrigin(), true)
+function ability_thdots_nitori02:OnAbilityPhaseStart()
+	if not IsServer() then return true end
+	-- 蓄力交给原生前摇，施法速度由引擎处理；这里仅管理表现。
+	local caster = self:GetCaster()
+	caster:EmitSound("Ability.MKG_AssassinateLoad")
+	self.weapon_particle = ParticleManager:CreateParticle("particles/heroes/nitori/nitori1_1.vpcf", PATTACH_POINT_FOLLOW, caster)
+	ParticleManager:SetParticleControlEnt(self.weapon_particle, 0, caster, PATTACH_POINT_FOLLOW, "attach_weapon", caster:GetAbsOrigin(), true)
+	return true
+end
+
+function ability_thdots_nitori02:OnAbilityPhaseInterrupted()
+	if not IsServer() then return end
+	self:GetCaster():StopSound("Ability.MKG_AssassinateLoad")
+	if self.weapon_particle ~= nil then
+		ParticleManager:DestroyParticle(self.weapon_particle, false)
+		ParticleManager:ReleaseParticleIndex(self.weapon_particle)
+		self.weapon_particle = nil
 	end
 end
+
+function ability_thdots_nitori02:OnSpellStart()
+	if IsServer() then
+		self.point = self:GetCursorPosition()
+		self.num = 1.1
+		self:OnAbilityPhaseInterrupted() -- 完成时同样释放蓄力表现，不由销毁事件发射。
+		self:FireChargedProjectile()
+	end
+end
+
+function ability_thdots_nitori02:OnOwnerDied()
+	self:OnAbilityPhaseInterrupted()
+end
+
 function ability_thdots_nitori02:OnProjectileHit(target, location)
 			-- local effectIndex = ParticleManager:CreateParticle("particles/heroes/nitori/ability_nitori02.vpcf", PATTACH_CUSTOMORIGIN, caster)
 			-- ParticleManager:SetParticleControlEnt(effectIndex , 0, self:GetCaster(), 5, "attach_weapon", Vector(0,0,0), true)
@@ -250,30 +267,15 @@ LinkLuaModifier("modifier_ability_thdots_nitori02","scripts/vscripts/abilities/a
 
 -- function modifier_ability_thdots_nitori02:IsHidden() return true end
 
-function modifier_ability_thdots_nitori02:CheckState()
-	return {
-		[MODIFIER_STATE_STUNNED] = true
-	}
-end
 
-function modifier_ability_thdots_nitori02:OnCreated()
+-- 保留旧公开 Modifier ID，但不再施加自晕或在移除时触发技能。
+function ability_thdots_nitori02:FireChargedProjectile()
 	if IsServer() then
-		self.caster = self:GetParent()
-		self.point = self:GetAbility().point
-		local vec = self:GetAbility().point - self.caster:GetOrigin()
-		vec.z = 0
-		self.caster:SetForwardVector(vec:Normalized())
-	end
-end
-
-function modifier_ability_thdots_nitori02:OnDestroy()
-	if IsServer() then
-		if self.caster:IsAlive() then
-			local caster = self:GetAbility():GetCaster()
-			local ability = self:GetAbility()
-			local width = self:GetAbility():GetSpecialValueFor("width")
-			local length = self:GetAbility():GetSpecialValueFor("length")
-			ability.point = self:GetAbility().point
+		if self:GetCaster():IsAlive() then
+			local caster = self:GetCaster()
+			local ability = self
+			local width = self:GetSpecialValueFor("width")
+			local length = self:GetSpecialValueFor("length")
 			ProjectileManager:CreateLinearProjectile({
 				Ability = ability,
 				EffectName = "particles/units/heroes/hero_dragon_knight/dragon_knight_breathe_fire.vpcf",

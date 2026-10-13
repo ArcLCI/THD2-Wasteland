@@ -470,7 +470,7 @@ function ability_thdots_toyohime02:OnSpellStart()
 				local enemies1 = FindUnitsInRadius(caster:GetTeam(), target_point, nil, radius, DOTA_UNIT_TARGET_TEAM_ENEMY,DOTA_UNIT_TARGET_HERO + DOTA_UNIT_TARGET_BASIC, DOTA_UNIT_TARGET_FLAG_NONE, FIND_ANY_ORDER, false)
 				local enemies2 = FindUnitsInRadius(caster:GetTeam(), Vector, nil, radius, DOTA_UNIT_TARGET_TEAM_ENEMY,DOTA_UNIT_TARGET_HERO + DOTA_UNIT_TARGET_BASIC, DOTA_UNIT_TARGET_FLAG_NONE, FIND_ANY_ORDER, false)
 				for _, unit in pairs(enemies1) do
-					UtilStun:UnitStunTarget(caster, unit, deal_duration)
+					UtilStun:UnitStunTarget(caster, unit, deal_duration, (UtilStun.TraceSource and UtilStun:TraceSource(function() return self end) or nil), "script:scripts/vscripts/abilities/abilitytoyohime.lua:OnSpellStart:473")
 					local damage_table = {
 						ability = self,
 						victim = unit,
@@ -483,7 +483,7 @@ function ability_thdots_toyohime02:OnSpellStart()
 					UnitDamageTarget(damage_table)
 				end
 				for _, unit in pairs(enemies2) do
-					UtilStun:UnitStunTarget(caster, unit, deal_duration)
+					UtilStun:UnitStunTarget(caster, unit, deal_duration, (UtilStun.TraceSource and UtilStun:TraceSource(function() return self end) or nil), "script:scripts/vscripts/abilities/abilitytoyohime.lua:OnSpellStart:486")
 				end
 				EmitSoundOn("Hero_VoidSpirit.Dissimilate.Stun",caster)
 			else

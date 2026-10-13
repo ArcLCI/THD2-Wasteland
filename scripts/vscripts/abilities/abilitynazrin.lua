@@ -470,7 +470,7 @@ function modifier_nazrin04_track:OnAttackLanded(keys)
 	ParticleManager:SetParticleControl(effectIndex, 1, target:GetOrigin())
 	ParticleManager:DestroyParticleSystem(effectIndex,false)		
 	
-	UtilStun:UnitStunTarget( caster,target,ability:GetSpecialValueFor("stun_duration"))
+	UtilStun:UnitStunTarget( caster,target,ability:GetSpecialValueFor("stun_duration"), (UtilStun.TraceSource and UtilStun:TraceSource(function() return self:GetAbility() end) or nil), "script:scripts/vscripts/abilities/abilitynazrin.lua:OnAttackLanded:473")
 	
 	UnitDamageTarget(damage_table)
 	

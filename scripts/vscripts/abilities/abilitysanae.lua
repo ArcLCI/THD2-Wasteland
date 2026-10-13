@@ -133,9 +133,9 @@ function ability_thdots_sanae02:OnSpellStart()
 
             local talent = caster:FindAbilityByName("special_bonus_unique_sanae_3")
             if talent == nil or talent:GetLevel() == 0 then
-                UtilStun:UnitStunTarget(caster, target, stunDuration)
+                UtilStun:UnitStunTarget(caster, target, stunDuration, self, "script:scripts/vscripts/abilities/abilitysanae.lua:OnSpellStart:136")
             else
-                UtilStun:UnitStunTarget(caster, target, stunDuration + talent:GetSpecialValueFor("value"))
+                UtilStun:UnitStunTarget(caster, target, stunDuration + talent:GetSpecialValueFor("value"), self, "script:scripts/vscripts/abilities/abilitysanae.lua:OnSpellStart:138")
             end
         end
 

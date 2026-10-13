@@ -495,8 +495,9 @@ function PrintKeys(keys)
     PrintTable(keys)
 end
 
-function UnitStunTarget(caster, target, stuntime)
-    UtilStun:UnitStunTarget(caster, target, stuntime)
+function UnitStunTarget(caster, target, stuntime, sourceAbility, sourceKind)
+    -- 仅向诊断透传来源，通用眩晕的实际参数规则保持不变。
+    UtilStun:UnitStunTarget(caster, target, stuntime, sourceAbility, sourceKind)
 end
 
 -- extra keys params:
@@ -860,7 +861,7 @@ function ItemAbility_SmashStick_OnAttack(keys)
         -- print(chance)
         if RollPseudoRandom(chance, keys.ability) then
             DebugPrint("ItemAbility_SmashStick_OnAttack| Melee Stun: " .. keys.duration .. " sec")
-            UnitStunTarget(Caster, Target, keys.duration)
+            UnitStunTarget(Caster, Target, keys.duration, keys.ability, 'item_attack_proc')
             local damage_table = {
                 ability = keys.ability,
                 victim = Target,
@@ -1748,7 +1749,7 @@ function ItemAbility_Rocket_OnHit(keys)
         return
     end
     Caster:EmitSound("THD_ITEM.Rocket_Hit")
-    UnitStunTarget(Caster, Target, keys.StunDuration)
+    UnitStunTarget(Caster, Target, keys.StunDuration, ItemAbility, 'rocket_projectile_hit')
     UnitDamageTarget({
         ability = ItemAbility,
         victim = Target,

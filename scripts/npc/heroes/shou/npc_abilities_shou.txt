@@ -285,6 +285,8 @@
 		"BaseClass"	"ability_lua"
 		"ScriptFile"	"scripts/vscripts/abilities/abilityshou.lua"
 		"AbilityTextureName"	"touhoutd/thtd_eirin_04"
+		"AbilityCastPoint"	"1.2"
+		"AbilityCastAnimation"	"ACT_DOTA_CAST_ABILITY_6"
 		"AbilityBehavior"	"DOTA_ABILITY_BEHAVIOR_POINT"
 		"AbilityUnitTargetType"	"DOTA_UNIT_TARGET_HERO | DOTA_UNIT_TARGET_BASIC"
 		"AbilityUnitTargetTeam"	"DOTA_UNIT_TARGET_TEAM_ENEMY"

@@ -657,7 +657,7 @@ function modifier_ability_thdots_seiga02:OnAttackLanded(keys)
 		self.seiga02_telent = false
 		--天赋眩晕
 		local telent_stun_time = FindTelentValue(self:GetCaster(),"special_bonus_unique_seiga_4")
-		UtilStun:UnitStunTarget(self.caster,keys.target,telent_stun_time)
+		UtilStun:UnitStunTarget(self.caster,keys.target,telent_stun_time, (UtilStun.TraceSource and UtilStun:TraceSource(function() return self:GetAbility() end) or nil), "script:scripts/vscripts/abilities/abilityseiga.lua:OnAttackLanded:660")
 	end
 end
 
@@ -901,7 +901,7 @@ function modifier_ability_thdots_seiga03_debuff:OnAbilityExecuted(keys)
 			    damage = self.damage,
 			    damage_type = self.ability:GetAbilityDamageType(), 
 			}
-	UtilStun:UnitStunTarget(self.caster,target,self.stun_duration)
+	UtilStun:UnitStunTarget(self.caster,target,self.stun_duration, (UtilStun.TraceSource and UtilStun:TraceSource(function() return self:GetAbility() end) or nil), "script:scripts/vscripts/abilities/abilityseiga.lua:OnAbilityExecuted:904")
 	UnitDamageTarget(damage_table)
 end
 

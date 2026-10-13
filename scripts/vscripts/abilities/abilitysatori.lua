@@ -573,7 +573,7 @@ function OnSatori02SpellStart(keys)
 		keys.ability:ApplyDataDrivenModifier(caster, v, "modifier_thdots_satori02", {Duration = keys.Duration})
 		keys.ability:ApplyDataDrivenModifier(caster, v, "modifier_thdots_satori02_think", {Duration = keys.Duration})
 		if v:HasModifier("modifier_thdots_satori04_bonus_damage") then
-		UtilStun:UnitStunTarget( caster, v, keys.Duration)
+		UtilStun:UnitStunTarget( caster, v, keys.Duration, (UtilStun.TraceSource and UtilStun:TraceSource(function() return keys.ability end) or nil), "script:scripts/vscripts/abilities/abilitysatori.lua:OnSatori02SpellStart:576")
 		end	
 	end	
 	
@@ -589,7 +589,7 @@ function OnSatori02SpellThink(keys)
 		damage_type = keys.ability:GetAbilityDamageType(), 
 	    damage_flags = 0
 	}
-	UtilStun:UnitStunTarget( caster, target, 0.3)
+	UtilStun:UnitStunTarget( caster, target, 0.3, (UtilStun.TraceSource and UtilStun:TraceSource(function() return keys.ability end) or nil), "script:scripts/vscripts/abilities/abilitysatori.lua:OnSatori02SpellThink:592")
 	UnitDamageTarget(damage_target)
 end
 

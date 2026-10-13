@@ -609,7 +609,7 @@ function modifier_ability_miko01_disappearing:OnDestroy() --状态移除时造�
 				   false
 			    )
 	for hh,sb in pairs(heroes) do
-		UtilStun:UnitStunTarget(self:GetCaster(),sb,stuntime)
+		UtilStun:UnitStunTarget(self:GetCaster(),sb,stuntime, (UtilStun.TraceSource and UtilStun:TraceSource(function() return self:GetAbility() end) or nil), "script:scripts/vscripts/abilities/abilitymiko.lua:OnDestroy:612")
 		local damage_table = {
 			victim = sb,
 			attacker = self:GetCaster(),

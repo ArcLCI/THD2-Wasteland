@@ -408,7 +408,7 @@ function ability_thdots_kokoro03:OnSpellStart()
 				local targets = FindUnitsInRadius(caster:GetTeam(),caster:GetOrigin(),nil,radius,DOTA_UNIT_TARGET_TEAM_ENEMY,
 		 								DOTA_UNIT_TARGET_BASIC + DOTA_UNIT_TARGET_HERO,0,0,false)
 				for _,v in pairs(targets) do
-					UtilStun:UnitStunTarget(caster,v,you_stun_duration)
+					UtilStun:UnitStunTarget(caster,v,you_stun_duration, (UtilStun.TraceSource and UtilStun:TraceSource(function() return self end) or nil), "script:scripts/vscripts/abilities/abilitykokoro.lua:OnSpellStart:411")
 				end
 			end
 		end
@@ -1037,7 +1037,7 @@ function modifier_ability_thdots_kokoro04_caster_wanbaochui:OnDestroy()
 			targets = FindUnitsInRadius(self:GetParent():GetTeam(),self:GetParent():GetOrigin(),nil,600,self:GetAbility():GetAbilityTargetTeam(),
 			DOTA_UNIT_TARGET_BASIC + DOTA_UNIT_TARGET_HERO,0,0,false)
 			for _,v in pairs(targets) do
-				UtilStun:UnitStunTarget(self:GetParent(),v,self:GetAbility():GetSpecialValueFor("stun_duration"))
+				UtilStun:UnitStunTarget(self:GetParent(),v,self:GetAbility():GetSpecialValueFor("stun_duration"), (UtilStun.TraceSource and UtilStun:TraceSource(function() return self:GetAbility() end) or nil), "script:scripts/vscripts/abilities/abilitykokoro.lua:OnDestroy:1040")
 			end
 		end
 	end

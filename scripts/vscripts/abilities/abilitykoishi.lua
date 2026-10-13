@@ -141,7 +141,7 @@ function OnKoishi02AttackLanded(keys)
 		UnitDamageTarget(damage_table) 
 	else
 		manadecrease = target:GetMana()
-		if target:IsHero() then UtilStun:UnitStunTarget(caster,target,0.05) end
+		if target:IsHero() then UtilStun:UnitStunTarget(caster,target,0.05, (UtilStun.TraceSource and UtilStun:TraceSource(function() return keys.ability end) or nil), "script:scripts/vscripts/abilities/abilitykoishi.lua:OnKoishi02AttackLanded:144") end
 		target:SetMana(0)
 		local effectIndex = ParticleManager:CreateParticle("particles/econ/items/antimage/antimage_weapon_basher_ti5/am_manaburn_basher_ti_5.vpcf", PATTACH_CUSTOMORIGIN, target)
 		ParticleManager:SetParticleControl(effectIndex, 0, target:GetOrigin())
@@ -193,7 +193,7 @@ function OnKoishi02wanbaochui(keys)
 				ParticleManager:SetParticleControl(effectIndex2, 0, target:GetOrigin())
 				ParticleManager:DestroyParticleSystem(effectIndex,false)
 				ParticleManager:DestroyParticleSystem(effectIndex2,false)
-				UtilStun:UnitStunTarget( caster,target,0.5)
+				UtilStun:UnitStunTarget( caster,target,0.5, (UtilStun.TraceSource and UtilStun:TraceSource(function() return keys.ability end) or nil), "script:scripts/vscripts/abilities/abilitykoishi.lua:OnKoishi02wanbaochui:196")
 	else
 		keys.ability:EndCooldown()
 		keys.ability:RefundManaCost()

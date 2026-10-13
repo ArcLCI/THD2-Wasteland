@@ -306,7 +306,7 @@ function Yuuka02_OnSpellStart(keys)
         YuukaCreateFlower(Caster, vecPos, Duration)
         if Target and not Target:IsNull() and (Target:GetOrigin() - vecPos):Length2D() < 50 then
             if Target:IsAlive() then
-                UtilStun:UnitStunTarget(Caster, Target, StunDuration)
+                UtilStun:UnitStunTarget(Caster, Target, StunDuration, (UtilStun.TraceSource and UtilStun:TraceSource(function() return keys.ability end) or nil), "script:scripts/vscripts/abilities/abilityyuuka.lua:Yuuka02_OnSpellStart:309")
                 UnitDamageTarget {
                     ability = Ability,
                     victim = Target,

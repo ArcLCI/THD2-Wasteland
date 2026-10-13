@@ -282,7 +282,7 @@ function modifier_ability_thdots_rinEx_explode:OnCreated()
 					damage_type = ability:GetAbilityDamageType(), 
 					damage_flags = 0
 				}
-		UtilStun:UnitStunTarget(caster,v,stun_duration)
+		UtilStun:UnitStunTarget(caster,v,stun_duration, (UtilStun.TraceSource and UtilStun:TraceSource(function() return self:GetAbility() end) or nil), "script:scripts/vscripts/abilities/abilityrin.lua:OnCreated:285")
 		UnitDamageTarget(damage_table)
 	end
 	self:GetParent():ForceKill(false)
@@ -1010,7 +1010,7 @@ function ability_thdots_rin_wbc:OnProjectileHit(target, pos)
 					damage_type = ability:GetAbilityDamageType(), 
 					damage_flags = 0
 				}
-			UtilStun:UnitStunTarget(caster,target,stun_duration)
+			UtilStun:UnitStunTarget(caster,target,stun_duration, (UtilStun.TraceSource and UtilStun:TraceSource(function() return self end) or nil), "script:scripts/vscripts/abilities/abilityrin.lua:OnProjectileHit:1013")
 			UnitDamageTarget(damage_table)
 		end
 	else
@@ -1037,7 +1037,7 @@ function ability_thdots_rin_wbc:OnProjectileHit(target, pos)
 				damage_type = ability:GetAbilityDamageType(), 
 				damage_flags = 0
 			}
-			UtilStun:UnitStunTarget(caster,v,stun_duration)
+			UtilStun:UnitStunTarget(caster,v,stun_duration, (UtilStun.TraceSource and UtilStun:TraceSource(function() return self end) or nil), "script:scripts/vscripts/abilities/abilityrin.lua:OnProjectileHit:1040")
 			UnitDamageTarget(damage_table)
 		end
 	end

@@ -69,7 +69,7 @@ function OnByakuren01SpellStart(keys)
 						damage_type = keys.ability:GetAbilityDamageType(), 
 						damage_flags = 0
 			}
-			UtilStun:UnitStunTarget(caster,v,ability:GetSpecialValueFor("stun_duration"))
+			UtilStun:UnitStunTarget(caster,v,ability:GetSpecialValueFor("stun_duration"), (UtilStun.TraceSource and UtilStun:TraceSource(function() return keys.ability end) or nil), "script:scripts/vscripts/abilities/abilitybyakuren.lua:OnByakuren01SpellStart:72")
 			UnitDamageTarget(damage_table)
 		end
 	end

@@ -69,13 +69,13 @@ function modifier_ability_kasen2_1c:OnIntervalThink()
     elseif #heroes ~= 0 then 
     	self.back = true
     	heroes[1]:SetOrigin(Vector(thinkerPoint.x,thinkerPoint.y,heroes[1]:GetAbsOrigin().z)+self.vec:Normalized()*50)
-		UtilStun:UnitStunTarget(self:GetCaster(),heroes[1],0.04)
+		UtilStun:UnitStunTarget(self:GetCaster(),heroes[1],0.04, (UtilStun.TraceSource and UtilStun:TraceSource(function() return self:GetAbility() end) or nil), "script:scripts/vscripts/abilities/abilitykasen2.lua:OnIntervalThink:72")
     	self:GetCaster():SetOrigin(thinkerPoint+self.vec:Normalized()*50)
     end
 	if self.back == true and length < 100 then
 		self:GetParent():RemoveModifierByName("modifier_ability_kasen2_1c")
 		if #heroes ~= 0 then
-			UtilStun:UnitStunTarget(self:GetCaster(),heroes[1],self:GetAbility():GetSpecialValueFor("stuntime"))
+			UtilStun:UnitStunTarget(self:GetCaster(),heroes[1],self:GetAbility():GetSpecialValueFor("stuntime"), (UtilStun.TraceSource and UtilStun:TraceSource(function() return self:GetAbility() end) or nil), "script:scripts/vscripts/abilities/abilitykasen2.lua:OnIntervalThink:78")
 			FindClearSpaceForUnit(heroes[1], heroes[1]:GetAbsOrigin(), true)
 			local kasen2 = FindUnitsInRadius(self:GetCaster():GetTeam(),self:GetCaster():GetAbsOrigin(),nil,1000,DOTA_UNIT_TARGET_TEAM_BOTH,DOTA_UNIT_TARGET_ALL,0,0,false)
 	    for hh,sb in pairs(kasen2) do
@@ -880,7 +880,7 @@ function modifier_ability_kasen2_s1_basic:OnAttackLanded(keys)
 	if keys.target:IsBuilding() then return end
 	local num = RandomInt(1,100)
 	if not (num <= 25) then return end
-	UtilStun:UnitStunTarget(keys.attacker,keys.target,self:GetAbility():GetSpecialValueFor("stuntime"))
+	UtilStun:UnitStunTarget(keys.attacker,keys.target,self:GetAbility():GetSpecialValueFor("stuntime"), (UtilStun.TraceSource and UtilStun:TraceSource(function() return self:GetAbility() end) or nil), "script:scripts/vscripts/abilities/abilitykasen2.lua:OnAttackLanded:883")
 	local effectIndex = ParticleManager:CreateParticle("particles/econ/items/antimage/antimage_weapon_basher_ti5_gold/am_basher_gold.vpcf", PATTACH_ABSORIGIN,keys.target)
 	ParticleManager:SetParticleControlEnt(effectIndex, 1, keys.attacker, PATTACH_POINT_FOLLOW, "attach_hitloc", self:GetParent():GetAbsOrigin(), true)
 	ParticleManager:SetParticleControlEnt(effectIndex, 0, keys.target, PATTACH_POINT_FOLLOW, "attach_hitloc", self:GetParent():GetAbsOrigin(), true)

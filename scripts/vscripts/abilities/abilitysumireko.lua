@@ -286,7 +286,7 @@ function ability_thdots_sumireko02:OnProjectileHit(target, location)
 			 knockback_distance = knockback_distance,
 			 knockback_height 	= knockback_height,
 		}
-	UtilStun:UnitStunTarget(caster,target,duration)
+	UtilStun:UnitStunTarget(caster,target,duration, (UtilStun.TraceSource and UtilStun:TraceSource(function() return self end) or nil), "script:scripts/vscripts/abilities/abilitysumireko.lua:OnProjectileHit:289")
 	target:AddNewModifier(caster, self, "modifier_knockback", knockback_properties)
 	--特效音效
 	target:EmitSound("Hero_Sniper.Boom_Headshot")
@@ -515,7 +515,7 @@ function modifier_ability_thdots_sumireko03:OnDestroy()
 				attacker 		= caster,
 				ability 		= self.ability
 			}
-		UtilStun:UnitStunTarget(caster,v,self.stun_duration)
+		UtilStun:UnitStunTarget(caster,v,self.stun_duration, (UtilStun.TraceSource and UtilStun:TraceSource(function() return self:GetAbility() end) or nil), "script:scripts/vscripts/abilities/abilitysumireko.lua:OnDestroy:518")
 		UnitDamageTarget(damage_tabel)
 	end
 	unit:SetContextThink("telekinesis_remove", 

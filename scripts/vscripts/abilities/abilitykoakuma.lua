@@ -435,7 +435,7 @@ function OnKoakuma04Death(keys)
 		false
 	)
 	for _,v in pairs(targets) do
-		UtilStun:UnitStunTarget(caster, v, wanbaochui_stun_time)
+		UtilStun:UnitStunTarget(caster, v, wanbaochui_stun_time, (UtilStun.TraceSource and UtilStun:TraceSource(function() return keys.ability end) or nil), "script:scripts/vscripts/abilities/abilitykoakuma.lua:OnKoakuma04Death:438")
 
 		local effectIndex = ParticleManager:CreateParticle("particles/econ/items/invoker/invoker_apex/invoker_sun_strike_beam_immortal1.vpcf", PATTACH_CUSTOMORIGIN, caster)
 		ParticleManager:SetParticleControl(effectIndex, 0, v:GetOrigin())

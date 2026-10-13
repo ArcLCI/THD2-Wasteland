@@ -38,8 +38,7 @@ THD2_SINGLE_HERO_PERF = {
 THD2_RADIANT_BOT_TEST = THD2_RADIANT_BOT_TEST or {
 	enabled = true,
 	heroes = {
-		"mokou:damage", -- 动态系数R1：优先保证妹红入场。
-		"tei:damage", -- 动态系数R2：三技能＋大招＋乳牙组合试点。
+		"suika", -- 观察萃香大招物免与普攻附伤例外。
 	},
 }
 
@@ -209,7 +208,6 @@ function THD2_GetJFFMode() return cur_jff end
 
 
 --to ban some girls(which is not work done XD)
-cur_bot_heros_size = 52
 tot_bot_heros_size = 72
 G_BOT_USED = 
 {
@@ -299,6 +297,14 @@ G_BOT_USED =
 	false ,			--因幡帝：物理核心，开放普通随机池
 	false ,			--华扇：前排构筑，开放普通随机池
 }
+
+-- 普通池初始容量从开放名单计算，避免手工计数漂移；选人后的占用不改变该容量。
+cur_bot_heros_size = 0
+for _, used in ipairs(G_BOT_USED) do
+	if used == false then
+		cur_bot_heros_size = cur_bot_heros_size + 1
+	end
+end
 
 G_Bot_Random_Hero = 
 {	

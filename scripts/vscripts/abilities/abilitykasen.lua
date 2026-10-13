@@ -438,7 +438,7 @@ function ability_thdots_kasen01:OnSpellStart()
                 -- 128内吸引	
                 FindClearSpaceForUnit(v, unit_location + direction * speed, true)
                 ResolveNPCPositions(PointPosition, radius)
-                UtilStun:UnitStunTarget(caster, v, 0.06)
+                UtilStun:UnitStunTarget(caster, v, 0.06, (UtilStun.TraceSource and UtilStun:TraceSource(function() return self end) or nil), "script:scripts/vscripts/abilities/abilitykasen.lua:OnSpellStart:441")
             end
         end
         return 0.06
@@ -693,7 +693,7 @@ function OnKasen02ProjectileHitUnit(keys)
     )
     for _, v in pairs(targets) do
         if v == target or FindTelentValue(caster, "special_bonus_unique_kasen_4") == 2 then
-            UtilStun:UnitStunTarget(caster, v, stun_duration)
+            UtilStun:UnitStunTarget(caster, v, stun_duration, ability, "script:scripts/vscripts/abilities/abilitykasen.lua:OnKasen02ProjectileHitUnit:696")
         end
         local damage_tabel = {
             victim = v,
@@ -1118,7 +1118,7 @@ function OnKasen04Normal(event)
             ability:ApplyDataDrivenModifier(caster, v, "modifier_kasen04normal_stun", {
                 duration = stun_duration
             })
-            UtilStun:UnitStunTarget(caster, v, stun_duration)
+            UtilStun:UnitStunTarget(caster, v, stun_duration, (UtilStun.TraceSource and UtilStun:TraceSource(function() return event.ability end) or nil), "script:scripts/vscripts/abilities/abilitykasen.lua:OnKasen04Normal:1121")
         end
     end
 end
@@ -1264,7 +1264,7 @@ function OnKasen04ExEnd(keys)
     false -- canGrowCache
     )
     for _, v in pairs(targets) do
-        UtilStun:UnitStunTarget(caster, v, keys.ability:GetSpecialValueFor("stun_duration"))
+        UtilStun:UnitStunTarget(caster, v, keys.ability:GetSpecialValueFor("stun_duration"), (UtilStun.TraceSource and UtilStun:TraceSource(function() return keys.ability end) or nil), "script:scripts/vscripts/abilities/abilitykasen.lua:OnKasen04ExEnd:1267")
         local damage_tabel = {
             victim = v,
             damage = damage,

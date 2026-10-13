@@ -44,6 +44,8 @@
 		"BaseClass"	"ability_lua"
 		"ScriptFile"	"scripts/vscripts/abilities/abilitynitori.lua"
 		"AbilityTextureName"	"ability_thdots_nitori02"
+		"AbilityCastPoint"	"1.0"
+		"AbilityCastAnimation"	"ACT_DOTA_CAST_ABILITY_2"
 		"AbilityBehavior"	"DOTA_ABILITY_BEHAVIOR_POINT"
 		"AbilityUnitTargetType"	"DOTA_UNIT_TARGET_HERO | DOTA_UNIT_TARGET_BASIC | DOTA_UNIT_TARGET_BUILDING"
 		"AbilityUnitTargetTeam"	"DOTA_UNIT_TARGET_TEAM_ENEMY"

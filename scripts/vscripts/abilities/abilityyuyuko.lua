@@ -746,7 +746,7 @@ function OnYuyuko04SpellThink(keys)
 						damage_flags = 0
 					}
 					if caster:HasModifier("modifier_item_wanbaochui") then
-						UtilStun:UnitStunTarget(caster,v,0.1)
+						UtilStun:UnitStunTarget(caster,v,0.1, (UtilStun.TraceSource and UtilStun:TraceSource(function() return keys.ability end) or nil), "script:scripts/vscripts/abilities/abilityyuyuko.lua:OnYuyuko04SpellThink:749")
 					end
 					UnitDamageTarget(damage_table)
 				end
@@ -772,7 +772,7 @@ function OnYuyuko04SpellThink(keys)
 							damage_flags = 0
 						}
 						if caster:HasModifier("modifier_item_wanbaochui") then
-							UtilStun:UnitStunTarget(caster,v,0.3)
+							UtilStun:UnitStunTarget(caster,v,0.3, (UtilStun.TraceSource and UtilStun:TraceSource(function() return keys.ability end) or nil), "script:scripts/vscripts/abilities/abilityyuyuko.lua:OnYuyuko04SpellThink:775")
 						end
 						UnitDamageTarget(damage_table_death)
 					end

@@ -213,7 +213,7 @@ function OnReisen02DealDamage(caster, targets)
         -- PrintTable(damage_table)
         -- OnReisenExSpellStart(caster,v)
         UnitDamageTarget(damage_table)
-        UtilStun:UnitStunTarget(caster, v, caster:GetContext("ability_reisen02_buff_stun_duration"))
+        UtilStun:UnitStunTarget(caster, v, caster:GetContext("ability_reisen02_buff_stun_duration"), (UtilStun.TraceSource and UtilStun:TraceSource(function() return ability end) or nil), "script:scripts/vscripts/abilities/abilityreisen.lua:OnReisen02DealDamage:216")
     end
 end
 

@@ -75,7 +75,7 @@ function ability_thdots_eirin02:OnProjectileHit(target, location)
 			duration = 2.0
 		end
 		duration = duration * (FindTelentValue(self.caster, "special_bonus_unique_eirin_2") + 1)
-		UtilStun:UnitStunTarget(self.caster, target, duration)
+		UtilStun:UnitStunTarget(self.caster, target, duration, (UtilStun.TraceSource and UtilStun:TraceSource(function() return self end) or nil), "script:scripts/vscripts/abilities/abilityeirin.lua:OnProjectileHit:78")
 		local damage_table = {
 			ability = self,
 			victim = target,

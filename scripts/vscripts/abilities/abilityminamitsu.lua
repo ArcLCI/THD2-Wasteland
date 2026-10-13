@@ -122,7 +122,7 @@ function OnMinamitsu01Back(vecHook, target, rad, distance, effectIndex, keys)
             if target ~= nil and target:IsNull() == false and target ~= caster then
                 target:RemoveModifierByName("modifier_minamitsu01_pause")
                 if target:GetTeam() ~= caster:GetTeam() then
-                    UtilStun:UnitStunTarget(caster, target, 1.2)
+                    UtilStun:UnitStunTarget(caster, target, 1.2, (UtilStun.TraceSource and UtilStun:TraceSource(function() return keys.ability end) or nil), "script:scripts/vscripts/abilities/abilityminamitsu.lua:OnMinamitsu01Back:125")
                 end
                 FindClearSpaceForUnit(target, vecHook - Vector(0, 0, 128), false)
                 -- if GridNav:CanFindPath(target:GetOrigin(),target:GetOrigin() + Vector(500,500,0)) == false then
@@ -565,7 +565,7 @@ function OnMinamitsu04ShipUnitBoom(keys)
                     damage_type = keys.ability:GetAbilityDamageType(),
                     damage_flags = keys.ability:GetAbilityTargetFlags()
                 }
-                UtilStun:UnitStunTarget(hero, v, 1.5)
+                UtilStun:UnitStunTarget(hero, v, 1.5, (UtilStun.TraceSource and UtilStun:TraceSource(function() return keys.ability end) or nil), "script:scripts/vscripts/abilities/abilityminamitsu.lua:OnMinamitsu04ShipUnitBoom:568")
                 UnitDamageTarget(damage_table)
             end
 

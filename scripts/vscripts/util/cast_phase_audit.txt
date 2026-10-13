@@ -1,0 +1,84 @@
+THD 施法前摇整理（2026-10-11，源码准备，未部署）
+
+判定标准
+释放前仅等待/播放蓄力、尚未发射或开始技能效果：合并到 AbilityCastPoint。
+使用自晕保证不可主动取消的上述技能：原生前摇 + cast_phase_orders 白名单。
+普通可取消技能：仅使用原生前摇，不加入订单保护。
+已经在运行的位移、多段攻击、引导、落点预警、弹道飞行、变身/复活、
+技能结束惩罚不属于前摇；不能因为有定时器或 STUNNED 就搬到施法之前。
+没有独立等待的普通技能保留已有 cast point；不凭空给瞬发技能添加时间。
+
+本次迁移
+荷取 ability_thdots_nitori02：固定 1 秒自晕 -> AbilityCastPoint 1.0；不可主动取消。
+  蓄力表现位于 OnAbilityPhaseStart；中断清理；OnSpellStart 直接发射。
+  原 Modifier ID 保留为空的兼容定义，不再添加、不自晕、不在销毁时发射。
+寅丸星 ability_thdots_shou04：固定 1.2 秒自晕/计时器 -> cast point 1.2；不可主动取消。
+  成功释放才位移并结算；中断停止蓄力音效。原 Modifier ID 保留但无自晕状态。
+梦美 ability_thdots_yumemi04：0.1 秒原生 + 4 秒自晕 -> cast point 4.1；不可主动取消。
+  KV ability_datadriven 改为 ability_lua，公共技能 ID 不变。
+  成功施法才爆炸；原 Modifier ID 保留为空的兼容定义。
+  天赋十字由等待开始改到成功释放生成，避免被真正控制中断后留下免费十字。
+  同帧生成后刷新原被动计数再计算伤害；因此十字在蓄力期间提供防御的旧行为改变。
+勇仪 ability_thdots_yugi04：0.5 秒原生 + 0.5 秒无自晕等待 -> cast point 1.0。
+  普通可取消前摇，不加入订单保护；成功施放后立即附加原效果。
+
+共同行为变化与边界
+蓝耗/冷却按原生成功施法时机结算；敌方控制和死亡按引擎施法中断规则处理。
+订单过滤仅拒绝前摇白名单内的主动替换动作，不提供控制免疫。
+过滤依据 GetCurrentActiveAbility + IsInAbilityPhase，无固定计时锁或逐帧扫描。
+多选订单剔除被保护单位后沿用原过滤链；升级、购买等非替换订单保留。
+缺省 cast point 不根据推测叠加：荷取/寅丸星明确采用原脚本等待时间。
+不修改施法速度属性，不手算百分比，避免引擎与脚本重复缩短。
+音效/模型动画节奏、引擎实际过滤覆盖范围、Bot GetCastPoint 是否反映所有修正，
+均须固定 7.38 手动观察，静态解析不构成运行验证。
+
+自晕/眩晕候选排除清单（scripts/vscripts/abilities 与 scripts/npc/heroes）
+美铃01 modifier_thdots_meirin01_think_interval：冲撞位移及被撞目标控制。
+美铃04 modifier_ability_thdots_meirin04_caster：1.15/2.52/4.03 秒多段打击和突进，非纯等待。
+铃仙03 UnitPauseTarget(caster,caster,0.5)：扫射期间持续更新方向和伤害。
+荷取01 UnitStunTarget(caster,caster,2)：万宝槌移动结束惩罚，非前摇。
+雏04 UnitStunTarget(caster,caster,end_stun_time)：技能结束惩罚，非前摇。
+琪露诺04：范围持续伤害/减速叠层后对敌冻结；自身眩晕代码已经注释。
+村纱01：钩子伸出/返回期间的自身锁定及被钩目标控制。
+村纱02：漩涡对目标的控制；村纱04：登船/船体期间的状态。
+蕾米02：两段跳跃位移；蕾米03：已经开始的范围持续伤害及隐去模型。
+蕾米 shard knockback_both：运动过程控制，非准备时间。
+梦美02：飞行位移过程，保留原 Bot 飞行生命周期。
+影狼06：突进抓取及抓取后的动作序列。
+小伞03：无敌期间的持续技能效果；小伞02 wanbaochui_stun：目标控制。
+小町01 modifier_thdots_komachi_01_02：目标状态；小町04：目标处刑和双方消失/位移序列。
+秦心04：持续动作/攻击循环，COMMAND_RESTRICTED 并非单纯施法准备。
+花果子念报 hatateEx：保护/隐藏状态；芙兰 mirror_image：幻象生成的分身状态。
+神子01 disappearing：消失状态；神子03_stun：目标控制。
+帕露西Ex invin：无敌消失过程；parsee04_dummy：辅助单位状态。
+阿燐 wbc/wbc_move：目标/运动过程状态。
+艾伦02_push：击退过程；女苑2_stunned：目标控制；拉尔瓦04_stun：睡眠控制。
+蕾蒂02_debuff：目标冻结；莉莉 black03_stun：目标控制；幽幽子02_buff：睡眠效果。
+早苗签文 kyou：目标眩晕，不是施法者前摇。
+文 aya_fantasy_stun：目标控制；华扇 kasen04ex_takedamage/stone_gaze：目标状态。
+爱丽丝 margatroid01_knockback：击退；margatroidex_doll_recovering：人偶恢复状态。
+咲夜 sakuya_pause_unit：技能运动/暂停目标状态，不能通用替换。
+诹访子 suwako04_stun：目标控制；紫 yukari01_falldown/yukari02_hidden：坠落/隙间过程。
+
+非自晕延迟的保留项
+早苗02 delay_time、屠自古02/04 delay、衣玖Ex delay：落点/雷击效果延迟。
+艾伦01 activation_delay：布置物激活；斯塔01：落星效果到达。
+梦美01延迟生成十字：弹道释放后的后续资源；梦美03：十字生成/效果时序。
+辉夜04：范围随储存魔法增长的爆炸过程，非固定前摇。
+铃仙04：可变蓄力/引导，满蓄力伤害和主动结束语义需保留。
+蕾蒂01、魔理沙光炮、紫04等持续引导：保留 channel 生命周期。
+千亦01连发间隔、妖梦2第三技能追加攻击：已释放后的多段效果。
+堇子04一帧延迟：读取技能位置/初始化；丰姬传送/反向弹道：效果时序。
+梅蒂欣毒效果、秋静叶树木倒下、帕秋莉区域/弹道延迟：独立效果时间。
+
+Bot 联动
+荷取原生阶段保护保留，弹道预测改为 GetCastPoint + 距离/7500。
+寅丸星、梦美在物品/其他技能之前保护大招 IsInAbilityPhase。
+原通用 action_intent 已保护 IsCastingAbility/IsInAbilityPhase；未改变模式权重。
+旧自晕 marker 查询保留兼容，但新游戏源码不再施加这些 marker。
+
+手动观察项目（未执行）
+无装备/单件/多件施法速度的阶段长度；S/H/移动/攻击/技能物品/Shift 队列；
+多选单位订单；敌方控制、死亡；中断不释放效果、不残留粒子；
+梦美天赋十字数量和伤害；Bot 前摇期间不替换动作。
+只做静态源码、Lua 解析、KV 结构与引用检查，无自动/单元/mock/回归测试。

@@ -959,7 +959,7 @@ function modifier_ability_thdots_hina04:OnDestroy()
 	if caster:GetName() == "npc_dota_hero_witch_doctor" and caster:IsAlive() then
 		caster:EmitSound("Voice_Thdots_Hine.AbilityHina04_2")
 	end
-	UtilStun:UnitStunTarget(caster,caster,end_stun_time)
+	UtilStun:UnitStunTarget(caster,caster,end_stun_time, (UtilStun.TraceSource and UtilStun:TraceSource(function() return self:GetAbility() end) or nil), "script:scripts/vscripts/abilities/abilityhina.lua:OnDestroy:962")
 	
 	local line_position = self.caster:GetAbsOrigin() + self.caster:GetForwardVector() * 1000
 	local line_count = 6
@@ -1096,7 +1096,7 @@ function modifier_ability_thdots_hina04_damage:OnCreated()
 						attacker = caster,
 						ability = ability
 						}
-	UtilStun:UnitStunTarget(caster,target,stun_time)
+	UtilStun:UnitStunTarget(caster,target,stun_time, (UtilStun.TraceSource and UtilStun:TraceSource(function() return self:GetAbility() end) or nil), "script:scripts/vscripts/abilities/abilityhina.lua:OnCreated:1099")
 	local damage_dealt = UnitDamageTarget(damageTable)
 
 end

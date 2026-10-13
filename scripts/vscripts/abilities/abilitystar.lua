@@ -266,7 +266,7 @@ function ability_thdotsr_star01:OnSpellStart()
                 damage_type = ability:GetAbilityDamageType(),
                 damage_flags = 0
             }
-            UtilStun:UnitStunTarget(caster, v, stun_duration)
+            UtilStun:UnitStunTarget(caster, v, stun_duration, (UtilStun.TraceSource and UtilStun:TraceSource(function() return self end) or nil), "script:scripts/vscripts/abilities/abilitystar.lua:OnSpellStart:269")
             v:EmitSound("Star01SpellHit")
             UnitDamageTarget(damage_table)
         end
@@ -332,7 +332,7 @@ function OnStar01SpellStart(keys)
                 damage_type = keys.ability:GetAbilityDamageType(),
                 damage_flags = 0
             }
-            UtilStun:UnitStunTarget(caster, v, stun_duration)
+            UtilStun:UnitStunTarget(caster, v, stun_duration, (UtilStun.TraceSource and UtilStun:TraceSource(function() return keys.ability end) or nil), "script:scripts/vscripts/abilities/abilitystar.lua:OnStar01SpellStart:335")
             v:EmitSound("Star01SpellHit")
             UnitDamageTarget(damage_table)
         end

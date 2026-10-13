@@ -39,7 +39,7 @@ function OnShou01AttackLanded( keys )
 			damage_type = keys.ability:GetAbilityDamageType(), 
 			damage_flags = 0
 		}
-		UtilStun:UnitStunTarget(caster,target,(duration - SHOU01INTERVAL) * stun_bonus)
+		UtilStun:UnitStunTarget(caster,target,(duration - SHOU01INTERVAL) * stun_bonus, (UtilStun.TraceSource and UtilStun:TraceSource(function() return keys.ability end) or nil), "script:scripts/vscripts/abilities/abilityshou.lua:OnShou01AttackLanded:42")
 		SHOU01INTERVAL = 0
 		ParticleManager:DestroyParticleSystem(SHOU01_EFFECT_INDEX, true)
 		UnitDamageTarget(damage_table)
@@ -160,7 +160,7 @@ function Shou03OnKill( keys )
 				}
 		effectIndex = ParticleManager:CreateParticle("particles/econ/items/alchemist/alchemist_smooth_criminal/alchemist_smooth_criminal_unstable_concoction_explosion_streak.vpcf", PATTACH_POINT, v)
 		ParticleManager:DestroyParticleSystem(effectIndex,false)
-		UtilStun:UnitStunTarget(caster,v,keys.stun_duration)
+		UtilStun:UnitStunTarget(caster,v,keys.stun_duration, (UtilStun.TraceSource and UtilStun:TraceSource(function() return keys.ability end) or nil), "script:scripts/vscripts/abilities/abilityshou.lua:Shou03OnKill:163")
 		UnitDamageTarget(damage_table)
 		--特效待测
 	end
@@ -285,6 +285,21 @@ function ability_thdots_shou04:GetCooldown(level)
 	return cd
 end
 
+function ability_thdots_shou04:OnAbilityPhaseStart()
+	if not IsServer() then return true end
+	-- 原固定 1.2 秒自晕改由原生前摇承担，订单过滤只保护主动取消。
+	self:GetCaster():EmitSound("Hero_ElderTitan.EchoStomp.Channel")
+	return true
+end
+
+function ability_thdots_shou04:OnAbilityPhaseInterrupted()
+	if IsServer() then self:GetCaster():StopSound("Hero_ElderTitan.EchoStomp.Channel") end
+end
+
+function ability_thdots_shou04:OnOwnerDied()
+	self:OnAbilityPhaseInterrupted()
+end
+
 function ability_thdots_shou04:OnSpellStart()
 	if not IsServer() then return end
 	local caster = self:GetCaster()
@@ -293,26 +308,10 @@ function ability_thdots_shou04:OnSpellStart()
 	local radius = self:GetSpecialValueFor("radius")
 	local damage = self:GetSpecialValueFor("damage")
 	local stun = self:GetSpecialValueFor("stun")
-	Shou04OnSpellStart({
-		caster = caster,
-		ability = self
-	})
-	caster:EmitSound("Hero_ElderTitan.EchoStomp.Channel")
-	caster:EmitSound("Hero_ElderTitan.EchoStomp.Channel")
-	caster:EmitSound("Hero_ElderTitan.EchoStomp.Channel")
-	caster:AddNewModifier(caster, self, "modifier_ability_thdots_shou04_stun", {duration = 1.2})
-	Timer.Wait "Shou04DelayedAction" (1.2,
-		function ()
-			Shou04DelayedAction({
-				caster = caster,
-				ability = ability,
-				length = length,
-				radius = radius,
-				damage = damage,
-				stun = stun
-			})
-		end
-	)
+	self:OnAbilityPhaseInterrupted()
+	caster.point = self:GetCursorPosition()
+	Shou04DelayedAction({ caster = caster, ability = ability, length = length,
+		radius = radius, damage = damage, stun = stun })
 end
 
 function Shou04OnSpellStart( keys )
@@ -342,7 +341,7 @@ function Shou04DelayedAction( keys )
 		local targets = FindUnitsInLine(caster:GetTeam(), SHOU04_POINT, SHOU04_POINT + rad * keys.length, nil, keys.radius, keys.ability:GetAbilityTargetTeam(), keys.ability:GetAbilityTargetType(), 0)
 		for _,v in pairs (targets) do
 			v:AddNewModifier(caster, keys.ability, "modifier_ability_thdots_shou04_damage", {duration = 1})
-			UtilStun:UnitStunTarget(caster,v,keys.stun)
+			UtilStun:UnitStunTarget(caster,v,keys.stun, (UtilStun.TraceSource and UtilStun:TraceSource(function() return keys.ability end) or nil), "script:scripts/vscripts/abilities/abilityshou.lua:Shou04DelayedAction:344")
 		end
 	end
 end
@@ -354,9 +353,7 @@ function modifier_ability_thdots_shou04_stun:IsPurgable() return false end
 function modifier_ability_thdots_shou04_stun:RemoveOnDeath() return true end
 function modifier_ability_thdots_shou04_stun:IsDebuff() return false end
 function modifier_ability_thdots_shou04_stun:CheckState()
-	return {
-		[MODIFIER_STATE_STUNNED] = true
-	}
+	return {} -- 兼容旧 ID；前摇不再通过自晕实现。
 end
 
 modifier_ability_thdots_shou04 = {}

@@ -226,7 +226,7 @@ function Yasaka01_OnSpellStart(keys)
                 damage = Damage,
                 damage_type = Ability:GetAbilityDamageType()
             }
-            UtilStun:UnitStunTarget(Caster, v, StunDuration)
+            UtilStun:UnitStunTarget(Caster, v, StunDuration, (UtilStun.TraceSource and UtilStun:TraceSource(function() return keys.ability end) or nil), "script:scripts/vscripts/abilities/abilityyasaka.lua:Yasaka01_OnSpellStart:229")
             UnitDamageTarget(damage_table)
         end
         Caster:EmitSound("Hero_EarthSpirit.BoulderSmash.Target")
@@ -655,7 +655,7 @@ function Yasaka41_OnSpellStart(keys)
                 FIND_ANY_ORDER, false)
             for _, v in pairs(enemies) do
                 damage_table.victim = v
-                UtilStun:UnitStunTarget(Caster, v, stun_duration)
+                UtilStun:UnitStunTarget(Caster, v, stun_duration, (UtilStun.TraceSource and UtilStun:TraceSource(function() return keys.ability end) or nil), "script:scripts/vscripts/abilities/abilityyasaka.lua:Yasaka41_OnSpellStart:658")
                 UnitDamageTarget(damage_table)
             end
             local effectIndex = ParticleManager:CreateParticle("particles/heroes/kanako/ability_kanako_041.vpcf",

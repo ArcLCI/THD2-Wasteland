@@ -237,7 +237,7 @@ function Shikieiki02_OnSpellStart(keys)
 	local StunDuration= math.min(keys.StunDurationBase+keys.StunDurationAccusation*AccusationNum,3)
 	local Damage=keys.DamageBase+keys.DamageAccusation*AccusationNum
 	
-	UtilStun:UnitStunTarget(Caster,Target,StunDuration)
+	UtilStun:UnitStunTarget(Caster,Target,StunDuration, (UtilStun.TraceSource and UtilStun:TraceSource(function() return keys.ability end) or nil), "script:scripts/vscripts/abilities/abilityshikieiki.lua:Shikieiki02_OnSpellStart:240")
 	local effectIndex = ParticleManager:CreateParticle("particles/units/heroes/hero_omniknight/omniknight_purification.vpcf", PATTACH_CUSTOMORIGIN, Target)
 	ParticleManager:SetParticleControl(effectIndex, 0, Target:GetOrigin())
 	ParticleManager:SetParticleControl(effectIndex, 1, Vector(1,1,1))

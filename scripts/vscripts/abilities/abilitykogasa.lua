@@ -182,7 +182,7 @@ function Kogasa04OnThink( keys )
 					damage_type = keys.ability:GetAbilityDamageType(), 
 					damage_flags = 0
 				}
-				UtilStun:UnitStunTarget(caster,v,FindValueTHD("stun_duration",ability))
+				UtilStun:UnitStunTarget(caster,v,FindValueTHD("stun_duration",ability), (UtilStun.TraceSource and UtilStun:TraceSource(function() return keys.ability end) or nil), "script:scripts/vscripts/abilities/abilitykogasa.lua:Kogasa04OnThink:185")
 				UnitDamageTarget(damage_table)
 				if v and not v:IsNull() and v:IsRealHero() then
 					if caster:FindModifierByName("modifier_ability_thdots_kogasa04_movespeed") == nil then

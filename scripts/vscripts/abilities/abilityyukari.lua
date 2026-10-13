@@ -85,7 +85,7 @@ function Yukari_FalldownUnitInGap(caster, pos)
                         damage_table.victim = u
                         UtilStun:UnitStunTarget(caster, u,
                             Ability01:GetLevelSpecialValueFor("stun_duration", ability_level - 1) +
-                                FindTelentValue(caster, "special_bonus_unique_yukari_1"))
+                                FindTelentValue(caster, "special_bonus_unique_yukari_1"), (UtilStun.TraceSource and UtilStun:TraceSource(function() return Ability01 end) or nil), "script:scripts/vscripts/abilities/abilityyukari.lua:Yukari_FalldownUnitInGap:86")
                         UnitDamageTarget(damage_table)
                     end
 

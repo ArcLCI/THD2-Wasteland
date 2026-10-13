@@ -412,7 +412,7 @@ function ability_thdots_tojiko01:OnSpellStart()
 				ability 		= self
 			}
 		if HitHero then
-			UtilStun:UnitStunTarget(caster,vic,stun_duration)
+			UtilStun:UnitStunTarget(caster,vic,stun_duration,self, is_ex_copy and "tojiko_echo" or "tojiko_primary")
 		end
 		UnitDamageTarget(damage_tabel)
 	end

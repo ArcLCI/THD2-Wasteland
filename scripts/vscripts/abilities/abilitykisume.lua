@@ -141,7 +141,7 @@ function modifier_ability_thdots_kisume01_dummy:OnCreated()
 				    damage_type = self.ability:GetAbilityDamageType(), 
 					damage_flags = 0
 				}
-		UtilStun:UnitStunTarget(self.caster,victim,self.stun_duration)
+		UtilStun:UnitStunTarget(self.caster,victim,self.stun_duration, (UtilStun.TraceSource and UtilStun:TraceSource(function() return self:GetAbility() end) or nil), "script:scripts/vscripts/abilities/abilitykisume.lua:OnCreated:144")
 		UnitDamageTarget(damage_table)
 	end
 	self:StartIntervalThink(interval)
@@ -305,7 +305,7 @@ function modifier_ability_thdots_kisume02_invin:OnDestroy()
 					damage_flags = 0
 				}
 		if self.ability.kisumeEx_stun_time ~= 0 then
-			UtilStun:UnitStunTarget(self.caster,victim,self.ability.kisumeEx_stun_time)
+			UtilStun:UnitStunTarget(self.caster,victim,self.ability.kisumeEx_stun_time, (UtilStun.TraceSource and UtilStun:TraceSource(function() return self:GetAbility() end) or nil), "script:scripts/vscripts/abilities/abilitykisume.lua:OnDestroy:308")
 		end
 		UnitDamageTarget(damage_table)
 	end
@@ -397,7 +397,7 @@ function ability_thdots_kisume03:OnSpellStart()
 					damage_flags = 0
 				}
 		if self.kisumeEx_stun_time ~= 0 then
-			UtilStun:UnitStunTarget(self.caster,victim,self.kisumeEx_stun_time)
+			UtilStun:UnitStunTarget(self.caster,victim,self.kisumeEx_stun_time, (UtilStun.TraceSource and UtilStun:TraceSource(function() return self end) or nil), "script:scripts/vscripts/abilities/abilitykisume.lua:OnSpellStart:400")
 		end
 		UnitDamageTarget(damage_table)
 	end
@@ -632,7 +632,7 @@ function ability_thdots_kisume04:OnSpellStart()
 					damage_flags = 0
 				}
 		if self.kisumeEx_stun_time ~= 0 then
-			UtilStun:UnitStunTarget(self.caster,victim,self.kisumeEx_stun_time)
+			UtilStun:UnitStunTarget(self.caster,victim,self.kisumeEx_stun_time, (UtilStun.TraceSource and UtilStun:TraceSource(function() return self end) or nil), "script:scripts/vscripts/abilities/abilitykisume.lua:OnSpellStart:635")
 		end
 		UnitDamageTarget(damage_table)
 	end

@@ -252,7 +252,7 @@ function ability_thdots_medicine01:OnProjectileHit(hTarget, vLocation)
         local mods = hTarget:FindAllModifiers()
         for _, m in pairs(mods) do
             if string.find(m:GetName(), "medicine") then
-                UtilStun:UnitStunTarget(caster, hTarget, self:GetSpecialValueFor("stun_time"))
+                UtilStun:UnitStunTarget(caster, hTarget, self:GetSpecialValueFor("stun_time"), (UtilStun.TraceSource and UtilStun:TraceSource(function() return self end) or nil), "script:scripts/vscripts/abilities/abilitymedicine.lua:OnProjectileHit:255")
                 break
             end
         end

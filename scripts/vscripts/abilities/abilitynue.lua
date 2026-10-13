@@ -227,7 +227,7 @@ function OnNue04Start(keys)
                 damage_flags = keys.ability:GetAbilityTargetFlags()
             }
             UtilStun:UnitStunTarget(caster, v,
-                keys.stun_duration + FindTelentValue(caster, "special_bonus_unique_nue_2"))
+                keys.stun_duration + FindTelentValue(caster, "special_bonus_unique_nue_2"), (UtilStun.TraceSource and UtilStun:TraceSource(function() return keys.ability end) or nil), "script:scripts/vscripts/abilities/abilitynue.lua:OnNue04Start:229")
             UnitDamageTarget(damage_table)
         end
         FindClearSpaceForUnit(caster, targetPoint, true)

@@ -241,7 +241,7 @@ function modifier_ability_thdots_yorihime_01_move:OnDestroy()
 				damage_flags    = ability:GetAbilityTargetFlags(),
 				ability= ability
 			}
-		UtilStun:UnitStunTarget(caster,unit,stun_duration)
+		UtilStun:UnitStunTarget(caster,unit,stun_duration, (UtilStun.TraceSource and UtilStun:TraceSource(function() return self:GetAbility() end) or nil), "script:scripts/vscripts/abilities/abilityyorihime.lua:OnDestroy:244")
 		UnitDamageTarget(damage_table)
 	end
 

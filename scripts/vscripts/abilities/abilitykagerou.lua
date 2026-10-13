@@ -356,7 +356,7 @@ function A3PassiveTrig(k)
 	local stun_time = ab:GetSpecialValueFor("stun_time")
 	if ab.first and not k.first then return end --防止首次攻击回复两次生命值
 	if not t:IsTower() and not t:IsBuilding() then
-		UtilStun:UnitStunTarget( cs,t,stun_time)--击晕目标
+		UtilStun:UnitStunTarget( cs,t,stun_time, (UtilStun.TraceSource and UtilStun:TraceSource(function() return k.ability end) or nil), "script:scripts/vscripts/abilities/abilitykagerou.lua:A3PassiveTrig:359")--击晕目标
 		cs:EmitSound("Voice_Thdots_Kagerou.AbilityKagerou03")
 	end
 	--天生强化 触发三技能攻击特效时回复生命值

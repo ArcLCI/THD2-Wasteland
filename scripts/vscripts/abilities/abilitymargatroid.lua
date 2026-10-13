@@ -946,7 +946,7 @@ function Margatroid32_OnSpellStart(keys)
         return
     end
     Caster:StartGesture(ACT_DOTA_ATTACK)
-    UtilStun:UnitStunTarget(Caster, Target, keys.StunDuration)
+    UtilStun:UnitStunTarget(Caster, Target, keys.StunDuration, (UtilStun.TraceSource and UtilStun:TraceSource(function() return keys.ability end) or nil), "script:scripts/vscripts/abilities/abilitymargatroid.lua:Margatroid32_OnSpellStart:949")
     local effectIndex = ParticleManager:CreateParticle("particles/heroes/alice/ability_alice_dash_a1.vpcf",
         PATTACH_CUSTOMORIGIN, Caster)
     ParticleManager:SetParticleControlEnt(effectIndex, 0, Caster, 5, "attach_attack1", Vector(0, 0, 0), true)

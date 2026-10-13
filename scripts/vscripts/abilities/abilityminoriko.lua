@@ -85,7 +85,7 @@ function ability_thdots_minoriko01:OnProjectileHit(hTarget, vLocation)
     if caster:GetTeam() ~= target:GetTeam() then
         local ex = target:GetMaxHealth() * heal_percent / 100
         UtilStun:UnitStunTarget(caster, target,
-            (stun_duration + FindTelentValue(caster, "special_bonus_unique_minoriko_3")))
+            (stun_duration + FindTelentValue(caster, "special_bonus_unique_minoriko_3")), (UtilStun.TraceSource and UtilStun:TraceSource(function() return self end) or nil), "script:scripts/vscripts/abilities/abilityminoriko.lua:OnProjectileHit:87")
         local targets = FindUnitsInRadius(caster:GetTeam(), target:GetOrigin(), nil, radius,
             DOTA_UNIT_TARGET_TEAM_ENEMY, self:GetAbilityTargetType(), 0, FIND_CLOSEST, false)
         -- local mod = v:AddNewModifier(caster, self, "modifier_ability_thdots_minoriko01_sign",{duration = 1})
@@ -209,7 +209,7 @@ function OnMinoriko01ProjectileHitUnit(keys)
             damage_flags = keys.ability:GetAbilityTargetFlags()
         }
         UtilStun:UnitStunTarget(caster, target,
-            (keys.stun_duration + FindTelentValue(caster, "special_bonus_unique_minoriko_3")))
+            (keys.stun_duration + FindTelentValue(caster, "special_bonus_unique_minoriko_3")), (UtilStun.TraceSource and UtilStun:TraceSource(function() return keys.ability end) or nil), "script:scripts/vscripts/abilities/abilityminoriko.lua:OnMinoriko01ProjectileHitUnit:211")
         local effectIndex = ParticleManager:CreateParticle(
             "particles/units/heroes/hero_ogre_magi/ogre_magi_fireblast.vpcf", PATTACH_CUSTOMORIGIN, target)
         ParticleManager:SetParticleControl(effectIndex, 0, target:GetOrigin())

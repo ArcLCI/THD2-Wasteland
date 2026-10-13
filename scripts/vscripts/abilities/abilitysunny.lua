@@ -156,7 +156,7 @@ function ability_thdots_sunny02:OnSpellStart()
 				damage_type = self:GetAbilityDamageType(), 
 				damage_flags = 0
 		}
-		UtilStun:UnitStunTarget(caster,v,stun_time)
+		UtilStun:UnitStunTarget(caster,v,stun_time, (UtilStun.TraceSource and UtilStun:TraceSource(function() return self end) or nil), "script:scripts/vscripts/abilities/abilitysunny.lua:OnSpellStart:159")
 		UnitDamageTarget(damage_table)
 	end
 end

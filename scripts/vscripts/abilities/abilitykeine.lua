@@ -499,7 +499,7 @@ function modifier_ability_thdots_keine03_passive:OnAttackLanded(keys)
 		-- caster:RemoveGesture(ACT_DOTA_CAST_ABILITY_3)
 		
 		target:EmitSound("Hero_FacelessVoid.TimeLockImpact")
-		UtilStun:UnitStunTarget(caster,target,self.pass_stun)
+		UtilStun:UnitStunTarget(caster,target,self.pass_stun, (UtilStun.TraceSource and UtilStun:TraceSource(function() return self:GetAbility() end) or nil), "script:scripts/vscripts/abilities/abilitykeine.lua:OnAttackLanded:502")
 		local damage = self.damage
 		damage = damage + caster:GetAverageTrueAttackDamage(caster) * self.attack_bonus
 		local damage_tabel = {
@@ -559,7 +559,7 @@ function ability_thdots_keine03:OnSpellStart()
 	ParticleManager:ReleaseParticleIndex(aoe_pfx)
 	ParticleManager:DestroyParticleSystemTime(aoe_pfx,2)
 
-	UtilStun:UnitStunTarget(caster,target,act_stun)
+	UtilStun:UnitStunTarget(caster,target,act_stun, (UtilStun.TraceSource and UtilStun:TraceSource(function() return self end) or nil), "script:scripts/vscripts/abilities/abilitykeine.lua:OnSpellStart:562")
 	damage = damage + caster:GetAverageTrueAttackDamage(caster) * attack_bonus
 	local damage_tabel = {
 				victim 			= target,

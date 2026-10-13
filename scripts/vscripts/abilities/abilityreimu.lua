@@ -124,7 +124,7 @@ function OnReimu01BollIntervalThink(keys)
             }
             AbilityReimu:ReimuSpellDamageTarget(damageTable)
             -- Apply stun
-            UtilStun:UnitStunTarget(caster, target, unit.stun_duration)
+            UtilStun:UnitStunTarget(caster, target, unit.stun_duration, (UtilStun.TraceSource and UtilStun:TraceSource(function() return keys.ability end) or nil), "script:scripts/vscripts/abilities/abilityreimu.lua:OnReimu01BollIntervalThink:127")
         end
 
         -- Collision sound
@@ -585,7 +585,7 @@ function OnReimu04Damage(keys)
             damage_type = ability:GetAbilityDamageType()
         }
         AbilityReimu:ReimuSpellDamageTarget(damageTable)
-        UtilStun:UnitStunTarget(caster, target, stun_duration)
+        UtilStun:UnitStunTarget(caster, target, stun_duration, (UtilStun.TraceSource and UtilStun:TraceSource(function() return keys.ability end) or nil), "script:scripts/vscripts/abilities/abilityreimu.lua:OnReimu04Damage:588")
         modifier:IncrementStackCount()
     end
 end

@@ -222,7 +222,7 @@ function OnClown02SpellUnitMove(keys)
     caster.unit:SetAbsOrigin(Pos - Direction * Speed * MoveRate)
     if Distance >= keys.BreakRadius and Distance <= keys.MaxRadius then
         if caster.target:GetTeam() ~= caster:GetTeam() then
-            UtilStun:UnitStunTarget(caster, caster.target, Time)
+            UtilStun:UnitStunTarget(caster, caster.target, Time, (UtilStun.TraceSource and UtilStun:TraceSource(function() return keys.ability end) or nil), "script:scripts/vscripts/abilities/abilityclown.lua:OnClown02SpellUnitMove:225")
             StartSoundEventFromPosition("Hero_StormSpirit.StaticRemnantExplode", TargetPos)
             local damage_table = {
                 ability = keys.ability,
@@ -271,7 +271,7 @@ function OnClown03Damage(keys)
         DOTA_UNIT_TARGET_TEAM_ENEMY, keys.ability:GetAbilityTargetType(), keys.ability:GetAbilityTargetFlags(),
         FIND_CLOSEST, false)
     for _, v in pairs(targets) do
-        UtilStun:UnitStunTarget(caster, v, keys.StunDuration)
+        UtilStun:UnitStunTarget(caster, v, keys.StunDuration, (UtilStun.TraceSource and UtilStun:TraceSource(function() return keys.ability end) or nil), "script:scripts/vscripts/abilities/abilityclown.lua:OnClown03Damage:274")
         local damage_table = {
             ability = keys.ability,
             victim = v,

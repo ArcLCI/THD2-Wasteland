@@ -266,13 +266,15 @@
 
 	"ability_thdots_yumemi04"
 	{
-		"BaseClass"	"ability_datadriven"
+		"BaseClass"	"ability_lua"
+		"ScriptFile"	"scripts/vscripts/abilities/abilityyumemi.lua"
 		"AbilityTextureName"	"custom/ability_thdots_yumemi04"
+		"AbilityCastAnimation"	"ACT_DOTA_CAST_ABILITY_4"
 		"AbilityBehavior"	"DOTA_ABILITY_BEHAVIOR_NO_TARGET"
 		"AbilityUnitTargetType"	"DOTA_UNIT_TARGET_HERO | DOTA_UNIT_TARGET_BASIC"
 		"AbilityUnitDamageType"	"DAMAGE_TYPE_PURE"
 		"AbilityType"	"DOTA_ABILITY_TYPE_ULTIMATE"
-		"AbilityCastPoint"	"0.1"
+		"AbilityCastPoint"	"4.1"
 		"AbilityCooldown"	"120"
 		"AOERadius"	"%radius"
 		// Stats
@@ -286,57 +288,7 @@
 			"particle"	"particles/heroes/yumemi/ability_yumemi_04.vpcf"
 			"particle"	"particles/heroes/yumemi/ability_yumemi_04_exolosion.vpcf"
 		}
-		"OnSpellStart"
-		{
-			"FireSound"
-			{
-				"EffectName"	"Voice_Thdots_Yumemi.AbilityYumemi04"
-				"Target"	"CASTER"
-			}
-			"ApplyModifier"
-			{
-				"Target"	"CASTER"
-				"ModifierName"	"modifier_yumemi04_action"
-			}
-		}
-		"Modifiers"
-		{
-			"modifier_yumemi04_action"
-			{
-				"EffectName"	"particles/heroes/yumemi/ability_yumemi_04.vpcf"
-				"EffectAttachType"	"follow_origin"
-				"OverrideAnimation"	"ACT_DOTA_CAST_ABILITY_4"
-				"Duration"	"%duration"
-				"OnCreated"
-				{
-					"RunScript"
-					{
-						"ScriptFile"	"scripts/vscripts/abilities/abilityYumemi.lua"
-						"Function"	"OnYumemi04PhaseStart"
-					}
-				}
-				"OnDestroy"
-				{
-					"FireEffect"
-					{
-						"EffectName"	"particles/heroes/yumemi/ability_yumemi_04_exolosion.vpcf"
-						"EffectAttachType"	"follow_origin"
-						"Target"	"CASTER"
-					}
-					"RunScript"
-					{
-						"ScriptFile"	"scripts/vscripts/abilities/abilityYumemi.lua"
-						"Function"	"OnYumemi04Destroy"						
-						"StunDuration"	"%stun_duration"
-						"Radius"		"%radius"
-					}
-				}
-				"States"
-				{
-					"MODIFIER_STATE_STUNNED"	"MODIFIER_STATE_VALUE_ENABLED"
-				}
-			}
-		}
+
 		"AbilityValues"
 		{
 				"radius"

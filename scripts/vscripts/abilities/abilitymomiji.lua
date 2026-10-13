@@ -212,7 +212,7 @@ function OnMomiji03Start(keys)
     end
     local caster = EntIndexToHScript(keys.caster_entindex)
     local target = keys.target
-    UtilStun:UnitStunTarget(caster, target, keys.Duration)
+    UtilStun:UnitStunTarget(caster, target, keys.Duration, (UtilStun.TraceSource and UtilStun:TraceSource(function() return keys.ability end) or nil), "script:scripts/vscripts/abilities/abilitymomiji.lua:OnMomiji03Start:215")
 
     local effectIndex = ParticleManager:CreateParticle(
         "particles/units/heroes/hero_sven/sven_storm_bolt_projectile_explosion.vpcf", PATTACH_CUSTOMORIGIN, caster)
@@ -244,7 +244,7 @@ function ability_thdots_momiji03:OnSpellStart()
         return
     end
     caster:EmitSound("Hero_DragonKnight.DragonTail.Target")
-    UtilStun:UnitStunTarget(caster, target, duration)
+    UtilStun:UnitStunTarget(caster, target, duration, (UtilStun.TraceSource and UtilStun:TraceSource(function() return self end) or nil), "script:scripts/vscripts/abilities/abilitymomiji.lua:OnSpellStart:247")
 
     local effectIndex = ParticleManager:CreateParticle(
         "particles/units/heroes/hero_sven/sven_storm_bolt_projectile_explosion.vpcf", PATTACH_CUSTOMORIGIN, caster)

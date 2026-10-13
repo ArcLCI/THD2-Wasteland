@@ -282,7 +282,7 @@ function modifier_ability_thdots_chen02_target:OnIntervalThink()
 	if self.wait_time <= 0.03 or not self.target:IsAlive() then
 		if self:GetStackCount() == 1 then
 			--眩晕
-			UtilStun:UnitStunTarget(self.caster,self.target,self.duration_stun)
+			UtilStun:UnitStunTarget(self.caster,self.target,self.duration_stun, (UtilStun.TraceSource and UtilStun:TraceSource(function() return self:GetAbility() end) or nil), "script:scripts/vscripts/abilities/abilitychen.lua:OnIntervalThink:285")
 		else
 			--沉默
 			UtilSilence:UnitSilenceTarget(self.caster,self.target,self.duration)

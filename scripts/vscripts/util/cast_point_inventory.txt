@@ -1,0 +1,415 @@
+STATIC DECLARATION INVENTORY - not runtime or active roster proof
+Hero KV files: 87; non-passive declarations: 410
+<inherited> means no explicit value in this declaration, not zero. Lua overrides and base ability definitions may apply.
+ability | declared cast point | declared behavior | source
+ability_dota2x_reimu01 | 0.1 | DOTA_ABILITY_BEHAVIOR_POINT | DOTA_ABILITY_BEHAVIOR_AOE | scripts/npc/heroes/reimu/npc_abilities_reimu.txt
+ability_dota2x_reimu02 | 0.2 | DOTA_ABILITY_BEHAVIOR_NO_TARGET | scripts/npc/heroes/reimu/npc_abilities_reimu.txt
+ability_dota2x_reimu03 | 0.1 | DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | scripts/npc/heroes/reimu/npc_abilities_reimu.txt
+ability_dota2x_reimu04 | 0.2 | DOTA_ABILITY_BEHAVIOR_NO_TARGET | scripts/npc/heroes/reimu/npc_abilities_reimu.txt
+ability_dota2x_reimuEx | 0.1 | DOTA_ABILITY_BEHAVIOR_NO_TARGET | scripts/npc/heroes/reimu/npc_abilities_reimu.txt
+ability_marisa03_dummy_unit | <inherited> | <inherited> | scripts/npc/heroes/marisa/npc_abilities_marisa.txt
+ability_reimu02_dummy_unit | <inherited> | <inherited> | scripts/npc/heroes/reimu/npc_abilities_reimu.txt
+ability_thdots_Jyoon_2 | 0.4 | DOTA_ABILITY_BEHAVIOR_AOE | DOTA_ABILITY_BEHAVIOR_POINT | DOTA_ABILITY_BEHAVIOR_IGNORE_BACKSWING | scripts/npc/heroes/jyoon/npc_abilities_jyoon.txt
+ability_thdots_Jyoon_3 | <inherited> | DOTA_ABILITY_BEHAVIOR_NO_TARGET | scripts/npc/heroes/jyoon/npc_abilities_jyoon.txt
+ability_thdots_Jyoon_4 | 0.4 | DOTA_ABILITY_BEHAVIOR_NO_TARGET | scripts/npc/heroes/jyoon/npc_abilities_jyoon.txt
+ability_thdots_Margatroid01 | 0.2 | DOTA_ABILITY_BEHAVIOR_POINT | DOTA_ABILITY_BEHAVIOR_AOE | DOTA_ABILITY_BEHAVIOR_DIRECTIONAL | DOTA_ABILITY_BEHAVIOR_IGNORE_TURN | DOTA_ABILITY_BEHAVIOR_IGNORE_CHANNEL | scripts/npc/heroes/margatroid/npc_abilities_margatroid.txt
+ability_thdots_Margatroid02 | 0.2 | DOTA_ABILITY_BEHAVIOR_POINT | DOTA_ABILITY_BEHAVIOR_DIRECTIONAL | DOTA_ABILITY_BEHAVIOR_IGNORE_TURN | DOTA_ABILITY_BEHAVIOR_IGNORE_CHANNEL | scripts/npc/heroes/margatroid/npc_abilities_margatroid.txt
+ability_thdots_Margatroid03 | 0.2 | DOTA_ABILITY_BEHAVIOR_POINT | scripts/npc/heroes/margatroid/npc_abilities_margatroid.txt
+ability_thdots_Margatroid04 | 0.2 | DOTA_ABILITY_BEHAVIOR_POINT | scripts/npc/heroes/margatroid/npc_abilities_margatroid.txt
+ability_thdots_Margatroid32 | <inherited> | DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE | scripts/npc/heroes/margatroid/npc_abilities_margatroid.txt
+ability_thdots_Margatroid33 | 0.5 | DOTA_ABILITY_BEHAVIOR_POINT | DOTA_ABILITY_BEHAVIOR_AOE | DOTA_ABILITY_BEHAVIOR_DIRECTIONAL | scripts/npc/heroes/margatroid/npc_abilities_margatroid.txt
+ability_thdots_Margatroid34 | 0.5 | DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_AOE | scripts/npc/heroes/margatroid/npc_abilities_margatroid.txt
+ability_thdots_MargatroidEx | 0.2 | DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IGNORE_BACKSWING | scripts/npc/heroes/margatroid/npc_abilities_margatroid.txt
+ability_thdots_Margatroid_lyz | 0.2 | DOTA_ABILITY_BEHAVIOR_POINT | DOTA_ABILITY_BEHAVIOR_AOE | DOTA_ABILITY_BEHAVIOR_IGNORE_TURN | DOTA_ABILITY_BEHAVIOR_IGNORE_CHANNEL | scripts/npc/heroes/margatroid/npc_abilities_margatroid.txt
+ability_thdots_Merlin01 | 0.2 0.2 0.2 0.2 | DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | scripts/npc/heroes/merlin/npc_abilities_merlin.txt
+ability_thdots_Merlin02 | 0.2 0.2 0.2 0.2 | DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | scripts/npc/heroes/merlin/npc_abilities_merlin.txt
+ability_thdots_Merlin04 | 0.3 0.3 0.3 0.3 | DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | scripts/npc/heroes/merlin/npc_abilities_merlin.txt
+ability_thdots_RanEx | <inherited> | DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE | scripts/npc/heroes/ran/npc_abilities_ran.txt
+ability_thdots_Utsuho01 | 0.3 | DOTA_ABILITY_BEHAVIOR_IGNORE_BACKSWING | DOTA_ABILITY_BEHAVIOR_UNIT_TARGET  | scripts/npc/heroes/utsuho/npc_abilities_utsuho.txt
+ability_thdots_Utsuho02 | 0 | DOTA_ABILITY_BEHAVIOR_IMMEDIATE | DOTA_ABILITY_BEHAVIOR_TOGGLE | DOTA_ABILITY_BEHAVIOR_IGNORE_CHANNEL | scripts/npc/heroes/utsuho/npc_abilities_utsuho.txt
+ability_thdots_Utsuho03 | 0.2 | DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE | DOTA_ABILITY_BEHAVIOR_IGNORE_CHANNEL | scripts/npc/heroes/utsuho/npc_abilities_utsuho.txt
+ability_thdots_Utsuho04 | 0.1 | DOTA_ABILITY_BEHAVIOR_IGNORE_BACKSWING | DOTA_ABILITY_BEHAVIOR_AOE | DOTA_ABILITY_BEHAVIOR_POINT | DOTA_ABILITY_BEHAVIOR_CHANNELLED | scripts/npc/heroes/utsuho/npc_abilities_utsuho.txt
+ability_thdots_YuukaEx | 0.2 | DOTA_ABILITY_BEHAVIOR_NO_TARGET | scripts/npc/heroes/yuuka/npc_abilities_yuuka.txt
+ability_thdots_YuukaEx2 | 0.3 | DOTA_ABILITY_BEHAVIOR_POINT | DOTA_ABILITY_BEHAVIOR_NOT_LEARNABLE | DOTA_ABILITY_BEHAVIOR_ROOT_DISABLES | scripts/npc/heroes/yuuka/npc_abilities_yuuka.txt
+ability_thdots_aya01 | 0.2 | DOTA_ABILITY_BEHAVIOR_IGNORE_BACKSWING | DOTA_ABILITY_BEHAVIOR_AOE | DOTA_ABILITY_BEHAVIOR_POINT | DOTA_ABILITY_BEHAVIOR_ROOT_DISABLES | DOTA_ABILITY_BEHAVIOR_DIRECTIONAL | scripts/npc/heroes/aya/npc_abilities_aya.txt
+ability_thdots_aya02 | 0.3 | DOTA_ABILITY_BEHAVIOR_IGNORE_BACKSWING | DOTA_ABILITY_BEHAVIOR_UNIT_TARGET  | scripts/npc/heroes/aya/npc_abilities_aya.txt
+ability_thdots_aya04 | 0.2 | DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE | scripts/npc/heroes/aya/npc_abilities_aya.txt
+ability_thdots_byakuren01 | 0.2 | <inherited> | scripts/npc/heroes/byakuren/npc_abilities_byakuren.txt
+ability_thdots_byakuren02 | 0.3 | DOTA_ABILITY_BEHAVIOR_UNIT_TARGET  | DOTA_ABILITY_BEHAVIOR_AOE | scripts/npc/heroes/byakuren/npc_abilities_byakuren.txt
+ability_thdots_byakuren03 | 0.3 | DOTA_ABILITY_BEHAVIOR_UNIT_TARGET  | scripts/npc/heroes/byakuren/npc_abilities_byakuren.txt
+ability_thdots_byakuren05 | 0.2 | DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | scripts/npc/heroes/byakuren/npc_abilities_byakuren.txt
+ability_thdots_chen01 | <inherited> | DOTA_ABILITY_BEHAVIOR_IMMEDIATE | DOTA_ABILITY_BEHAVIOR_POINT | DOTA_ABILITY_BEHAVIOR_AOE | DOTA_ABILITY_BEHAVIOR_ROOT_DISABLES | scripts/npc/heroes/chen/npc_abilities_chen.txt
+ability_thdots_chen02 | 0.2 | DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | scripts/npc/heroes/chen/npc_abilities_chen.txt
+ability_thdots_chen03 | <inherited> | DOTA_ABILITY_BEHAVIOR_IMMEDIATE | DOTA_ABILITY_BEHAVIOR_NO_TARGET | scripts/npc/heroes/chen/npc_abilities_chen.txt
+ability_thdots_chen04 | <inherited> | DOTA_ABILITY_BEHAVIOR_IMMEDIATE | DOTA_ABILITY_BEHAVIOR_NO_TARGET | scripts/npc/heroes/chen/npc_abilities_chen.txt
+ability_thdots_chen_wanbaochui | <inherited> | DOTA_ABILITY_BEHAVIOR_IMMEDIATE | DOTA_ABILITY_BEHAVIOR_NO_TARGET | scripts/npc/heroes/chen/npc_abilities_chen.txt
+ability_thdots_child01 | 0.2 | DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | scripts/npc/heroes/child/npc_abilities_child.txt
+ability_thdots_child02 | 0.2 | DOTA_ABILITY_BEHAVIOR_POINT | DOTA_ABILITY_BEHAVIOR_AOE | scripts/npc/heroes/child/npc_abilities_child.txt
+ability_thdots_child04 | 0.2 | DOTA_ABILITY_BEHAVIOR_POINT | scripts/npc/heroes/child/npc_abilities_child.txt
+ability_thdots_cirno01 | 0.2 | DOTA_ABILITY_BEHAVIOR_NO_TARGET | scripts/npc/heroes/cirno/npc_abilities_cirno.txt
+ability_thdots_cirno02 | 0.2 | DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE | scripts/npc/heroes/cirno/npc_abilities_cirno.txt
+ability_thdots_cirno03 | 0.2 | DOTA_ABILITY_BEHAVIOR_AOE | DOTA_ABILITY_BEHAVIOR_POINT | scripts/npc/heroes/cirno/npc_abilities_cirno.txt
+ability_thdots_cirno04 | 0.2 | DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE | scripts/npc/heroes/cirno/npc_abilities_cirno.txt
+ability_thdots_clown01 | 0.2 | DOTA_ABILITY_BEHAVIOR_AOE | DOTA_ABILITY_BEHAVIOR_POINT | scripts/npc/heroes/clown/npc_abilities_clown.txt
+ability_thdots_clown02 | 0.2 | DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | scripts/npc/heroes/clown/npc_abilities_clown.txt
+ability_thdots_clown03 | 0.1 | DOTA_ABILITY_BEHAVIOR_NO_TARGET | scripts/npc/heroes/clown/npc_abilities_clown.txt
+ability_thdots_clown04 | 0.2 | DOTA_ABILITY_BEHAVIOR_AOE | DOTA_ABILITY_BEHAVIOR_POINT | scripts/npc/heroes/clown/npc_abilities_clown.txt
+ability_thdots_daiyousei01 | 0.2 | DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | DOTA_ABILITY_BEHAVIOR_ROOT_DISABLES | scripts/npc/heroes/daiyousei/npc_abilities_daiyousei.txt
+ability_thdots_daiyousei02 | <inherited> | DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IGNORE_BACKSWING | scripts/npc/heroes/daiyousei/npc_abilities_daiyousei.txt
+ability_thdots_daiyousei03 | 0.2 | DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | scripts/npc/heroes/daiyousei/npc_abilities_daiyousei.txt
+ability_thdots_daiyousei04 | <inherited> | DOTA_ABILITY_BEHAVIOR_IMMEDIATE | DOTA_ABILITY_BEHAVIOR_NO_TARGET | scripts/npc/heroes/daiyousei/npc_abilities_daiyousei.txt
+ability_thdots_daiyousei05 | 0.4 | DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_DONT_CANCEL_MOVEMENT | DOTA_ABILITY_BEHAVIOR_DONT_RESUME_ATTACK | scripts/npc/heroes/daiyousei/npc_abilities_daiyousei.txt
+ability_thdots_eirin02 | 0.3 | DOTA_ABILITY_BEHAVIOR_IGNORE_BACKSWING | DOTA_ABILITY_BEHAVIOR_AOE | DOTA_ABILITY_BEHAVIOR_POINT | scripts/npc/heroes/eirin/npc_abilities_eirin.txt
+ability_thdots_eirin03 | 0.3 | DOTA_ABILITY_BEHAVIOR_IGNORE_BACKSWING | DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | scripts/npc/heroes/eirin/npc_abilities_eirin.txt
+ability_thdots_eirin04 | 0.3 | DOTA_ABILITY_BEHAVIOR_IGNORE_BACKSWING | DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | scripts/npc/heroes/eirin/npc_abilities_eirin.txt
+ability_thdots_eirinex | 0 | DOTA_ABILITY_BEHAVIOR_IGNORE_BACKSWING | DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | scripts/npc/heroes/eirin/npc_abilities_eirin.txt
+ability_thdots_ellen01 | 0.3 | DOTA_ABILITY_BEHAVIOR_POINT | DOTA_ABILITY_BEHAVIOR_AOE | scripts/npc/heroes/ellen/npc_abilities_ellen.txt
+ability_thdots_ellen02 | 0.2 | DOTA_ABILITY_BEHAVIOR_NO_TARGET | scripts/npc/heroes/ellen/npc_abilities_ellen.txt
+ability_thdots_ellen03 | 0.2 | DOTA_ABILITY_BEHAVIOR_POINT | scripts/npc/heroes/ellen/npc_abilities_ellen.txt
+ability_thdots_ellen03_end | 0.1 | DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_NOT_LEARNABLE | DOTA_ABILITY_BEHAVIOR_HIDDEN | DOTA_ABILITY_BEHAVIOR_DONT_RESUME_ATTACK | scripts/npc/heroes/ellen/npc_abilities_ellen.txt
+ability_thdots_ellen04 | 0.3 | DOTA_ABILITY_BEHAVIOR_AOE | DOTA_ABILITY_BEHAVIOR_POINT | DOTA_ABILITY_BEHAVIOR_IGNORE_BACKSWING | scripts/npc/heroes/ellen/npc_abilities_ellen.txt
+ability_thdots_flandre01 | 0.1 | DOTA_ABILITY_BEHAVIOR_NO_TARGET | scripts/npc/heroes/flandre/npc_abilities_flandre.txt
+ability_thdots_flandre04 | 0.2 | DOTA_ABILITY_BEHAVIOR_NO_TARGET | scripts/npc/heroes/flandre/npc_abilities_flandre.txt
+ability_thdots_hatate01 | 0.2 | DOTA_ABILITY_BEHAVIOR_POINT | DOTA_ABILITY_BEHAVIOR_ROOT_DISABLES | scripts/npc/heroes/hatate/npc_abilities_hatate.txt
+ability_thdots_hatate02 | 0.05 | DOTA_ABILITY_BEHAVIOR_POINT | DOTA_ABILITY_BEHAVIOR_AOE | scripts/npc/heroes/hatate/npc_abilities_hatate.txt
+ability_thdots_hatate03 | <inherited> | DOTA_ABILITY_BEHAVIOR_NO_TARGET | scripts/npc/heroes/hatate/npc_abilities_hatate.txt
+ability_thdots_hatate04 | 0.3 | DOTA_ABILITY_BEHAVIOR_NO_TARGET | scripts/npc/heroes/hatate/npc_abilities_hatate.txt
+ability_thdots_hatate04_unit | <inherited> | DOTA_ABILITY_BEHAVIOR_IGNORE_BACKSWING | DOTA_ABILITY_BEHAVIOR_IMMEDIATE | DOTA_ABILITY_BEHAVIOR_IGNORE_TURN | scripts/npc/heroes/hatate/npc_abilities_hatate.txt
+ability_thdots_hatateEx | 0.3 | DOTA_ABILITY_BEHAVIOR_NO_TARGET | scripts/npc/heroes/hatate/npc_abilities_hatate.txt
+ability_thdots_hina01 | 0.2 | DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | scripts/npc/heroes/hina/npc_abilities_hina.txt
+ability_thdots_hina02 | 0.2 | DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | scripts/npc/heroes/hina/npc_abilities_hina.txt
+ability_thdots_hina03 | 0.2 | DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | DOTA_ABILITY_BEHAVIOR_AOE | scripts/npc/heroes/hina/npc_abilities_hina.txt
+ability_thdots_hina04 | <inherited> | DOTA_ABILITY_BEHAVIOR_IMMEDIATE | DOTA_ABILITY_BEHAVIOR_NO_TARGET | scripts/npc/heroes/hina/npc_abilities_hina.txt
+ability_thdots_hina05 | 0 | DOTA_ABILITY_BEHAVIOR_IMMEDIATE | DOTA_ABILITY_BEHAVIOR_NO_TARGET | scripts/npc/heroes/hina/npc_abilities_hina.txt
+ability_thdots_iku01 | 0.0 0.0 0.0 0.0 | DOTA_ABILITY_BEHAVIOR_TOGGLE | scripts/npc/heroes/iku/npc_abilities_iku.txt
+ability_thdots_iku02 | 0.0 0.0 0.0 0.0 | DOTA_ABILITY_BEHAVIOR_NO_TARGET | scripts/npc/heroes/iku/npc_abilities_iku.txt
+ability_thdots_iku04 | 0.0 0.0 0.0 0.0 | DOTA_ABILITY_BEHAVIOR_POINT | scripts/npc/heroes/iku/npc_abilities_iku.txt
+ability_thdots_ikuEx | 0.1 | DOTA_ABILITY_BEHAVIOR_AOE | DOTA_ABILITY_BEHAVIOR_POINT | scripts/npc/heroes/iku/npc_abilities_iku.txt
+ability_thdots_iku_pose | 0.45 | DOTA_ABILITY_BEHAVIOR_NO_TARGET | scripts/npc/heroes/iku/npc_abilities_iku.txt
+ability_thdots_kagerou01 | 0.1 | DOTA_ABILITY_BEHAVIOR_POINT | DOTA_ABILITY_BEHAVIOR_AOE  | DOTA_ABILITY_BEHAVIOR_ROOT_DISABLES | scripts/npc/heroes/kagerou/npc_abilities_kagerou.txt
+ability_thdots_kagerou02 | 0.2 | DOTA_ABILITY_BEHAVIOR_POINT | scripts/npc/heroes/kagerou/npc_abilities_kagerou.txt
+ability_thdots_kagerou03 | 0 | DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE | scripts/npc/heroes/kagerou/npc_abilities_kagerou.txt
+ability_thdots_kagerou06 | 0.2 | DOTA_ABILITY_BEHAVIOR_POINT | DOTA_ABILITY_BEHAVIOR_ROOT_DISABLES | scripts/npc/heroes/kagerou/npc_abilities_kagerou.txt
+ability_thdots_kagerouEx | <inherited> | DOTA_ABILITY_BEHAVIOR_IMMEDIATE | DOTA_ABILITY_BEHAVIOR_NO_TARGET | scripts/npc/heroes/kagerou/npc_abilities_kagerou.txt
+ability_thdots_kaguya01 | 0.2 | DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE | scripts/npc/heroes/kaguya/npc_abilities_kaguya.txt
+ability_thdots_kaguya02 | 0.2 | DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE | scripts/npc/heroes/kaguya/npc_abilities_kaguya.txt
+ability_thdots_kaguya03 | 0.3 | DOTA_ABILITY_BEHAVIOR_NO_TARGET | scripts/npc/heroes/kaguya/npc_abilities_kaguya.txt
+ability_thdots_kaguya04 | 0.3 | DOTA_ABILITY_BEHAVIOR_IGNORE_BACKSWING | DOTA_ABILITY_BEHAVIOR_AOE | DOTA_ABILITY_BEHAVIOR_POINT | scripts/npc/heroes/kaguya/npc_abilities_kaguya.txt
+ability_thdots_kasen01 | 0.2 | DOTA_ABILITY_BEHAVIOR_POINT | DOTA_ABILITY_BEHAVIOR_AOE | DOTA_ABILITY_BEHAVIOR_CHANNELLED | scripts/npc/heroes/kasen/npc_abilities_kasen.txt
+ability_thdots_kasen02 | 0.2 | DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | scripts/npc/heroes/kasen/npc_abilities_kasen.txt
+ability_thdots_kasen03 | 0.2 | DOTA_ABILITY_BEHAVIOR_POINT | scripts/npc/heroes/kasen/npc_abilities_kasen.txt
+ability_thdots_kasen04 | 0.2 | DOTA_ABILITY_BEHAVIOR_POINT | scripts/npc/heroes/kasen/npc_abilities_kasen.txt
+ability_thdots_kasen04_ex | 0 | DOTA_ABILITY_BEHAVIOR_NO_TARGET | scripts/npc/heroes/kasen/npc_abilities_kasen.txt
+ability_thdots_kasen04_ex_WBC | 0.4 | DOTA_ABILITY_BEHAVIOR_NO_TARGET | scripts/npc/heroes/kasen/npc_abilities_kasen.txt
+ability_thdots_kasen2_1 | 0.15 | DOTA_ABILITY_BEHAVIOR_POINT | scripts/npc/heroes/kasen/npc_abilities_kasen2.txt
+ability_thdots_kasen2_2 | 0.6 | DOTA_ABILITY_BEHAVIOR_NO_TARGET | scripts/npc/heroes/kasen/npc_abilities_kasen2.txt
+ability_thdots_kasen2_3 | 0.4 | DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | DOTA_ABILITY_BEHAVIOR_AUTOCAST | scripts/npc/heroes/kasen/npc_abilities_kasen2.txt
+ability_thdots_kasen2_4 | <inherited> | DOTA_ABILITY_BEHAVIOR_NO_TARGET | scripts/npc/heroes/kasen/npc_abilities_kasen2.txt
+ability_thdots_kasen2_s3 | 0.6 | DOTA_ABILITY_BEHAVIOR_NO_TARGET | scripts/npc/heroes/kasen/npc_abilities_kasen2.txt
+ability_thdots_kasenEx | 0.8 | DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_NOT_LEARNABLE | scripts/npc/heroes/kasen/npc_abilities_kasen.txt
+ability_thdots_keine01 | 0.2 | DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | scripts/npc/heroes/keine/npc_abilities_keine.txt
+ability_thdots_keine02 | 0.2 | DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | scripts/npc/heroes/keine/npc_abilities_keine.txt
+ability_thdots_keine03 | 0.2 | DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | DOTA_ABILITY_BEHAVIOR_DONT_ALERT_TARGET | DOTA_ABILITY_BEHAVIOR_ROOT_DISABLES | scripts/npc/heroes/keine/npc_abilities_keine.txt
+ability_thdots_keine04 | 0.2 | DOTA_ABILITY_BEHAVIOR_NO_TARGET | scripts/npc/heroes/keine/npc_abilities_keine.txt
+ability_thdots_keineEx2 | <inherited> | <inherited> | scripts/npc/heroes/keine/npc_abilities_keine.txt
+ability_thdots_kisume01 | 0.2 | DOTA_ABILITY_BEHAVIOR_POINT | DOTA_ABILITY_BEHAVIOR_AOE | scripts/npc/heroes/kisume/npc_abilities_kisume.txt
+ability_thdots_kisume02 | <inherited> | DOTA_ABILITY_BEHAVIOR_POINT | DOTA_ABILITY_BEHAVIOR_AOE | DOTA_ABILITY_BEHAVIOR_ROOT_DISABLES | scripts/npc/heroes/kisume/npc_abilities_kisume.txt
+ability_thdots_kisume03 | <inherited> | DOTA_ABILITY_BEHAVIOR_IMMEDIATE | DOTA_ABILITY_BEHAVIOR_NO_TARGET | scripts/npc/heroes/kisume/npc_abilities_kisume.txt
+ability_thdots_kisume04 | <inherited> | DOTA_ABILITY_BEHAVIOR_IMMEDIATE | DOTA_ABILITY_BEHAVIOR_NO_TARGET | scripts/npc/heroes/kisume/npc_abilities_kisume.txt
+ability_thdots_kisume05 | 0.2 | DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | scripts/npc/heroes/kisume/npc_abilities_kisume.txt
+ability_thdots_koakuma01 | 0.3 | DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | scripts/npc/heroes/koakuma/npc_abilities_koakuma.txt
+ability_thdots_koakuma02 | 0.3 | DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | scripts/npc/heroes/koakuma/npc_abilities_koakuma.txt
+ability_thdots_koakuma04 | 0.2 | DOTA_ABILITY_BEHAVIOR_NO_TARGET | scripts/npc/heroes/koakuma/npc_abilities_koakuma.txt
+ability_thdots_kogasa01 | <inherited> | DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IGNORE_BACKSWING | scripts/npc/heroes/kogasa/npc_abilities_kogasa.txt
+ability_thdots_kogasa02 | <inherited> | DOTA_ABILITY_BEHAVIOR_IMMEDIATE | DOTA_ABILITY_BEHAVIOR_NO_TARGET | scripts/npc/heroes/kogasa/npc_abilities_kogasa.txt
+ability_thdots_kogasa03 | <inherited> | DOTA_ABILITY_BEHAVIOR_NO_TARGET | scripts/npc/heroes/kogasa/npc_abilities_kogasa.txt
+ability_thdots_kogasa04 | <inherited> | DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_CHANNELLED | scripts/npc/heroes/kogasa/npc_abilities_kogasa.txt
+ability_thdots_koishi01 | <inherited> | DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE | scripts/npc/heroes/koishi/npc_abilities_koishi.txt
+ability_thdots_koishi04 | 1.0 | DOTA_ABILITY_BEHAVIOR_NO_TARGET | scripts/npc/heroes/koishi/npc_abilities_koishi.txt
+ability_thdots_koishiex | 0.0 | DOTA_ABILITY_BEHAVIOR_IMMEDIATE | DOTA_ABILITY_BEHAVIOR_NO_TARGET | scripts/npc/heroes/koishi/npc_abilities_koishi.txt
+ability_thdots_kokoro01 | 0.3 | DOTA_ABILITY_BEHAVIOR_POINT | DOTA_ABILITY_BEHAVIOR_ROOT_DISABLES | scripts/npc/heroes/kokoro/npc_abilities_kokoro.txt
+ability_thdots_kokoro02 | 0.2 | DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_AOE | scripts/npc/heroes/kokoro/npc_abilities_kokoro.txt
+ability_thdots_kokoro03 | 0.1 | DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | scripts/npc/heroes/kokoro/npc_abilities_kokoro.txt
+ability_thdots_kokoro03_release | 0.2 | DOTA_ABILITY_BEHAVIOR_HIDDEN | DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_ROOT_DISABLES | scripts/npc/heroes/kokoro/npc_abilities_kokoro.txt
+ability_thdots_kokoro04 | <inherited> | DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | scripts/npc/heroes/kokoro/npc_abilities_kokoro.txt
+ability_thdots_kokoro04_WBC | <inherited> | DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | scripts/npc/heroes/kokoro/npc_abilities_kokoro.txt
+ability_thdots_kokoroEx | 0.2 | DOTA_ABILITY_BEHAVIOR_NO_TARGET | scripts/npc/heroes/kokoro/npc_abilities_kokoro.txt
+ability_thdots_kokoroEx_2 | 0.2 | DOTA_ABILITY_BEHAVIOR_NO_TARGET | scripts/npc/heroes/kokoro/npc_abilities_kokoro.txt
+ability_thdots_komachi01 | 0.1 | DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_ROOT_DISABLES | scripts/npc/heroes/komachi/npc_abilities_komachi.txt
+ability_thdots_komachi03 | 0.2 | DOTA_ABILITY_BEHAVIOR_NO_TARGET | scripts/npc/heroes/komachi/npc_abilities_komachi.txt
+ability_thdots_komachi04 | 0.2 | DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | scripts/npc/heroes/komachi/npc_abilities_komachi.txt
+ability_thdots_larva01 | 0.2 | DOTA_ABILITY_BEHAVIOR_POINT | DOTA_ABILITY_BEHAVIOR_ROOT_DISABLES | scripts/npc/heroes/larva/npc_abilities_larva.txt
+ability_thdots_larva01_1 | 0.2 | DOTA_ABILITY_BEHAVIOR_POINT | DOTA_ABILITY_BEHAVIOR_ROOT_DISABLES | scripts/npc/heroes/larva/npc_abilities_larva.txt
+ability_thdots_larva01_2 | 0 | DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE | DOTA_ABILITY_BEHAVIOR_HIDDEN | scripts/npc/heroes/larva/npc_abilities_larva.txt
+ability_thdots_larva02 | 0.0 | DOTA_ABILITY_BEHAVIOR_NO_TARGET | scripts/npc/heroes/larva/npc_abilities_larva.txt
+ability_thdots_larva03 | 0.2 | DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE | scripts/npc/heroes/larva/npc_abilities_larva.txt
+ability_thdots_larva04 | <inherited> | DOTA_ABILITY_BEHAVIOR_POINT | DOTA_ABILITY_BEHAVIOR_AOE | scripts/npc/heroes/larva/npc_abilities_larva.txt
+ability_thdots_letty01 | 0.01 | DOTA_ABILITY_BEHAVIOR_POINT | DOTA_ABILITY_BEHAVIOR_AOE | DOTA_ABILITY_BEHAVIOR_CHANNELLED | scripts/npc/heroes/letty/npc_abilities_letty.txt
+ability_thdots_letty02 | 0.01 | DOTA_ABILITY_BEHAVIOR_IMMEDIATE | DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IGNORE_CHANNEL | scripts/npc/heroes/letty/npc_abilities_letty.txt
+ability_thdots_letty04 | 0.2 | DOTA_ABILITY_BEHAVIOR_NO_TARGET | scripts/npc/heroes/letty/npc_abilities_letty.txt
+ability_thdots_lettyEx | <inherited> | DOTA_ABILITY_BEHAVIOR_IMMEDIATE | DOTA_ABILITY_BEHAVIOR_TOGGLE | DOTA_ABILITY_BEHAVIOR_IGNORE_CHANNEL | scripts/npc/heroes/letty/npc_abilities_letty.txt
+ability_thdots_lily01 | 0.3 | DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | DOTA_ABILITY_BEHAVIOR_IGNORE_BACKSWING | scripts/npc/heroes/lilywhite/npc_abilities_lilywhite.txt
+ability_thdots_lily02 | 0.5 | DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | DOTA_ABILITY_BEHAVIOR_IGNORE_BACKSWING | scripts/npc/heroes/lilywhite/npc_abilities_lilywhite.txt
+ability_thdots_lily03 | 0.2 | DOTA_ABILITY_BEHAVIOR_AOE | DOTA_ABILITY_BEHAVIOR_POINT | DOTA_ABILITY_BEHAVIOR_IGNORE_BACKSWING | scripts/npc/heroes/lilywhite/npc_abilities_lilywhite.txt
+ability_thdots_lily04 | 0.2 | DOTA_ABILITY_BEHAVIOR_AOE | DOTA_ABILITY_BEHAVIOR_POINT | DOTA_ABILITY_BEHAVIOR_IGNORE_BACKSWING | scripts/npc/heroes/lilywhite/npc_abilities_lilywhite.txt
+ability_thdots_lily05 | 0 | DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_TOGGLE | DOTA_ABILITY_BEHAVIOR_IGNORE_BACKSWING | scripts/npc/heroes/lilywhite/npc_abilities_lilywhite.txt
+ability_thdots_lunasa01 | 0.2 | DOTA_ABILITY_BEHAVIOR_POINT | scripts/npc/heroes/lunasa/npc_abilities_lunasa.txt
+ability_thdots_lunasa04 | 0.2 | DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | scripts/npc/heroes/lunasa/npc_abilities_lunasa.txt
+ability_thdots_lunasa_wanbaochui | 0 | DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_TOGGLE | scripts/npc/heroes/lunasa/npc_abilities_lunasa.txt
+ability_thdots_lyrica01 | 0.2 | DOTA_ABILITY_BEHAVIOR_POINT | DOTA_ABILITY_BEHAVIOR_AOE  | DOTA_ABILITY_BEHAVIOR_ROOT_DISABLES | scripts/npc/heroes/lyrica/npc_abilities_lyrica.txt
+ability_thdots_lyrica02 | 0.2 | DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | scripts/npc/heroes/lyrica/npc_abilities_lyrica.txt
+ability_thdots_lyrica04 | 0.2 | DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | scripts/npc/heroes/lyrica/npc_abilities_lyrica.txt
+ability_thdots_marisa01 | 0.1 | DOTA_ABILITY_BEHAVIOR_IGNORE_BACKSWING | DOTA_ABILITY_BEHAVIOR_AOE | DOTA_ABILITY_BEHAVIOR_POINT | DOTA_ABILITY_BEHAVIOR_ROOT_DISABLES | scripts/npc/heroes/marisa/npc_abilities_marisa.txt
+ability_thdots_marisa02 | 0.1 | DOTA_ABILITY_BEHAVIOR_IGNORE_BACKSWING | DOTA_ABILITY_BEHAVIOR_AOE | DOTA_ABILITY_BEHAVIOR_POINT | DOTA_ABILITY_BEHAVIOR_CHANNELLED | scripts/npc/heroes/marisa/npc_abilities_marisa.txt
+ability_thdots_marisa03 | 0.2 | DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE | scripts/npc/heroes/marisa/npc_abilities_marisa.txt
+ability_thdots_marisa04 | 0.3 | DOTA_ABILITY_BEHAVIOR_IGNORE_BACKSWING | DOTA_ABILITY_BEHAVIOR_AOE | DOTA_ABILITY_BEHAVIOR_POINT | DOTA_ABILITY_BEHAVIOR_CHANNELLED | scripts/npc/heroes/marisa/npc_abilities_marisa.txt
+ability_thdots_medicine00 | 0.1 | DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | scripts/npc/heroes/medicine/npc_abilities_medicine.txt
+ability_thdots_medicine01 | 0.1 | DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | DOTA_ABILITY_BEHAVIOR_AUTOCAST | scripts/npc/heroes/medicine/npc_abilities_medicine.txt
+ability_thdots_medicine01old | 0.1 | DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | scripts/npc/heroes/medicine/npc_abilities_medicine.txt
+ability_thdots_medicine02 | 0.2 | DOTA_ABILITY_BEHAVIOR_AOE | DOTA_ABILITY_BEHAVIOR_POINT | scripts/npc/heroes/medicine/npc_abilities_medicine.txt
+ability_thdots_medicine03 | 0 | DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | DOTA_ABILITY_BEHAVIOR_IGNORE_BACKSWING | scripts/npc/heroes/medicine/npc_abilities_medicine.txt
+ability_thdots_medicine04 | 0.6 | DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | scripts/npc/heroes/medicine/npc_abilities_medicine.txt
+ability_thdots_medicineEx | 0 | DOTA_ABILITY_BEHAVIOR_NO_TARGET  | DOTA_ABILITY_BEHAVIOR_IMMEDIATE | scripts/npc/heroes/medicine/npc_abilities_medicine.txt
+ability_thdots_meirin01 | 0.2 | DOTA_ABILITY_BEHAVIOR_POINT | DOTA_ABILITY_BEHAVIOR_ROOT_DISABLES | scripts/npc/heroes/meirin/npc_abilities_meirin.txt
+ability_thdots_meirin02 | 0.3 | DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IGNORE_BACKSWING | scripts/npc/heroes/meirin/npc_abilities_meirin.txt
+ability_thdots_meirin04_fix | 0.2 | DOTA_ABILITY_BEHAVIOR_POINT | scripts/npc/heroes/meirin/npc_abilities_meirin.txt
+ability_thdots_meirinex | 0 | DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IGNORE_BACKSWING | scripts/npc/heroes/meirin/npc_abilities_meirin.txt
+ability_thdots_miko01 | 0.4 | DOTA_ABILITY_BEHAVIOR_POINT | DOTA_ABILITY_BEHAVIOR_AOE | DOTA_ABILITY_BEHAVIOR_ROOT_DISABLES | scripts/npc/heroes/miko/npc_abilities_miko.txt
+ability_thdots_miko02 | <inherited> | DOTA_ABILITY_BEHAVIOR_TOGGLE | DOTA_ABILITY_BEHAVIOR_UNRESTRICTED | DOTA_ABILITY_BEHAVIOR_IMMEDIATE | scripts/npc/heroes/miko/npc_abilities_miko.txt
+ability_thdots_miko04 | <inherited> | DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | DOTA_ABILITY_BEHAVIOR_CHANNELLED | scripts/npc/heroes/miko/npc_abilities_miko.txt
+ability_thdots_mikoWanbao | <inherited> | DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | scripts/npc/heroes/miko/npc_abilities_miko.txt
+ability_thdots_minamitsu01 | 0.3 | DOTA_ABILITY_BEHAVIOR_POINT | scripts/npc/heroes/minamitsu/npc_abilities_minamitsu.txt
+ability_thdots_minamitsu02 | 0.1 | DOTA_ABILITY_BEHAVIOR_AOE | DOTA_ABILITY_BEHAVIOR_POINT | scripts/npc/heroes/minamitsu/npc_abilities_minamitsu.txt
+ability_thdots_minamitsu03 | 0.3 | DOTA_ABILITY_BEHAVIOR_NO_TARGET | scripts/npc/heroes/minamitsu/npc_abilities_minamitsu.txt
+ability_thdots_minamitsu04 | 1.0 | DOTA_ABILITY_BEHAVIOR_NO_TARGET | scripts/npc/heroes/minamitsu/npc_abilities_minamitsu.txt
+ability_thdots_minamitsu04_unit_back | 1.5 | DOTA_ABILITY_BEHAVIOR_NO_TARGET | scripts/npc/heroes/minamitsu/npc_abilities_minamitsu.txt
+ability_thdots_minamitsu04_unit_boom | 0.1 | DOTA_ABILITY_BEHAVIOR_AOE | DOTA_ABILITY_BEHAVIOR_IGNORE_BACKSWING | DOTA_ABILITY_BEHAVIOR_IGNORE_TURN | DOTA_ABILITY_BEHAVIOR_POINT | scripts/npc/heroes/minamitsu/npc_abilities_minamitsu.txt
+ability_thdots_minamitsu04_unit_download | 0.1 | DOTA_ABILITY_BEHAVIOR_IGNORE_BACKSWING | DOTA_ABILITY_BEHAVIOR_IGNORE_TURN | DOTA_ABILITY_BEHAVIOR_POINT | scripts/npc/heroes/minamitsu/npc_abilities_minamitsu.txt
+ability_thdots_minamitsu04_unit_upload | 0.1 | DOTA_ABILITY_BEHAVIOR_IGNORE_BACKSWING | DOTA_ABILITY_BEHAVIOR_IGNORE_TURN | DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | scripts/npc/heroes/minamitsu/npc_abilities_minamitsu.txt
+ability_thdots_minoriko01 | 0.4 | DOTA_ABILITY_BEHAVIOR_UNIT_TARGET  | scripts/npc/heroes/minoriko/npc_abilities_minoriko.txt
+ability_thdots_minoriko02 | 0.2 | DOTA_ABILITY_BEHAVIOR_POINT | scripts/npc/heroes/minoriko/npc_abilities_minoriko.txt
+ability_thdots_minoriko04 | 0.2 | DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | scripts/npc/heroes/minoriko/npc_abilities_minoriko.txt
+ability_thdots_miyako01 | 0.2 | DOTA_ABILITY_BEHAVIOR_TOGGLE | DOTA_ABILITY_BEHAVIOR_IGNORE_PSEUDO_QUEUE | DOTA_ABILITY_BEHAVIOR_UNRESTRICTED | DOTA_ABILITY_BEHAVIOR_IMMEDIATE | scripts/npc/heroes/miyako/npc_abilities_miyako.txt
+ability_thdots_miyako04 | <inherited> | DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE | scripts/npc/heroes/miyako/npc_abilities_miyako.txt
+ability_thdots_miyako05 | <inherited> | DOTA_ABILITY_BEHAVIOR_IMMEDIATE | DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_AUTOCAST | scripts/npc/heroes/miyako/npc_abilities_miyako.txt
+ability_thdots_mokou01 | 0.1 | DOTA_ABILITY_BEHAVIOR_IGNORE_BACKSWING | DOTA_ABILITY_BEHAVIOR_AOE | DOTA_ABILITY_BEHAVIOR_POINT | DOTA_ABILITY_BEHAVIOR_ROOT_DISABLES | scripts/npc/heroes/mokou/npc_abilities_mokou.txt
+ability_thdots_mokou03 | 0 | DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_DONT_RESUME_ATTACK | scripts/npc/heroes/mokou/npc_abilities_mokou.txt
+ability_thdots_mokou04 | 0.2 | DOTA_ABILITY_BEHAVIOR_NO_TARGET | scripts/npc/heroes/mokou/npc_abilities_mokou.txt
+ability_thdots_mokouEx | 0 | DOTA_ABILITY_BEHAVIOR_NO_TARGET | scripts/npc/heroes/mokou/npc_abilities_mokou.txt
+ability_thdots_momiji01 | 0.1 | DOTA_ABILITY_BEHAVIOR_NO_TARGET | scripts/npc/heroes/momiji/npc_abilities_momiji.txt
+ability_thdots_momiji02 | 0.3 | DOTA_ABILITY_BEHAVIOR_POINT | DOTA_ABILITY_BEHAVIOR_AOE | scripts/npc/heroes/momiji/npc_abilities_momiji.txt
+ability_thdots_momiji02_unit | <inherited> | DOTA_ABILITY_BEHAVIOR_IGNORE_BACKSWING | DOTA_ABILITY_BEHAVIOR_IMMEDIATE | DOTA_ABILITY_BEHAVIOR_IGNORE_TURN | scripts/npc/heroes/momiji/npc_abilities_momiji.txt
+ability_thdots_momiji03 | 0.1 | DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | scripts/npc/heroes/momiji/npc_abilities_momiji.txt
+ability_thdots_mystia01 | 0.3 | DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE | scripts/npc/heroes/mystia/npc_abilities_mystia.txt
+ability_thdots_mystia02 | 0 | DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE | scripts/npc/heroes/mystia/npc_abilities_mystia.txt
+ability_thdots_mystia04 | 0.3 | DOTA_ABILITY_BEHAVIOR_NO_TARGET | scripts/npc/heroes/mystia/npc_abilities_mystia.txt
+ability_thdots_mystiaex | 0 | DOTA_ABILITY_BEHAVIOR_NO_TARGET | scripts/npc/heroes/mystia/npc_abilities_mystia.txt
+ability_thdots_nitori01 | <inherited> | DOTA_ABILITY_BEHAVIOR_IMMEDIATE | DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IGNORE_BACKSWING | scripts/npc/heroes/nitori/npc_abilities_nitori.txt
+ability_thdots_nitori02 | 1.0 | DOTA_ABILITY_BEHAVIOR_POINT | scripts/npc/heroes/nitori/npc_abilities_nitori.txt
+ability_thdots_nitori03 | <inherited> | DOTA_ABILITY_BEHAVIOR_IMMEDIATE | DOTA_ABILITY_BEHAVIOR_NO_TARGET  | scripts/npc/heroes/nitori/npc_abilities_nitori.txt
+ability_thdots_nitori04 | 0.4 | DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | scripts/npc/heroes/nitori/npc_abilities_nitori.txt
+ability_thdots_nue01 | 0 | DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE | scripts/npc/heroes/nue/npc_abilities_nue.txt
+ability_thdots_nue02 | 0.8 | DOTA_ABILITY_BEHAVIOR_POINT | scripts/npc/heroes/nue/npc_abilities_nue.txt
+ability_thdots_nue04 | 1 | DOTA_ABILITY_BEHAVIOR_POINT | DOTA_ABILITY_BEHAVIOR_AOE | scripts/npc/heroes/nue/npc_abilities_nue.txt
+ability_thdots_nueEx | 0.2 | DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | scripts/npc/heroes/nue/npc_abilities_nue.txt
+ability_thdots_observer_unit | <inherited> | DOTA_ABILITY_BEHAVIOR_IGNORE_BACKSWING | DOTA_ABILITY_BEHAVIOR_IMMEDIATE | DOTA_ABILITY_BEHAVIOR_IGNORE_TURN | scripts/npc/heroes/momiji/npc_abilities_momiji.txt
+ability_thdots_parsee01 | 0.2 | DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | DOTA_ABILITY_BEHAVIOR_DONT_ALERT_TARGET | DOTA_ABILITY_BEHAVIOR_AOE | scripts/npc/heroes/parsee/npc_abilities_parsee.txt
+ability_thdots_parsee02 | 0.4 | DOTA_ABILITY_BEHAVIOR_POINT | DOTA_ABILITY_BEHAVIOR_AOE | scripts/npc/heroes/parsee/npc_abilities_parsee.txt
+ability_thdots_parsee03 | 0.6 | DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | DOTA_ABILITY_BEHAVIOR_POINT | DOTA_ABILITY_BEHAVIOR_DONT_ALERT_TARGET | scripts/npc/heroes/parsee/npc_abilities_parsee.txt
+ability_thdots_parsee04 | 0.2 | DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | scripts/npc/heroes/parsee/npc_abilities_parsee.txt
+ability_thdots_patchouli_earth | 0 | DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE | DOTA_ABILITY_BEHAVIOR_IGNORE_BACKSWING | scripts/npc/heroes/patchouli/npc_abilities_patchouli.txt
+ability_thdots_patchouli_earth_earth | 0.01 | DOTA_ABILITY_BEHAVIOR_POINT | DOTA_ABILITY_BEHAVIOR_AOE | scripts/npc/heroes/patchouli/npc_abilities_patchouli.txt
+ability_thdots_patchouli_fire | 0 | DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE | DOTA_ABILITY_BEHAVIOR_IGNORE_BACKSWING | scripts/npc/heroes/patchouli/npc_abilities_patchouli.txt
+ability_thdots_patchouli_fire_earth | 0.01 | DOTA_ABILITY_BEHAVIOR_POINT | DOTA_ABILITY_BEHAVIOR_AOE | scripts/npc/heroes/patchouli/npc_abilities_patchouli.txt
+ability_thdots_patchouli_fire_fire | 0.01 | DOTA_ABILITY_BEHAVIOR_NO_TARGET | scripts/npc/heroes/patchouli/npc_abilities_patchouli.txt
+ability_thdots_patchouli_fire_metal | 0.01 | DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | scripts/npc/heroes/patchouli/npc_abilities_patchouli.txt
+ability_thdots_patchouli_fire_water | 0.01 | DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | scripts/npc/heroes/patchouli/npc_abilities_patchouli.txt
+ability_thdots_patchouli_fire_wood | 0.01 | DOTA_ABILITY_BEHAVIOR_AOE | DOTA_ABILITY_BEHAVIOR_POINT | scripts/npc/heroes/patchouli/npc_abilities_patchouli.txt
+ability_thdots_patchouli_metal | 0 | DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE | DOTA_ABILITY_BEHAVIOR_IGNORE_BACKSWING | scripts/npc/heroes/patchouli/npc_abilities_patchouli.txt
+ability_thdots_patchouli_metal_earth | 0.01 | DOTA_ABILITY_BEHAVIOR_POINT | scripts/npc/heroes/patchouli/npc_abilities_patchouli.txt
+ability_thdots_patchouli_metal_metal | 0.01 | DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | scripts/npc/heroes/patchouli/npc_abilities_patchouli.txt
+ability_thdots_patchouli_water | 0 | DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE | DOTA_ABILITY_BEHAVIOR_IGNORE_BACKSWING | scripts/npc/heroes/patchouli/npc_abilities_patchouli.txt
+ability_thdots_patchouli_water_earth | 0.01 | DOTA_ABILITY_BEHAVIOR_POINT | scripts/npc/heroes/patchouli/npc_abilities_patchouli.txt
+ability_thdots_patchouli_water_metal | 0.01 | DOTA_ABILITY_BEHAVIOR_AOE | DOTA_ABILITY_BEHAVIOR_POINT | scripts/npc/heroes/patchouli/npc_abilities_patchouli.txt
+ability_thdots_patchouli_water_water | 0.01 | DOTA_ABILITY_BEHAVIOR_AOE | DOTA_ABILITY_BEHAVIOR_POINT | scripts/npc/heroes/patchouli/npc_abilities_patchouli.txt
+ability_thdots_patchouli_water_wood | 0.01 | DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | scripts/npc/heroes/patchouli/npc_abilities_patchouli.txt
+ability_thdots_patchouli_wood | 0 | DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE | DOTA_ABILITY_BEHAVIOR_IGNORE_BACKSWING | scripts/npc/heroes/patchouli/npc_abilities_patchouli.txt
+ability_thdots_patchouli_wood_earth | 0.01 | DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | scripts/npc/heroes/patchouli/npc_abilities_patchouli.txt
+ability_thdots_patchouli_wood_metal | 0.01 | DOTA_ABILITY_BEHAVIOR_AOE | DOTA_ABILITY_BEHAVIOR_POINT | scripts/npc/heroes/patchouli/npc_abilities_patchouli.txt
+ability_thdots_patchouli_wood_wood | 0.01 | DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | scripts/npc/heroes/patchouli/npc_abilities_patchouli.txt
+ability_thdots_ran01 | 0.2 | DOTA_ABILITY_BEHAVIOR_POINT | scripts/npc/heroes/ran/npc_abilities_ran.txt
+ability_thdots_ran02 | 0.2 | DOTA_ABILITY_BEHAVIOR_NO_TARGET | scripts/npc/heroes/ran/npc_abilities_ran.txt
+ability_thdots_ran03 | 0.2 | DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | scripts/npc/heroes/ran/npc_abilities_ran.txt
+ability_thdots_ran04 | 0.2 | DOTA_ABILITY_BEHAVIOR_NO_TARGET | scripts/npc/heroes/ran/npc_abilities_ran.txt
+ability_thdots_reisen01 | 0.3 | DOTA_ABILITY_BEHAVIOR_IGNORE_BACKSWING | DOTA_ABILITY_BEHAVIOR_POINT | scripts/npc/heroes/reisen/npc_abilities_reisen.txt
+ability_thdots_reisen02 | 0.2 | DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE | scripts/npc/heroes/reisen/npc_abilities_reisen.txt
+ability_thdots_reisen03 | 0.3 | DOTA_ABILITY_BEHAVIOR_POINT | scripts/npc/heroes/reisen/npc_abilities_reisen.txt
+ability_thdots_reisen04 | 0.2 | DOTA_ABILITY_BEHAVIOR_NO_TARGET | scripts/npc/heroes/reisen/npc_abilities_reisen.txt
+ability_thdots_reisenOld02 | <inherited> | DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE | scripts/npc/heroes/reisen/npc_abilities_reisen.txt
+ability_thdots_reisenOld03 | 0.1 | DOTA_ABILITY_BEHAVIOR_POINT | DOTA_ABILITY_BEHAVIOR_CHANNELLED | scripts/npc/heroes/reisen/npc_abilities_reisen.txt
+ability_thdots_reisenOld04 | <inherited> | DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE | scripts/npc/heroes/reisen/npc_abilities_reisen.txt
+ability_thdots_reisen_2_01 | <inherited> | DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE | scripts/npc/heroes/reisen02/npc_abilities_reisen02.txt
+ability_thdots_reisen_2_02 | 0 | DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE | scripts/npc/heroes/reisen02/npc_abilities_reisen02.txt
+ability_thdots_reisen_2_ultimate | <inherited> | DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE | scripts/npc/heroes/reisen02/npc_abilities_reisen02.txt
+ability_thdots_remilia01 | 0.3 | DOTA_ABILITY_BEHAVIOR_POINT | scripts/npc/heroes/remilia/npc_abilities_remilia.txt
+ability_thdots_remilia02 | 0.1 | DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_CHANNELLED | DOTA_ABILITY_BEHAVIOR_ROOT_DISABLES | scripts/npc/heroes/remilia/npc_abilities_remilia.txt
+ability_thdots_remilia03 | <inherited> | DOTA_ABILITY_BEHAVIOR_NO_TARGET | scripts/npc/heroes/remilia/npc_abilities_remilia.txt
+ability_thdots_remilia04 | 0 | DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE | DOTA_ABILITY_BEHAVIOR_TOGGLE | scripts/npc/heroes/remilia/npc_abilities_remilia.txt
+ability_thdots_remilia_shard | 0.45 | DOTA_ABILITY_BEHAVIOR_POINT | DOTA_ABILITY_BEHAVIOR_AOE | scripts/npc/heroes/remilia/npc_abilities_remilia.txt
+ability_thdots_renko01 | 0.2 | DOTA_ABILITY_BEHAVIOR_NO_TARGET | scripts/npc/heroes/renko/npc_abilities_renko.txt
+ability_thdots_renko02 | 0.2 | DOTA_ABILITY_BEHAVIOR_POINT | scripts/npc/heroes/renko/npc_abilities_renko.txt
+ability_thdots_renko03 | 0.0 | DOTA_ABILITY_BEHAVIOR_NO_TARGET | scripts/npc/heroes/renko/npc_abilities_renko.txt
+ability_thdots_renko04 | 0.3 | DOTA_ABILITY_BEHAVIOR_NO_TARGET | scripts/npc/heroes/renko/npc_abilities_renko.txt
+ability_thdots_rin01 | 0.2 | DOTA_ABILITY_BEHAVIOR_POINT | scripts/npc/heroes/rin/npc_abilities_rin.txt
+ability_thdots_rin02 | 0.3 | DOTA_ABILITY_BEHAVIOR_POINT | DOTA_ABILITY_BEHAVIOR_AOE | scripts/npc/heroes/rin/npc_abilities_rin.txt
+ability_thdots_rin03 | 0.15 | DOTA_ABILITY_BEHAVIOR_POINT | DOTA_ABILITY_BEHAVIOR_AOE | scripts/npc/heroes/rin/npc_abilities_rin.txt
+ability_thdots_rin04 | 0.2 | DOTA_ABILITY_BEHAVIOR_NO_TARGET | scripts/npc/heroes/rin/npc_abilities_rin.txt
+ability_thdots_rinEx | 0.2 | DOTA_ABILITY_BEHAVIOR_POINT | DOTA_ABILITY_BEHAVIOR_AOE | scripts/npc/heroes/rin/npc_abilities_rin.txt
+ability_thdots_rin_wbc | 0.1 | DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | DOTA_ABILITY_BEHAVIOR_POINT | DOTA_ABILITY_BEHAVIOR_AOE | scripts/npc/heroes/rin/npc_abilities_rin.txt
+ability_thdots_rumia01 | <inherited> | DOTA_ABILITY_BEHAVIOR_IMMEDIATE | DOTA_ABILITY_BEHAVIOR_NO_TARGET | scripts/npc/heroes/rumia/npc_abilities_rumia.txt
+ability_thdots_rumia04 | 0.3 | DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | scripts/npc/heroes/rumia/npc_abilities_rumia.txt
+ability_thdots_sagume_1 | 0.4 | DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | scripts/npc/heroes/sagume/npc_abilities_sagume.txt
+ability_thdots_sagume_2 | 0.3 | DOTA_ABILITY_BEHAVIOR_POINT | DOTA_ABILITY_BEHAVIOR_ROOT_DISABLES | scripts/npc/heroes/sagume/npc_abilities_sagume.txt
+ability_thdots_sagume_3 | <inherited> | DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | DOTA_ABILITY_BEHAVIOR_AUTOCAST | DOTA_ABILITY_BEHAVIOR_ATTACK | scripts/npc/heroes/sagume/npc_abilities_sagume.txt
+ability_thdots_sagume_4 | 0.4 | DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | scripts/npc/heroes/sagume/npc_abilities_sagume.txt
+ability_thdots_sakuya01 | 0.2 | DOTA_ABILITY_BEHAVIOR_IGNORE_BACKSWING | DOTA_ABILITY_BEHAVIOR_AOE | DOTA_ABILITY_BEHAVIOR_POINT | scripts/npc/heroes/sakuya/npc_abilities_sakuya.txt
+ability_thdots_sakuya02 | 0.2 | DOTA_ABILITY_BEHAVIOR_IGNORE_BACKSWING | DOTA_ABILITY_BEHAVIOR_AOE | DOTA_ABILITY_BEHAVIOR_POINT  | scripts/npc/heroes/sakuya/npc_abilities_sakuya.txt
+ability_thdots_sakuya03 | 0.2 | DOTA_ABILITY_BEHAVIOR_IGNORE_BACKSWING | DOTA_ABILITY_BEHAVIOR_AOE | DOTA_ABILITY_BEHAVIOR_POINT | DOTA_ABILITY_BEHAVIOR_ROOT_DISABLES | scripts/npc/heroes/sakuya/npc_abilities_sakuya.txt
+ability_thdots_sakuya04 | 0 | DOTA_ABILITY_BEHAVIOR_NO_TARGET | scripts/npc/heroes/sakuya/npc_abilities_sakuya.txt
+ability_thdots_sakuyaEx | 0.2 | DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE | scripts/npc/heroes/sakuya/npc_abilities_sakuya.txt
+ability_thdots_sanae01 | 0.1 | DOTA_ABILITY_BEHAVIOR_AOE | DOTA_ABILITY_BEHAVIOR_POINT | scripts/npc/heroes/sanae/npc_abilities_sanae.txt
+ability_thdots_sanae02 | 0.1 | DOTA_ABILITY_BEHAVIOR_AOE | DOTA_ABILITY_BEHAVIOR_POINT | scripts/npc/heroes/sanae/npc_abilities_sanae.txt
+ability_thdots_sanae04 | 0.3 | DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_AURA | scripts/npc/heroes/sanae/npc_abilities_sanae.txt
+ability_thdots_sanae_lyz | 0.2 | DOTA_ABILITY_BEHAVIOR_AOE | DOTA_ABILITY_BEHAVIOR_POINT | DOTA_ABILITY_BEHAVIOR_CHANNELLED | DOTA_ABILITY_BEHAVIOR_AUTOCAST | scripts/npc/heroes/sanae/npc_abilities_sanae.txt
+ability_thdots_satori01 | 0.1 | DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | scripts/npc/heroes/satori/npc_abilities_satori.txt
+ability_thdots_satori02 | 0.2 | DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | DOTA_ABILITY_BEHAVIOR_AOE | scripts/npc/heroes/satori/npc_abilities_satori.txt
+ability_thdots_satori03 | 0.2 | DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | scripts/npc/heroes/satori/npc_abilities_satori.txt
+ability_thdots_satori04 | 0.2 | DOTA_ABILITY_BEHAVIOR_NO_TARGET | scripts/npc/heroes/satori/npc_abilities_satori.txt
+ability_thdots_satori04_OLD | 0.2 | DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_AOE | scripts/npc/heroes/satori/npc_abilities_satori.txt
+ability_thdots_seiga01 | 0.2 | DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | scripts/npc/heroes/seiga/npc_abilities_seiga.txt
+ability_thdots_seiga02 | 0.2 | DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | scripts/npc/heroes/seiga/npc_abilities_seiga.txt
+ability_thdots_seiga03 | 0.2 | DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | scripts/npc/heroes/seiga/npc_abilities_seiga.txt
+ability_thdots_seiga04 | <inherited> | DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | DOTA_ABILITY_BEHAVIOR_CHANNELLED | scripts/npc/heroes/seiga/npc_abilities_seiga.txt
+ability_thdots_seigaEx | 0.2 | DOTA_ABILITY_BEHAVIOR_POINT | scripts/npc/heroes/seiga/npc_abilities_seiga.txt
+ability_thdots_seija01 | 0.2 | DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | DOTA_ABILITY_BEHAVIOR_POINT | DOTA_ABILITY_BEHAVIOR_CHANNELLED | scripts/npc/heroes/seija/npc_abilities_seija.txt
+ability_thdots_seija02 | <inherited> | DOTA_ABILITY_BEHAVIOR_IMMEDIATE | DOTA_ABILITY_BEHAVIOR_NO_TARGET | scripts/npc/heroes/seija/npc_abilities_seija.txt
+ability_thdots_seija03 | 0.2 | DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | scripts/npc/heroes/seija/npc_abilities_seija.txt
+ability_thdots_seija04 | 0.2 | DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | DOTA_ABILITY_BEHAVIOR_POINT | DOTA_ABILITY_BEHAVIOR_AOE | scripts/npc/heroes/seija/npc_abilities_seija.txt
+ability_thdots_seijaEx | 0.2 | DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | scripts/npc/heroes/seija/npc_abilities_seija.txt
+ability_thdots_shikieiki01 | 0.2 | DOTA_ABILITY_BEHAVIOR_POINT | DOTA_ABILITY_BEHAVIOR_AOE | scripts/npc/heroes/shikieiki/npc_abilities_shikieiki.txt
+ability_thdots_shikieiki02 | 0.2 | DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | scripts/npc/heroes/shikieiki/npc_abilities_shikieiki.txt
+ability_thdots_shikieiki04 | 0.3 | DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | scripts/npc/heroes/shikieiki/npc_abilities_shikieiki.txt
+ability_thdots_shinki_01 | 0.3 | DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_AOE | DOTA_ABILITY_BEHAVIOR_DONT_CANCEL_MOVEMENT | scripts/npc/heroes/shinki/npc_abilities_shinki.txt
+ability_thdots_shinki_02 | 1 | DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_AOE | DOTA_ABILITY_BEHAVIOR_DONT_CANCEL_MOVEMENT | scripts/npc/heroes/shinki/npc_abilities_shinki.txt
+ability_thdots_shinki_03 | 0.3 | DOTA_ABILITY_BEHAVIOR_POINT | DOTA_ABILITY_BEHAVIOR_AOE | scripts/npc/heroes/shinki/npc_abilities_shinki.txt
+ability_thdots_shinki_ultimate | 0.3 | DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | scripts/npc/heroes/shinki/npc_abilities_shinki.txt
+ability_thdots_shion_01 | <inherited> | DOTA_ABILITY_BEHAVIOR_NO_TARGET | scripts/npc/heroes/shion/npc_abilities_shion.txt
+ability_thdots_shion_02 | <inherited> | DOTA_ABILITY_BEHAVIOR_NO_TARGET | scripts/npc/heroes/shion/npc_abilities_shion.txt
+ability_thdots_shion_04 | 0 | DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | scripts/npc/heroes/shion/npc_abilities_shion.txt
+ability_thdots_shion_05 | <inherited> | DOTA_ABILITY_BEHAVIOR_NO_TARGET | scripts/npc/heroes/shion/npc_abilities_shion.txt
+ability_thdots_shizuha01 | 0.3 | DOTA_ABILITY_BEHAVIOR_POINT | DOTA_ABILITY_BEHAVIOR_AOE | scripts/npc/heroes/shizuha/npc_abilities_shizuha.txt
+ability_thdots_shizuha02 | <inherited> | DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_CHANNELLED | scripts/npc/heroes/shizuha/npc_abilities_shizuha.txt
+ability_thdots_shizuha03 | <inherited> | DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | DOTA_ABILITY_BEHAVIOR_AUTOCAST | DOTA_ABILITY_BEHAVIOR_ATTACK | scripts/npc/heroes/shizuha/npc_abilities_shizuha.txt
+ability_thdots_shizuha04 | 0.4 | DOTA_ABILITY_BEHAVIOR_POINT | scripts/npc/heroes/shizuha/npc_abilities_shizuha.txt
+ability_thdots_shizuha05 | 0.333 | DOTA_ABILITY_BEHAVIOR_POINT | DOTA_ABILITY_BEHAVIOR_AOE | scripts/npc/heroes/shizuha/npc_abilities_shizuha.txt
+ability_thdots_shou01 | <inherited> | DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IGNORE_BACKSWING | DOTA_ABILITY_BEHAVIOR_IMMEDIATE | scripts/npc/heroes/shou/npc_abilities_shou.txt
+ability_thdots_shou02 | 0.2 | DOTA_ABILITY_BEHAVIOR_POINT | DOTA_ABILITY_BEHAVIOR_AOE | scripts/npc/heroes/shou/npc_abilities_shou.txt
+ability_thdots_shou04 | 1.2 | DOTA_ABILITY_BEHAVIOR_POINT | scripts/npc/heroes/shou/npc_abilities_shou.txt
+ability_thdots_suika03 | 0.0 | DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE | scripts/npc/heroes/suika/npc_abilities_suika.txt
+ability_thdots_suika04 | 0.2 | DOTA_ABILITY_BEHAVIOR_NO_TARGET | scripts/npc/heroes/suika/npc_abilities_suika.txt
+ability_thdots_suikaex | <inherited> | DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_NOT_LEARNABLE | scripts/npc/heroes/suika/npc_abilities_suika.txt
+ability_thdots_sumireko01 | 0.2 | DOTA_ABILITY_BEHAVIOR_POINT | scripts/npc/heroes/sumireko/npc_abilities_sumireko.txt
+ability_thdots_sumireko02 | 0.2 | DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | scripts/npc/heroes/sumireko/npc_abilities_sumireko.txt
+ability_thdots_sumireko03 | 0.5 | DOTA_ABILITY_BEHAVIOR_POINT | DOTA_ABILITY_BEHAVIOR_IGNORE_BACKSWING | scripts/npc/heroes/sumireko/npc_abilities_sumireko.txt
+ability_thdots_sumireko03_release | <inherited> | DOTA_ABILITY_BEHAVIOR_IMMEDIATE | DOTA_ABILITY_BEHAVIOR_HIDDEN | DOTA_ABILITY_BEHAVIOR_POINT | scripts/npc/heroes/sumireko/npc_abilities_sumireko.txt
+ability_thdots_sumireko04 | 0.2 | DOTA_ABILITY_BEHAVIOR_POINT | DOTA_ABILITY_BEHAVIOR_AOE | scripts/npc/heroes/sumireko/npc_abilities_sumireko.txt
+ability_thdots_sumirekoEx | 0 | DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_DONT_RESUME_MOVEMENT |
+		 DOTA_ABILITY_BEHAVIOR_CHANNELLED | DOTA_ABILITY_BEHAVIOR_DONT_RESUME_ATTACK | scripts/npc/heroes/sumireko/npc_abilities_sumireko.txt
+ability_thdots_sunny01 | <inherited> | DOTA_ABILITY_BEHAVIOR_IMMEDIATE | DOTA_ABILITY_BEHAVIOR_NO_TARGET | scripts/npc/heroes/sunny/npc_abilities_sunny.txt
+ability_thdots_sunny02 | 0.3 | DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_AOE | scripts/npc/heroes/sunny/npc_abilities_sunny.txt
+ability_thdots_sunny03 | 0.2 | DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | scripts/npc/heroes/sunny/npc_abilities_sunny.txt
+ability_thdots_sunny04 | <inherited> | DOTA_ABILITY_BEHAVIOR_IMMEDIATE | DOTA_ABILITY_BEHAVIOR_NO_TARGET | scripts/npc/heroes/sunny/npc_abilities_sunny.txt
+ability_thdots_sunny05 | 0.2 | DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | scripts/npc/heroes/sunny/npc_abilities_sunny.txt
+ability_thdots_suwako01 | 0.25 | DOTA_ABILITY_BEHAVIOR_NO_TARGET | scripts/npc/heroes/suwako/npc_abilities_suwako.txt
+ability_thdots_suwako02 | 0.45 | DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_ROOT_DISABLES | scripts/npc/heroes/suwako/npc_abilities_suwako.txt
+ability_thdots_suwako03 | 0 | DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_TOGGLE | DOTA_ABILITY_BEHAVIOR_IMMEDIATE | scripts/npc/heroes/suwako/npc_abilities_suwako.txt
+ability_thdots_suwako03z | 0 | DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE | DOTA_ABILITY_BEHAVIOR_TOGGLE | scripts/npc/heroes/suwako/npc_abilities_suwako.txt
+ability_thdots_suwako04 | 0.3 | DOTA_ABILITY_BEHAVIOR_NO_TARGET | scripts/npc/heroes/suwako/npc_abilities_suwako.txt
+ability_thdots_suwako04new | 0.3 | DOTA_ABILITY_BEHAVIOR_NO_TARGET | scripts/npc/heroes/suwako/npc_abilities_suwako.txt
+ability_thdots_suwako05 | 0.2 | DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | DOTA_ABILITY_BEHAVIOR_AUTOCAST | scripts/npc/heroes/suwako/npc_abilities_suwako.txt
+ability_thdots_suwako_aghs | 0.2 | DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | scripts/npc/heroes/suwako/npc_abilities_suwako.txt
+ability_thdots_tei01 | 0.3 | DOTA_ABILITY_BEHAVIOR_NO_TARGET | scripts/npc/heroes/tei/npc_abilities_tei.txt
+ability_thdots_tei02 | 0.2 | DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_ROOT_DISABLES | scripts/npc/heroes/tei/npc_abilities_tei.txt
+ability_thdots_tei03 | <inherited> | DOTA_ABILITY_BEHAVIOR_NO_TARGET | scripts/npc/heroes/tei/npc_abilities_tei.txt
+ability_thdots_tei04 | <inherited> | DOTA_ABILITY_BEHAVIOR_IMMEDIATE | DOTA_ABILITY_BEHAVIOR_NO_TARGET | scripts/npc/heroes/tei/npc_abilities_tei.txt
+ability_thdots_tensi03 | 0 | DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE | scripts/npc/heroes/tensi/npc_abilities_tensi.txt
+ability_thdots_tensiex | 0.3 | DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | DOTA_ABILITY_BEHAVIOR_NOT_LEARNABLE  | scripts/npc/heroes/tensi/npc_abilities_tensi.txt
+ability_thdots_tojiko01 | 0.4 | DOTA_ABILITY_BEHAVIOR_POINT | DOTA_ABILITY_BEHAVIOR_AOE | scripts/npc/heroes/tojiko/npc_abilities_tojiko.txt
+ability_thdots_tojiko02 | 0.2 | DOTA_ABILITY_BEHAVIOR_POINT | DOTA_ABILITY_BEHAVIOR_AOE | scripts/npc/heroes/tojiko/npc_abilities_tojiko.txt
+ability_thdots_tojiko03 | 0.2 | DOTA_ABILITY_BEHAVIOR_POINT | DOTA_ABILITY_BEHAVIOR_AOE | scripts/npc/heroes/tojiko/npc_abilities_tojiko.txt
+ability_thdots_tojiko04 | 0.2 | DOTA_ABILITY_BEHAVIOR_POINT | DOTA_ABILITY_BEHAVIOR_AOE | scripts/npc/heroes/tojiko/npc_abilities_tojiko.txt
+ability_thdots_tojiko05 | <inherited> | DOTA_ABILITY_BEHAVIOR_IMMEDIATE | DOTA_ABILITY_BEHAVIOR_NO_TARGET | scripts/npc/heroes/tojiko/npc_abilities_tojiko.txt
+ability_thdots_toyohime01 | 0.3 | DOTA_ABILITY_BEHAVIOR_AOE | DOTA_ABILITY_BEHAVIOR_POINT | DOTA_ABILITY_BEHAVIOR_AUTOCAST | scripts/npc/heroes/toyohime/npc_abilities_toyohime.txt
+ability_thdots_toyohime02 | 0.2 | DOTA_ABILITY_BEHAVIOR_AOE | DOTA_ABILITY_BEHAVIOR_POINT | scripts/npc/heroes/toyohime/npc_abilities_toyohime.txt
+ability_thdots_toyohime03 | 0 | DOTA_ABILITY_BEHAVIOR_POINT | DOTA_ABILITY_BEHAVIOR_IGNORE_BACKSWING | scripts/npc/heroes/toyohime/npc_abilities_toyohime.txt
+ability_thdots_toyohime03_back | 0.2 | DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_NOT_LEARNABLE | scripts/npc/heroes/toyohime/npc_abilities_toyohime.txt
+ability_thdots_toyohime04 | 0.5 | DOTA_ABILITY_BEHAVIOR_NO_TARGET | scripts/npc/heroes/toyohime/npc_abilities_toyohime.txt
+ability_thdots_toyohime04_end | 0.2 | DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IGNORE_SILENCE | DOTA_ABILITY_BEHAVIOR_NOT_LEARNABLE | scripts/npc/heroes/toyohime/npc_abilities_toyohime.txt
+ability_thdots_toyohimeEx | 0.2 | DOTA_ABILITY_BEHAVIOR_AOE | DOTA_ABILITY_BEHAVIOR_POINT | DOTA_ABILITY_BEHAVIOR_NOT_LEARNABLE | scripts/npc/heroes/toyohime/npc_abilities_toyohime.txt
+ability_thdots_toyohime_wanbaochui | 0.2 | DOTA_ABILITY_BEHAVIOR_NO_TARGET | scripts/npc/heroes/toyohime/npc_abilities_toyohime.txt
+ability_thdots_wriggle01 | 0.2 | DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE | scripts/npc/heroes/wriggle/npc_abilities_wriggle.txt
+ability_thdots_wriggle01_special | 0 | DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE | scripts/npc/heroes/wriggle/npc_abilities_wriggle.txt
+ability_thdots_wriggle_talent_unit | <inherited> | DOTA_ABILITY_BEHAVIOR_IGNORE_BACKSWING | DOTA_ABILITY_BEHAVIOR_IMMEDIATE | DOTA_ABILITY_BEHAVIOR_IGNORE_TURN | scripts/npc/heroes/wriggle/npc_abilities_wriggle.txt
+ability_thdots_yamame02 | 0.2 | DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_AOE | scripts/npc/heroes/yamame/npc_abilities_yamame.txt
+ability_thdots_yamame03 | 0.2 | DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | scripts/npc/heroes/yamame/npc_abilities_yamame.txt
+ability_thdots_yamame04 | 0.2 | DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | DOTA_ABILITY_BEHAVIOR_POINT | DOTA_ABILITY_BEHAVIOR_AUTOCAST | DOTA_ABILITY_BEHAVIOR_IGNORE_BACKSWING | DOTA_ABILITY_BEHAVIOR_ROOT_DISABLES | scripts/npc/heroes/yamame/npc_abilities_yamame.txt
+ability_thdots_yasaka01 | 0.2 | DOTA_ABILITY_BEHAVIOR_AOE | DOTA_ABILITY_BEHAVIOR_POINT | scripts/npc/heroes/yasaka/npc_abilities_yasaka.txt
+ability_thdots_yasaka02 | 0.2 | DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE | scripts/npc/heroes/yasaka/npc_abilities_yasaka.txt
+ability_thdots_yasaka03 | 0.2 | DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | scripts/npc/heroes/yasaka/npc_abilities_yasaka.txt
+ability_thdots_yasaka04_quit | 0.2 | DOTA_ABILITY_BEHAVIOR_NO_TARGET | scripts/npc/heroes/yasaka/npc_abilities_yasaka.txt
+ability_thdots_yasaka04_release | 1 | DOTA_ABILITY_BEHAVIOR_NO_TARGET | scripts/npc/heroes/yasaka/npc_abilities_yasaka.txt
+ability_thdots_yasaka41 | 0.2 | DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE | DOTA_ABILITY_BEHAVIOR_NOT_LEARNABLE | scripts/npc/heroes/yasaka/npc_abilities_yasaka.txt
+ability_thdots_yasaka42 | 0.2 | DOTA_ABILITY_BEHAVIOR_AOE | DOTA_ABILITY_BEHAVIOR_POINT | DOTA_ABILITY_BEHAVIOR_NOT_LEARNABLE | scripts/npc/heroes/yasaka/npc_abilities_yasaka.txt
+ability_thdots_yasaka43 | 0.2 | DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | DOTA_ABILITY_BEHAVIOR_CHANNELLED | DOTA_ABILITY_BEHAVIOR_NOT_LEARNABLE  | scripts/npc/heroes/yasaka/npc_abilities_yasaka.txt
+ability_thdots_yorihime_01 | 0.3 0.3 0.3 0.3 | DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | DOTA_ABILITY_BEHAVIOR_AOE | DOTA_ABILITY_BEHAVIOR_IGNORE_BACKSWING |	\n		DOTA_ABILITY_BEHAVIOR_ROOT_DISABLES | scripts/npc/heroes/yorihime/npc_abilities_yorihime.txt
+ability_thdots_yorihime_02 | 0.2 | DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | scripts/npc/heroes/yorihime/npc_abilities_yorihime.txt
+ability_thdots_yorihime_03 | 0.3 | DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | scripts/npc/heroes/yorihime/npc_abilities_yorihime.txt
+ability_thdots_yorihime_ultimate | 0.3 | DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IGNORE_BACKSWING | scripts/npc/heroes/yorihime/npc_abilities_yorihime.txt
+ability_thdots_yorihime_ultimateEX | <inherited> | DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | scripts/npc/heroes/yorihime/npc_abilities_yorihime.txt
+ability_thdots_youmu01 | 0.1 | DOTA_ABILITY_BEHAVIOR_IGNORE_BACKSWING | DOTA_ABILITY_BEHAVIOR_AOE | DOTA_ABILITY_BEHAVIOR_POINT | DOTA_ABILITY_BEHAVIOR_ROOT_DISABLES | scripts/npc/heroes/youmu/npc_abilities_youmu.txt
+ability_thdots_youmu03 | 0.2 | DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE | scripts/npc/heroes/youmu/npc_abilities_youmu.txt
+ability_thdots_youmu04 | 0.3 | DOTA_ABILITY_BEHAVIOR_IGNORE_BACKSWING | DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | DOTA_ABILITY_BEHAVIOR_ROOT_DISABLES | scripts/npc/heroes/youmu/npc_abilities_youmu.txt
+ability_thdots_youmu2_01 | 0.1 | DOTA_ABILITY_BEHAVIOR_POINT | DOTA_ABILITY_BEHAVIOR_AOE | scripts/npc/heroes/youmu2/npc_abilities_youmu2.txt
+ability_thdots_youmu2_02 | <inherited> | DOTA_ABILITY_BEHAVIOR_IMMEDIATE | DOTA_ABILITY_BEHAVIOR_NO_TARGET | scripts/npc/heroes/youmu2/npc_abilities_youmu2.txt
+ability_thdots_youmu2_03 | <inherited> | DOTA_ABILITY_BEHAVIOR_IMMEDIATE | DOTA_ABILITY_BEHAVIOR_NO_TARGET | scripts/npc/heroes/youmu2/npc_abilities_youmu2.txt
+ability_thdots_youmu2_04 | 0.3 | DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | scripts/npc/heroes/youmu2/npc_abilities_youmu2.txt
+ability_thdots_youmu2_05 | 0.2 | DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | scripts/npc/heroes/youmu2/npc_abilities_youmu2.txt
+ability_thdots_youmuEx | 0 | DOTA_ABILITY_BEHAVIOR_IMMEDIATE | DOTA_ABILITY_BEHAVIOR_NO_TARGET | scripts/npc/heroes/youmu/npc_abilities_youmu.txt
+ability_thdots_yugi04 | 1.0 | DOTA_ABILITY_BEHAVIOR_UNIT_TARGET  | scripts/npc/heroes/yugi/npc_abilities_yugi.txt
+ability_thdots_yukari01 | 0.2 | DOTA_ABILITY_BEHAVIOR_AOE | DOTA_ABILITY_BEHAVIOR_POINT | scripts/npc/heroes/yukari/npc_abilities_yukari.txt
+ability_thdots_yukari02 | 0.2 | DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | scripts/npc/heroes/yukari/npc_abilities_yukari.txt
+ability_thdots_yukari03 | 2.7 | DOTA_ABILITY_BEHAVIOR_POINT | DOTA_ABILITY_BEHAVIOR_OPTIONAL_UNIT_TARGET | DOTA_ABILITY_BEHAVIOR_AOE | DOTA_ABILITY_BEHAVIOR_ROOT_DISABLES | scripts/npc/heroes/yukari/npc_abilities_yukari.txt
+ability_thdots_yukari04 | 0.2 | DOTA_ABILITY_BEHAVIOR_POINT | DOTA_ABILITY_BEHAVIOR_OPTIONAL_UNIT_TARGET | DOTA_ABILITY_BEHAVIOR_CHANNELLED | DOTA_ABILITY_BEHAVIOR_ROOT_DISABLES | scripts/npc/heroes/yukari/npc_abilities_yukari.txt
+ability_thdots_yukari05 | 0.2 | DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | DOTA_ABILITY_BEHAVIOR_NOT_LEARNABLE | scripts/npc/heroes/yukari/npc_abilities_yukari.txt
+ability_thdots_yukariEx | 0.5 | DOTA_ABILITY_BEHAVIOR_AOE | DOTA_ABILITY_BEHAVIOR_POINT | DOTA_ABILITY_BEHAVIOR_NOT_LEARNABLE | scripts/npc/heroes/yukari/npc_abilities_yukari.txt
+ability_thdots_yumemi01 | 0.1 | DOTA_ABILITY_BEHAVIOR_POINT | scripts/npc/heroes/yumemi/npc_abilities_yumemi.txt
+ability_thdots_yumemi02 | 0.2 | DOTA_ABILITY_BEHAVIOR_IGNORE_BACKSWING | DOTA_ABILITY_BEHAVIOR_POINT | DOTA_ABILITY_BEHAVIOR_ROOT_DISABLES | scripts/npc/heroes/yumemi/npc_abilities_yumemi.txt
+ability_thdots_yumemi03 | 0.1 | DOTA_ABILITY_BEHAVIOR_NO_TARGET | scripts/npc/heroes/yumemi/npc_abilities_yumemi.txt
+ability_thdots_yumemi04 | 4.1 | DOTA_ABILITY_BEHAVIOR_NO_TARGET | scripts/npc/heroes/yumemi/npc_abilities_yumemi.txt
+ability_thdots_yuuka01 | 0.2 | DOTA_ABILITY_BEHAVIOR_NO_TARGET | scripts/npc/heroes/yuuka/npc_abilities_yuuka.txt
+ability_thdots_yuuka02 | 0.2 | DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | scripts/npc/heroes/yuuka/npc_abilities_yuuka.txt
+ability_thdots_yuuka03 | 0.2 | DOTA_ABILITY_BEHAVIOR_AOE | DOTA_ABILITY_BEHAVIOR_POINT | scripts/npc/heroes/yuuka/npc_abilities_yuuka.txt
+ability_thdots_yuuka04 | 0.2 | DOTA_ABILITY_BEHAVIOR_POINT | scripts/npc/heroes/yuuka/npc_abilities_yuuka.txt
+ability_thdots_yuyuko01 | 0.3 | DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | DOTA_ABILITY_BEHAVIOR_POINT | scripts/npc/heroes/yuyuko/npc_abilities_yuyuko.txt
+ability_thdots_yuyuko02 | 0 | DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | DOTA_ABILITY_BEHAVIOR_DONT_RESUME_ATTACK | scripts/npc/heroes/yuyuko/npc_abilities_yuyuko.txt
+ability_thdots_yuyuko02_end | 0 | DOTA_ABILITY_BEHAVIOR_NOT_LEARNABLE | DOTA_ABILITY_BEHAVIOR_HIDDEN | DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IGNORE_MUTED | DOTA_ABILITY_BEHAVIOR_IMMEDIATE | DOTA_ABILITY_BEHAVIOR_IGNORE_PSEUDO_QUEUE | scripts/npc/heroes/yuyuko/npc_abilities_yuyuko.txt
+ability_thdots_yuyuko04 | 2.0 | DOTA_ABILITY_BEHAVIOR_IGNORE_BACKSWING | DOTA_ABILITY_BEHAVIOR_AOE | DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_NORMAL_WHEN_STOLEN | DOTA_ABILITY_BEHAVIOR_CHANNELLED | scripts/npc/heroes/yuyuko/npc_abilities_yuyuko.txt
+ability_thdotsr_Nazrin01 | <inherited> | DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE | DOTA_ABILITY_BEHAVIOR_IGNORE_BACKSWING | DOTA_ABILITY_BEHAVIOR_ROOT_DISABLES | scripts/npc/heroes/nazrin/npc_abilities_nazrin.txt
+ability_thdotsr_Nazrin02 | 0.2 | DOTA_ABILITY_BEHAVIOR_IGNORE_BACKSWING | DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | DOTA_ABILITY_BEHAVIOR_IGNORE_BACKSWING | scripts/npc/heroes/nazrin/npc_abilities_nazrin.txt
+ability_thdotsr_Nazrin04 | 0.3 | DOTA_ABILITY_BEHAVIOR_IGNORE_BACKSWING | DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | scripts/npc/heroes/nazrin/npc_abilities_nazrin.txt
+ability_thdotsr_star01 | 0.2 | DOTA_ABILITY_BEHAVIOR_POINT | DOTA_ABILITY_BEHAVIOR_AOE | scripts/npc/heroes/star/npc_abilities_star.txt
+ability_thdotsr_star02 | 0.2 | DOTA_ABILITY_BEHAVIOR_UNIT_TARGET | DOTA_ABILITY_BEHAVIOR_AOE | scripts/npc/heroes/star/npc_abilities_star.txt
+ability_thdotsr_star03 | 0.2 | DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_AOE | scripts/npc/heroes/star/npc_abilities_star.txt
+ability_thdotsr_star05 | 0.2 | DOTA_ABILITY_BEHAVIOR_AOE | DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_NOT_LEARNABLE | DOTA_ABILITY_BEHAVIOR_CHANNELLED | scripts/npc/heroes/star/npc_abilities_star.txt
+ability_thdotsr_suwako03 | 0 | DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_IMMEDIATE | DOTA_ABILITY_BEHAVIOR_TOGGLE | scripts/npc/heroes/suwako/npc_abilities_suwako.txt
+aya_fantasy | <inherited> | DOTA_ABILITY_BEHAVIOR_IMMEDIATE | DOTA_ABILITY_BEHAVIOR_POINT | DOTA_ABILITY_BEHAVIOR_DIRECTIONAL | scripts/npc/heroes/aya/npc_abilities_aya.txt

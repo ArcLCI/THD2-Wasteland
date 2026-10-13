@@ -690,7 +690,7 @@ function modifier_thdots_marisa04_think_interval:OnIntervalThink()
                 damage_type = ability:GetAbilityDamageType(),
                 damage_flags = 0
             }
-            UtilStun:UnitStunTarget(caster, v, 0.2)
+            UtilStun:UnitStunTarget(caster, v, 0.2, (UtilStun.TraceSource and UtilStun:TraceSource(function() return self:GetAbility() end) or nil), "script:scripts/vscripts/abilities/abilitymarisa.lua:OnIntervalThink:693")
             UnitDamageTarget(damage_table)
         end
     end

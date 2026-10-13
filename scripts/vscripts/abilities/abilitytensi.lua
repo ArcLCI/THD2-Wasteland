@@ -65,7 +65,7 @@ function passive_tensi02_attack:OnAttackLanded(keys)
 					damage_type = ability:GetAbilityDamageType(),
 					damage_flags = 0
 				}
-				UtilStun:UnitStunTarget(caster,v,duration)
+				UtilStun:UnitStunTarget(caster,v,duration, ability, "tensi_attack_proc")
 				UnitDamageTarget(damage_table)
 			end
 

@@ -830,7 +830,7 @@ function ability_thdots_parsee02:OnSpellStart()
 								parsee02_debuff:IncrementStackCount()
 								parsee02_debuff:SetDuration(slow_duration, true)
 								if parsee02_debuff:GetStackCount() >= 3 and FindTelentValue(caster,"special_bonus_unique_parsee_1") ~= 0 then
-									UtilStun:UnitStunTarget(caster,v,FindTelentValue(caster,"special_bonus_unique_parsee_1"))
+									UtilStun:UnitStunTarget(caster,v,FindTelentValue(caster,"special_bonus_unique_parsee_1"), (UtilStun.TraceSource and UtilStun:TraceSource(function() return self end) or nil), "script:scripts/vscripts/abilities/abilityparsee.lua:OnSpellStart:833")
 								end
 							else
 								local parsee02_debuff = v:AddNewModifier(caster, self, "modifier_ability_thdots_parsee02_debuff",{duration = slow_duration})
@@ -1007,7 +1007,7 @@ function modifier_ability_thdots_parsee03_dummy:OnAttackLanded(keys)
 		    damage = damage,
 		}
 		if RollPercentage(self.change) then
-			UtilStun:UnitStunTarget(caster,target,self.stun_time)
+			UtilStun:UnitStunTarget(caster,target,self.stun_time, (UtilStun.TraceSource and UtilStun:TraceSource(function() return self:GetAbility() end) or nil), "script:scripts/vscripts/abilities/abilityparsee.lua:OnAttackLanded:1010")
 		end
 		damage_table.damage = self.phy_damage + int*self.phy_int
 		damage_table.damage_type = DAMAGE_TYPE_PHYSICAL
@@ -1249,7 +1249,7 @@ function modifier_ability_thdots_parsee04_dummy:OnDestroy()
 				end
 			end
 			damage_table.damage = self.damage * self.damage_bonus
-			UtilStun:UnitStunTarget(self.caster,self.target,self.stun_time)
+			UtilStun:UnitStunTarget(self.caster,self.target,self.stun_time, (UtilStun.TraceSource and UtilStun:TraceSource(function() return self:GetAbility() end) or nil), "script:scripts/vscripts/abilities/abilityparsee.lua:OnDestroy:1252")
 			UnitDamageTarget(damage_table)
 		end
 	end
@@ -1386,7 +1386,7 @@ function modifier_ability_thdots_parsee04_target:OnDestroy()
 					damage_flags = 0
 				}
 		damage_table.damage = self.damage * self.damage_bonus
-		UtilStun:UnitStunTarget(self.caster,self.target,self.stun_time)
+		UtilStun:UnitStunTarget(self.caster,self.target,self.stun_time, (UtilStun.TraceSource and UtilStun:TraceSource(function() return self:GetAbility() end) or nil), "script:scripts/vscripts/abilities/abilityparsee.lua:OnDestroy:1389")
 		UnitDamageTarget(damage_table)
 	end
 end

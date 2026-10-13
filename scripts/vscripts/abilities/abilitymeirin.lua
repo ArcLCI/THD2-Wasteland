@@ -44,7 +44,7 @@ function OnMeirinexDamage(keys)
                 damage_flags = 1
             }
             StartSoundEventFromPosition("Hero_Ancient_Apparition.ChillingTouch.Target", target:GetOrigin())
-            UtilStun:UnitStunTarget(caster, target, 0.1)
+            UtilStun:UnitStunTarget(caster, target, 0.1, (UtilStun.TraceSource and UtilStun:TraceSource(function() return keys.ability end) or nil), "script:scripts/vscripts/abilities/abilitymeirin.lua:OnMeirinexDamage:47")
 
             local effectIndex = ParticleManager:CreateParticle(
                 "particles/units/heroes/hero_lich/lich_frost_nova_flash_b.vpcf", PATTACH_CUSTOMORIGIN, caster)

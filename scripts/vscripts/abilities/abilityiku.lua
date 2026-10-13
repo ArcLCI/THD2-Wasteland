@@ -506,7 +506,7 @@ function OnIkuExSpellStart(keys)
             damage_type = damagetype,
             damage_flags = keys.ability:GetAbilityTargetFlags()
         }
-        UtilStun:UnitStunTarget(caster, v, keys.StunDuration)
+        UtilStun:UnitStunTarget(caster, v, keys.StunDuration, (UtilStun.TraceSource and UtilStun:TraceSource(function() return keys.ability end) or nil), "script:scripts/vscripts/abilities/abilityiku.lua:OnIkuExSpellStart:509")
         UnitDamageTarget(damage_table)
     end
 end
@@ -573,7 +573,7 @@ function OnIkuExSpellwanbaochuiattack(keys)
                     local targets = FindUnitsInRadius(caster:GetTeamNumber(), attackpoint, nil, 250,
                         DOTA_UNIT_TARGET_TEAM_ENEMY, DOTA_UNIT_TARGET_HERO, 0, FIND_CLOSEST, false)
                     for _, r in pairs(targets) do
-                        UtilStun:UnitStunTarget(caster, r, 1)
+                        UtilStun:UnitStunTarget(caster, r, 1, (UtilStun.TraceSource and UtilStun:TraceSource(function() return keys.ability end) or nil), "script:scripts/vscripts/abilities/abilityiku.lua:OnIkuExSpellwanbaochuiattack:576")
                         damage_table = {
                             victim = r,
                             attacker = caster,

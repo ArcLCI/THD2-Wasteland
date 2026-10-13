@@ -320,7 +320,7 @@ function OnKaguya04SpellStart(keys)
         caster.ability_kaguya_04_radius, -- find radius
         DOTA_UNIT_TARGET_TEAM_ENEMY, keys.ability:GetAbilityTargetType(), 0, FIND_CLOSEST, false)
         for _, v in pairs(targets) do
-            UtilStun:UnitStunTarget(caster, v, keys.StunDuration)
+            UtilStun:UnitStunTarget(caster, v, keys.StunDuration, (UtilStun.TraceSource and UtilStun:TraceSource(function() return keys.ability end) or nil), "script:scripts/vscripts/abilities/abilitykaguya.lua:OnKaguya04SpellStart:323")
             local damage_table = {
                 ability = keys.ability,
                 victim = v,

@@ -3308,8 +3308,12 @@ function THDOTSGameMode:OnTHDOTSDamageFilter(keys)
 	return true
 end
 
+local CastPhaseOrders = require('util/cast_phase_orders')
+
 function THDOTSGameMode:OnTHDOTSOrderFilter(keys)
 
+	-- 自晕前摇迁移后，以实际施法阶段屏蔽主动取消；沿用唯一订单过滤入口。
+	if not CastPhaseOrders.Filter(keys) then return false end
 	if keys.units["0"] == nil then return true end
 
 	------------------------------------------------------------------------------------

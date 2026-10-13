@@ -67,7 +67,7 @@ function modifier_item_yuetufensuijvren:OnAttackLanded(keys)
 			attacker 		= keys.attacker,
 			ability 		= self.ability
 		})
-        UtilStun:UnitStunTarget(keys.attacker, keys.target, self.duration)
+        UtilStun:UnitStunTarget(keys.attacker, keys.target, self.duration, self.ability, 'item_attack_proc')
         keys.attacker:AddNewModifier(keys.attacker,self.ability, "modifier_item_yuetufensuijvren_cooldown", {duration=self.cooldown})
 		--print("yes")
 	end
@@ -170,7 +170,7 @@ function modifier_mark_target_yuetufensuijvren:OnAttackLanded(keys)
         }
         EmitSoundOn("DOTA_Item.AbyssalBlade.Activate", target)
         UnitDamageTarget(damage_table)
-        UtilStun:UnitStunTarget(keys.attacker, target, hability:GetSpecialValueFor("default_stun_duration"))
+        UtilStun:UnitStunTarget(keys.attacker, target, hability:GetSpecialValueFor("default_stun_duration"), hability, 'item_active_attack_confirm')
         local particle_abyssal_fx = ParticleManager:CreateParticle("particles/items_fx/abyssal_blade.vpcf", PATTACH_ABSORIGIN_FOLLOW, target)
         ParticleManager:SetParticleControl(particle_abyssal_fx, 0, target:GetAbsOrigin())
         ParticleManager:ReleaseParticleIndex(particle_abyssal_fx)

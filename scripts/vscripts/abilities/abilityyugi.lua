@@ -75,7 +75,7 @@ function OnYugi03Damage(keys)
 			 knockback_distance = keys.Distance,
 			 knockback_height 	= 200,
 		}
-	UtilStun:UnitStunTarget( caster,target,1.0)
+	UtilStun:UnitStunTarget( caster,target,1.0, (UtilStun.TraceSource and UtilStun:TraceSource(function() return keys.ability end) or nil), "script:scripts/vscripts/abilities/abilityyugi.lua:OnYugi03Damage:78")
 	target:AddNewModifier(caster, keys.ability, "modifier_thdots_yugi03_mark", {duration = 1})
 	target:AddNewModifier(caster, self, "modifier_knockback", knockback_properties)
 	target:EmitSound("Hero_Spirit_Breaker.GreaterBash")
@@ -280,49 +280,46 @@ function ability_thdots_yugi04:OnSpellStart()
 	local caster = self:GetCaster()
 	local target = self:GetCursorTarget()
 
-	Timer.Wait 'yugi04_delay' (0.5,
-	function ()
-		local duration = self:GetSpecialValueFor("ability_duration")
+	-- 释放前等待已合并到原生前摇，成功施法后立即结算。
+	local duration = self:GetSpecialValueFor("ability_duration")
 
-		-- if is_spell_blocked(target) then return end
-		target:EmitSound("Hero_Axe.JungleWeapon.Dunk")
+	-- if is_spell_blocked(target) then return end
+	target:EmitSound("Hero_Axe.JungleWeapon.Dunk")
 
-		local effectIndex = ParticleManager:CreateParticle("particles/thd2/heroes/yugi/yugi_slam.vpcf", PATTACH_CUSTOMORIGIN, caster)
-		ParticleManager:SetParticleControl(effectIndex, 0, target:GetOrigin())
-		ParticleManager:DestroyParticleSystem(effectIndex,false)
-		local effectIndex1 = ParticleManager:CreateParticle("particles/units/heroes/hero_earthshaker/earthshaker_echoslam_start_fallback_mid.vpcf", PATTACH_CUSTOMORIGIN, caster)
-		ParticleManager:SetParticleControl(effectIndex1, 0, target:GetOrigin())
-		ParticleManager:DestroyParticleSystem(effectIndex1,false)
+	local effectIndex = ParticleManager:CreateParticle("particles/thd2/heroes/yugi/yugi_slam.vpcf", PATTACH_CUSTOMORIGIN, caster)
+	ParticleManager:SetParticleControl(effectIndex, 0, target:GetOrigin())
+	ParticleManager:DestroyParticleSystem(effectIndex,false)
+	local effectIndex1 = ParticleManager:CreateParticle("particles/units/heroes/hero_earthshaker/earthshaker_echoslam_start_fallback_mid.vpcf", PATTACH_CUSTOMORIGIN, caster)
+	ParticleManager:SetParticleControl(effectIndex1, 0, target:GetOrigin())
+	ParticleManager:DestroyParticleSystem(effectIndex1,false)
 
-		target:AddNewModifier( caster, self, "modifier_thdots_yugi04_think_interval", {duration = duration} )
-		-- 仅对 bot 目标额外附加不可驱散减速。
-		Yugi04_ApplyBotCircle(caster, self, target, duration)
+	target:AddNewModifier( caster, self, "modifier_thdots_yugi04_think_interval", {duration = duration} )
+	-- 仅对 bot 目标额外附加不可驱散减速。
+	Yugi04_ApplyBotCircle(caster, self, target, duration)
 
-		if caster:HasModifier("modifier_item_wanbaochui") then
-			local targets = FindUnitsInRadius(
-				caster:GetTeam(),		
-				target:GetOrigin(),	
-				nil,					
-				350,		
-				DOTA_UNIT_TARGET_TEAM_ENEMY,
-				DOTA_UNIT_TARGET_HERO,
-				0,
-				FIND_CLOSEST,
-				false
-			)
-			for k,v in pairs(targets) do
-				v:AddNewModifier( caster, self, "modifier_thdots_yugi04_think_interval", {duration = duration} )
-				Yugi04_ApplyBotCircle(caster, self, v, duration)
+	if caster:HasModifier("modifier_item_wanbaochui") then
+		local targets = FindUnitsInRadius(
+			caster:GetTeam(),
+			target:GetOrigin(),
+			nil,
+			350,
+			DOTA_UNIT_TARGET_TEAM_ENEMY,
+			DOTA_UNIT_TARGET_HERO,
+			0,
+			FIND_CLOSEST,
+			false
+		)
+		for k,v in pairs(targets) do
+			v:AddNewModifier( caster, self, "modifier_thdots_yugi04_think_interval", {duration = duration} )
+			Yugi04_ApplyBotCircle(caster, self, v, duration)
 
-				if v~=target then
-					local effectIndex = ParticleManager:CreateParticle("particles/thd2/heroes/yugi/yugi_slam.vpcf", PATTACH_CUSTOMORIGIN, caster)
-					ParticleManager:SetParticleControl(effectIndex, 0, v:GetOrigin())
-					ParticleManager:DestroyParticleSystem(effectIndex,false)
-				end
+			if v~=target then
+				local effectIndex = ParticleManager:CreateParticle("particles/thd2/heroes/yugi/yugi_slam.vpcf", PATTACH_CUSTOMORIGIN, caster)
+				ParticleManager:SetParticleControl(effectIndex, 0, v:GetOrigin())
+				ParticleManager:DestroyParticleSystem(effectIndex,false)
 			end
 		end
 	end
-	)
 
 end
 

@@ -199,10 +199,56 @@ function OnYumemi03SpellStart(keys, delay)
     end, delay)
 end
 
+ability_thdots_yumemi04 = class({})
+
+function ability_thdots_yumemi04:OnAbilityPhaseStart()
+    if not IsServer() then return true end
+    -- 原 0.1 秒前摇 + 4 秒自晕统一为原生前摇；取消只清理表现。
+    local caster = self:GetCaster()
+    caster:EmitSound("Voice_Thdots_Yumemi.AbilityYumemi04")
+    caster:EmitSound("Hero_Enigma.BlackHole.Cast.Chasm")
+    self.phaseParticle = ParticleManager:CreateParticle("particles/heroes/yumemi/ability_yumemi_04.vpcf", PATTACH_ABSORIGIN_FOLLOW, caster)
+    return true
+end
+
+function ability_thdots_yumemi04:OnAbilityPhaseInterrupted()
+    if not IsServer() then return end
+    self:GetCaster():StopSound("Hero_Enigma.BlackHole.Cast.Chasm")
+    self:GetCaster():StopSound("Voice_Thdots_Yumemi.AbilityYumemi04")
+    if self.phaseParticle ~= nil then
+        ParticleManager:DestroyParticle(self.phaseParticle, false)
+        ParticleManager:ReleaseParticleIndex(self.phaseParticle)
+        self.phaseParticle = nil
+    end
+end
+
+function ability_thdots_yumemi04:OnSpellStart()
+    if not IsServer() then return end
+    self:OnAbilityPhaseInterrupted()
+    local keys = { caster_entindex = self:GetCaster():entindex(), ability = self,
+        Radius = self:GetSpecialValueFor("radius"), StunDuration = self:GetSpecialValueFor("stun_duration") }
+    -- 天赋十字在成功施法时生成，避免真实中断后留下免费效果。
+    OnYumemi04PhaseStart(keys)
+    local passive = self:GetCaster():FindModifierByName("modifier_thdots_yumemiEx_passive")
+    -- 十字现在同帧生成，先刷新原计数再读取大招伤害，避免等待 0.1 秒被动轮询。
+    if passive ~= nil then passive:OnIntervalThink() end
+    local effect = ParticleManager:CreateParticle("particles/heroes/yumemi/ability_yumemi_04_exolosion.vpcf", PATTACH_ABSORIGIN_FOLLOW, self:GetCaster())
+    ParticleManager:ReleaseParticleIndex(effect)
+    OnYumemi04Destroy(keys)
+end
+
+function ability_thdots_yumemi04:OnOwnerDied()
+    self:OnAbilityPhaseInterrupted()
+end
+
+-- 保留旧公开标记供外部兼容，不再附加自晕或在销毁回调结算。
+LinkLuaModifier("modifier_yumemi04_action", "scripts/vscripts/abilities/abilityyumemi.lua", LUA_MODIFIER_MOTION_NONE)
+modifier_yumemi04_action = class({})
+function modifier_yumemi04_action:IsHidden() return true end
+function modifier_yumemi04_action:IsPurgable() return false end
+
 function OnYumemi04PhaseStart(keys)
     local caster = EntIndexToHScript(keys.caster_entindex)
-    caster:StartGesture(ACT_DOTA_CAST_ABILITY_4)
-    caster:EmitSound("Hero_Enigma.BlackHole.Cast.Chasm")
 
     if FindTelentValue(caster, "special_bonus_unique_yumemi_3") ~= 0 then
         local vecCaster = caster:GetOrigin()
@@ -241,7 +287,7 @@ function OnYumemi04Destroy(keys)
             damage_type = keys.ability:GetAbilityDamageType(),
             damage_flags = keys.ability:GetAbilityTargetFlags()
         }
-        UtilStun:UnitStunTarget(caster, v, keys.StunDuration)
+        UtilStun:UnitStunTarget(caster, v, keys.StunDuration, (UtilStun.TraceSource and UtilStun:TraceSource(function() return keys.ability end) or nil), "script:scripts/vscripts/abilities/abilityyumemi.lua:OnYumemi04Destroy:290")
         UnitDamageTarget(damage_table)
     end
     caster:EmitSound("Hero_Phoenix.SuperNova.Explode")

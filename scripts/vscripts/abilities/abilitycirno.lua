@@ -159,7 +159,7 @@ function CirnoBreakIceboundsInRadius(caster, pos, radius)
                                 UnitDamageTarget(cirno02_damage_table)
                             end
                             if is_stun_unit then
-                                UtilStun:UnitStunTarget(caster, v, cirno02_StunEnemyDuration)
+                                UtilStun:UnitStunTarget(caster, v, cirno02_StunEnemyDuration, (UtilStun.TraceSource and UtilStun:TraceSource(function() return AbilityCirno02 end) or nil), "script:scripts/vscripts/abilities/abilitycirno.lua:CirnoBreakIceboundsInRadius:162")
                             end
                         end
                     end
@@ -216,7 +216,7 @@ end
 
 function OnCirno02SpellStart(keys)
     if (CirnoBreakIceboundsInRadius(keys.caster, keys.caster:GetOrigin(), keys.radius) == 0) then
-        UtilStun:UnitStunTarget(keys.caster, keys.caster, keys.stun_self_duration)
+        UtilStun:UnitStunTarget(keys.caster, keys.caster, keys.stun_self_duration, (UtilStun.TraceSource and UtilStun:TraceSource(function() return keys.ability end) or nil), "script:scripts/vscripts/abilities/abilitycirno.lua:OnCirno02SpellStart:219")
     end
 end
 
@@ -417,7 +417,7 @@ function Cirnowanbaochui(keys)
             UnitDamageTarget(damage_table)
             -- SendOverheadEventMessage(nil,OVERHEAD_ALERT_BONUS_SPELL_DAMAGE,target,dealdamage,nil)
         else
-            UtilStun:UnitStunTarget(caster, target, ability:GetSpecialValueFor("intellect_stun"))
+            UtilStun:UnitStunTarget(caster, target, ability:GetSpecialValueFor("intellect_stun"), (UtilStun.TraceSource and UtilStun:TraceSource(function() return keys.ability end) or nil), "script:scripts/vscripts/abilities/abilitycirno.lua:Cirnowanbaochui:420")
             target:RemoveModifierByName("Cirno_wanbaochui_debuff")
         end
     end
